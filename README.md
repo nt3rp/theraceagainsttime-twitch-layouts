@@ -154,15 +154,15 @@ Project Link: [https://github.com/nt3rp/theraceagainsttime-twitch-layouts](https
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/nt3rp/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/nt3rp/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/nt3rp/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/nt3rp/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/nt3rp/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/nt3rp/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/nt3rp/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/nt3rp/repo/issues
-[license-shield]: https://img.shields.io/github/license/nt3rp/repo.svg?style=for-the-badge
-[license-url]: https://github.com/nt3rp/repo/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/nt3rp/theraceagainsttime-twitch-layouts.svg?style=for-the-badge
+[contributors-url]: https://github.com/nt3rp/theraceagainsttime-twitch-layouts/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/nt3rp/theraceagainsttime-twitch-layouts.svg?style=for-the-badge
+[forks-url]: https://github.com/nt3rp/theraceagainsttime-twitch-layouts/network/members
+[stars-shield]: https://img.shields.io/github/stars/nt3rp/theraceagainsttime-twitch-layouts.svg?style=for-the-badge
+[stars-url]: https://github.com/nt3rp/theraceagainsttime-twitch-layouts/stargazers
+[issues-shield]: https://img.shields.io/github/issues/nt3rp/theraceagainsttime-twitch-layouts.svg?style=for-the-badge
+[issues-url]: https://github.com/nt3rp/theraceagainsttime-twitch-layouts/issues
+[license-shield]: https://img.shields.io/github/license/nt3rp/theraceagainsttime-twitch-layouts.svg?style=for-the-badge
+[license-url]: https://github.com/nt3rp/theraceagainsttime-twitch-layouts/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/nt3rp
