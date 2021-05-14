@@ -97,17 +97,26 @@ To get a local copy up and running follow these simple steps.
 
 ## Usage
 
-### Starting development mode
+### Starting development
 
-If you want to do further development on widgets and layouts, run the following:
+Due to some complications of Parcel and how NodeCG is configured, it is not
+possible at the moment to run Parcel directly via the command line. Instead,
+a simple build script has been created to handle Parcel's `build` and `watch`
+commands (`scripts/bundle`).
 
-```sh
-npm run start
-```
+1. **Start Parcel in [watch mode](https://v2.parceljs.org/features/cli/#parcel-watch-%3Centries%3E)**
 
-This will start Parcel in [`serve` mode](https://v2.parceljs.org/features/cli/#parcel-%5Bserve%5D-%3Centries%3E). The widgets will be visible at `https://localhost:1234`, and by default uses [hot module replacement](https://v2.parceljs.org/features/hmr/) meaning your changes should immediately be visible.
+   ```sh
+   npm start
+   ```
 
-For more details on this mode and it's configuration, please consult the [Parcel documentation](https://v2.parceljs.org/features/cli/).
+   By default, Parcel will run with [hot module replacement](https://v2.parceljs.org/features/hmr/)
+   so any changes made will be immediately reflected in the generated files
+   on save.
+
+2. **[Start NodeCG](https://www.nodecg.dev/docs/installing#start)**
+
+Your files should now be accessible via the NodeCG dashboard.
 
 <!-- ROADMAP -->
 
