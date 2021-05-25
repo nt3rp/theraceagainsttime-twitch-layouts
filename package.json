@@ -6,8 +6,8 @@
   "author": "Nick Terwoord <me@nt3rp.io>",
   "license": "MIT",
   "scripts": {
-    "start": "node scripts/bundle watch",
-    "build": "node scripts/bundle build"
+    "watch:graphics": "npx parcel watch 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'",
+    "build:graphics": "npx parcel build 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'"
   },
   "alias": {
     "react": "preact/compat",
@@ -24,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "app-root-path": "^3.0.0",
+    "concurrently": "^6.2.0",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-standard": "^16.0.2",

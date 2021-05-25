@@ -107,7 +107,7 @@ commands (`scripts/bundle`).
 1. **Start Parcel in [watch mode](https://v2.parceljs.org/features/cli/#parcel-watch-%3Centries%3E)**
 
    ```sh
-   npm start
+   npx concurrently 'npm:watch*'
    ```
 
    By default, Parcel will run with [hot module replacement](https://v2.parceljs.org/features/hmr/)
