@@ -6,8 +6,8 @@
   "author": "Nick Terwoord <me@nt3rp.io>",
   "license": "MIT",
   "scripts": {
-    "watch:graphics": "npx parcel watch 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'",
-    "build:graphics": "npx parcel build 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'"
+    "watch:graphics": "parcel watch 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'",
+    "build:graphics": "parcel build 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'"
   },
   "alias": {
     "react": "preact/compat",
