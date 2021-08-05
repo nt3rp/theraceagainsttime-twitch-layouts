@@ -1,16 +1,20 @@
 import { h, FunctionComponent } from "preact";
 import { useEffect, useState } from "preact/hooks";
+import { useReplicant } from "use-nodecg";
 
 export interface AlertProps {
   title: string;
   description: string;
+  achieved: boolean;
 }
 
 export const Alert: FunctionComponent<AlertProps> = ({
   title,
   description,
+  achieved,
 }: AlertProps) => (
   <li>
+    {achieved ? "✅" : "❎"}
     {title}: {description}
   </li>
 );
@@ -21,6 +25,7 @@ export interface AlertQueueProps {
 }
 
 // TODO: How to test this?
+// TODO: Convert useTimout to function / hook
 export const AlertQueue: FunctionComponent<AlertQueueProps> = ({
   initialAlerts,
   delay,
@@ -35,4 +40,18 @@ export const AlertQueue: FunctionComponent<AlertQueueProps> = ({
     };
   }, [alerts]);
   return <ul>{alerts.map((alert) => Alert(alert))}</ul>;
+};
+
+export const AchievementAlerts: FunctionComponent<any> = () => {
+  const [achievements, _setAchievements]: [any, unknown] = useReplicant(
+    "achievements",
+    []
+  );
+  return (
+    <ul>
+      {achievements.map((a) => (
+        <Alert key={a.id} {...a} />
+      ))}
+    </ul>
+  );
 };
