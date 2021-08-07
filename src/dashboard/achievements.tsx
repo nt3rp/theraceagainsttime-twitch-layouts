@@ -1,21 +1,10 @@
 import { h, render, FunctionComponent, Fragment } from "preact";
 import { useCallback } from "preact/hooks";
 import { useReplicant } from "use-nodecg";
+import type { Achievement } from "../../types/replicants";
+import type { Completeable } from "../../types/events";
 
 const copy = (obj) => JSON.parse(JSON.stringify(obj));
-
-interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  achieved: boolean;
-  achievedAt: Date;
-}
-
-// TODO: Figure out how to fix unused vars for typescript like this.
-interface Completeable {
-  onComplete: (id: string, event: any) => void; // eslint-disable-line no-unused-vars
-}
 
 const AchievementRow: FunctionComponent<Achievement & Completeable> = ({
   id,
