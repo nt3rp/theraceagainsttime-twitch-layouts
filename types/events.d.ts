@@ -2,3 +2,7 @@
 export interface Completeable {
   onComplete: (id: string, event: any) => void; // eslint-disable-line no-unused-vars
 }
+
+export interface Changeable {
+  onChange: (id: string, event: any) => void; // eslint-disable-line no-unused-vars
+}

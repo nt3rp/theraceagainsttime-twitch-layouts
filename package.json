@@ -58,6 +58,13 @@
         "file": "achievements.html",
         "width": 4,
         "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "checkpoints",
+        "title": "Checkpoints",
+        "file": "checkpoints.html",
+        "width": 3,
+        "workspace": "The Race Against Time VII"
       }
     ]
   }
