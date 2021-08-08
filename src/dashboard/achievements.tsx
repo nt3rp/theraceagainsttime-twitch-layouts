@@ -1,20 +1,19 @@
 import { h, render, FunctionComponent, Fragment } from "preact";
-import { useCallback } from "preact/hooks";
+import { useCallback, useState } from "preact/hooks";
 import { useReplicant } from "use-nodecg";
 import type { Achievement } from "../../types/replicants";
 import type { Completeable } from "../../types/events";
 
-const copy = (obj) => JSON.parse(JSON.stringify(obj));
+const copy = (obj: any) => JSON.parse(JSON.stringify(obj));
 
 const AchievementRow: FunctionComponent<Achievement & Completeable> = ({
   id,
   title,
   description,
+  secretDescription,
   achieved,
-  achievedAt,
   onComplete,
 }: Achievement & Completeable) => {
-  console.log(achieved);
   return (
     <tr>
       <td>
@@ -27,35 +26,31 @@ const AchievementRow: FunctionComponent<Achievement & Completeable> = ({
       </td>
       <td className="title">{title}</td>
       <td className="description">{description}</td>
-      <td className="achieved-at">{achievedAt}</td>
+      <td className="secretDescription">{secretDescription}</td>
     </tr>
   );
 };
 
 // TODO: Add the ability to add achievements on the fly.
 const AchievementsPanel: FunctionComponent<any> = () => {
-  // TODO: useReplicant should return an immutable copy of the variable. Otherwise, what's the point of the hooks?
-  const [achievements, setAchievements]: [any, any] = useReplicant(
-    "achievements",
-    []
-  );
+  const [achievements, setAchievements]: [
+    Array<Achievement>,
+    any
+  ] = useReplicant("achievements", []);
 
   const onComplete = useCallback(
     (id: string, event: any) => {
       const checked = event.target.checked;
-      const copied = copy(achievements);
+      const copied: Array<Achievement> = copy(achievements);
       // NOTE: This modifies the array in place.
       copied.find((achievement) => {
         if (achievement.id !== id) return false;
-
         achievement.achieved = checked;
-        if (checked && !achievement.achievedAt) {
-          achievement.achievedAt = new Date();
-        }
-
         if (checked) {
-          // TODO: Toast.
-          // window.nodecg.sendMessage('toast', achievement);
+          if (!achievement.achievedAt) {
+            achievement.achievedAt = new Date();
+          }
+          (window as any).nodecg.sendMessage("event", achievement);
         }
         return true;
       });
@@ -64,8 +59,7 @@ const AchievementsPanel: FunctionComponent<any> = () => {
     [achievements]
   );
 
-  // TODO: Debounce
-  // TODO: Syntax highlighting?
+  const [search, setSearch] = useState("");
 
   return (
     <Fragment>
@@ -74,12 +68,21 @@ const AchievementsPanel: FunctionComponent<any> = () => {
         type="text"
         autoComplete="off"
         placeholder="Search..."
-        value=""
+        onInput={(e) => setSearch((e.target as any).value)}
+        value={search}
       />
       <table>
-        {achievements.map((a) => (
-          <AchievementRow key={a.id} {...a} onComplete={onComplete} />
-        ))}
+        {achievements
+          .filter(
+            ({ title, description, secretDescription = "" }) =>
+              !search ||
+              title.toLowerCase().includes(search.toLowerCase()) ||
+              description.toLowerCase().includes(search.toLowerCase()) ||
+              secretDescription.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((a) => (
+            <AchievementRow key={a.id} {...a} onComplete={onComplete} />
+          ))}
       </table>
     </Fragment>
   );

@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "lib": ["es6"],
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "skipLibCheck": true
