@@ -61,6 +61,14 @@ const AchievementsPanel: FunctionComponent<any> = () => {
 
   const [search, setSearch] = useState("");
 
+  const results = achievements.filter(
+    ({ title, description, secretDescription = "" }) =>
+      !search ||
+      title.toLowerCase().includes(search.toLowerCase()) ||
+      description.toLowerCase().includes(search.toLowerCase()) ||
+      secretDescription.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Fragment>
       <input
@@ -70,19 +78,24 @@ const AchievementsPanel: FunctionComponent<any> = () => {
         placeholder="Search..."
         onInput={(e) => setSearch((e.target as any).value)}
         value={search}
+        style={{ width: "100%" }}
       />
-      <table>
-        {achievements
-          .filter(
-            ({ title, description, secretDescription = "" }) =>
-              !search ||
-              title.toLowerCase().includes(search.toLowerCase()) ||
-              description.toLowerCase().includes(search.toLowerCase()) ||
-              secretDescription.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((a) => (
-            <AchievementRow key={a.id} {...a} onComplete={onComplete} />
-          ))}
+      <table style={{ width: "100%" }}>
+        <thead>
+          <th />
+          <th>Title</th>
+          <th>Description</th>
+          <th>Secret Description</th>
+        </thead>
+        <tbody>
+          {results.length > 0 ? (
+            results.map((a) => (
+              <AchievementRow key={a.id} {...a} onComplete={onComplete} />
+            ))
+          ) : (
+            <td colSpan={4}>No results found</td>
+          )}
+        </tbody>
       </table>
     </Fragment>
   );
