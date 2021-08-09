@@ -47,9 +47,9 @@
     "compatibleRange": "^1.1.1",
     "graphics": [
       {
-        "file": "alert.html",
-        "width": 400,
-        "height": 280
+        "file": "components.html",
+        "width": 1920,
+        "height": 1080
       }
     ],
     "dashboardPanels": [
@@ -71,6 +71,13 @@
         "name": "checkpoints",
         "title": "Checkpoints",
         "file": "checkpoints.html",
+        "width": 3,
+        "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "guests",
+        "title": "Guests",
+        "file": "guests.html",
         "width": 3,
         "workspace": "The Race Against Time VII"
       }
