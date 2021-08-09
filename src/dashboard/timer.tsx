@@ -1,8 +1,9 @@
 import { h, render, Fragment } from "preact";
 import { useReplicant } from "use-nodecg";
-import { useCallback } from "preact/hooks";
+import { useCallback, useState } from "preact/hooks";
 import classNames from "classnames";
-import { copy } from "../utils";
+import { copy, toHms, calculateSplits } from "../utils";
+import { useInterval } from "../hooks";
 import type { Checkpoint, Timer } from "../../types/replicants";
 
 const DEFAULT_TIMER: Timer = {
@@ -12,6 +13,7 @@ const DEFAULT_TIMER: Timer = {
 };
 
 const TimerPanel = () => {
+  const [duration, setDuration] = useState(0);
   const [timerReplicant, setTimer] = useReplicant("timer", DEFAULT_TIMER);
   const [checkpointsReplicant, setCheckpoints] = useReplicant(
     "checkpoints",
@@ -64,7 +66,20 @@ const TimerPanel = () => {
     setCheckpoints(checkpoints);
   }, [currentIndex, nextCheckpoint, timer, checkpoints]);
 
-  // TODO: Tick the timer.
+  // Is this overkill to calculate the time? Yes, but it works...
+  // TODO: Make this into a function.
+  useInterval(
+    () => {
+      const length = (current.splits || []).length;
+      if (length === 0) return;
+      const limit = length % 2 === 0 ? length : length - 1;
+      const previousSplits = current.splits.slice(0, limit);
+      const newDuration = calculateSplits(previousSplits);
+      const [start] = current.splits.slice(-1);
+      setDuration(newDuration + (Date.now() - start));
+    },
+    timer.state !== "paused" ? 1000 : null
+  );
 
   const canPlayPause = currentIndex !== -1;
   const canAdvance =
@@ -76,7 +91,14 @@ const TimerPanel = () => {
         {/* Show global time, currentIndex time, currentIndex checkpoint with icon */}
         <div className="distributed vertically">
           <span className="title">{current.title}</span>
-          <span className="time">00:00:00</span>
+          <span
+            className={classNames({
+              time: true,
+              paused: timer.state === "paused",
+            })}
+          >
+            {toHms(duration)}
+          </span>
         </div>
         <span
           className={classNames({ button: true, disabled: !canPlayPause })}

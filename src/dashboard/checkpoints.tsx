@@ -2,7 +2,7 @@ import { h, render, FunctionComponent } from "preact";
 import { useReplicant } from "use-nodecg";
 import { useCallback } from "preact/hooks";
 import classNames from "classnames";
-import { copy, calculateSplits } from "../utils";
+import { copy, calculateSplits, toHms } from "../utils";
 import type { Achievement, Checkpoint, Timer } from "../../types/replicants";
 import type { Changeable } from "../../types/events";
 
@@ -48,7 +48,7 @@ const CheckpointRow: FunctionComponent<Checkpoint & Changeable> = ({
       <td className="title">{title}</td>
       <td className="ending">{endingId === undefined ? "" : endingSelector}</td>
       <td className="time">
-        {completed ? calculateSplits(splits) : active ? "🔄" : "🚧"}
+        {completed ? toHms(calculateSplits(splits)) : active ? "🔄" : "🚧"}
       </td>
     </tr>
   );

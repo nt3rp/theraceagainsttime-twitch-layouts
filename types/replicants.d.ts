@@ -29,5 +29,5 @@ export interface Checkpoint {
 export interface Timer {
   splits: Array<number>;
   checkpoint: string | undefined;
-  state: "paused" | "playing";
+  state: "paused" | "playing"; // TODO: Change to boolean 'paused'
 }
