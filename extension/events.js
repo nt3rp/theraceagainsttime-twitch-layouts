@@ -3,13 +3,13 @@ Event logger: Keeps a history of all events that happened
 during the Race Against Time.
 */
 const TIMESTAMP_REGEX = /At$/;
+const copy = (obj) => JSON.parse(JSON.stringify(obj));
 
 module.exports = (nodecg) => {
   const events = nodecg.Replicant("events", { defaultValue: [] });
 
-  nodecg.listenFor("event", (newEvent) => {
-    // TODO: Do we need to make a copy of the event,
-    // or can we use the rest operator?
+  nodecg.listenFor("event", (e) => {
+    const newEvent = copy(e);
     // TODO: Define 'event' structure.
     // TODO: Consider logging event here (if event structure defined)
 

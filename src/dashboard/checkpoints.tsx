@@ -1,27 +1,36 @@
-import { h, render, FunctionComponent, Fragment } from "preact";
+import { h, render, FunctionComponent } from "preact";
 import { useReplicant } from "use-nodecg";
 import { useCallback } from "preact/hooks";
-import type { Achievement, Checkpoint } from "../../types/replicants";
+import classNames from "classnames";
+import { copy, calculateSplits } from "../utils";
+import type { Achievement, Checkpoint, Timer } from "../../types/replicants";
 import type { Changeable } from "../../types/events";
 
-const copy = (obj: any) => JSON.parse(JSON.stringify(obj));
+const DEFAULT_TIMER: Timer = {
+  splits: [],
+  checkpoint: undefined,
+  state: "paused",
+};
 
 const CheckpointRow: FunctionComponent<Checkpoint & Changeable> = ({
   id,
   title,
   endingId,
+  completed,
+  splits,
   onChange,
 }: Checkpoint & Changeable) => {
-  const [achievements, _setAchievements]: [
-    Array<Achievement>,
-    any
-  ] = useReplicant("achievements", []);
+  const [timerReplicant, _setTimer] = useReplicant("timer", DEFAULT_TIMER);
+  const [achievements, _setAchievements] = useReplicant("achievements", []);
+  const timer = copy(timerReplicant);
 
   // Pull the endings from the achievements.
-  const endings = copy(achievements).filter((a) => a.tags.includes("ending"));
+  const endings = copy(achievements).filter((a: Achievement) =>
+    a.tags.includes("ending")
+  );
   const endingSelector = (
     <select value={endingId} onChange={(e) => onChange(id, e)}>
-      {endings.map((e) => {
+      {endings.map((e: Achievement) => {
         return (
           <option key={e.id} value={e.id}>
             {e.title}
@@ -31,16 +40,16 @@ const CheckpointRow: FunctionComponent<Checkpoint & Changeable> = ({
     </select>
   );
 
+  const active = id === timer.checkpoint;
   return (
-    <tr>
+    <tr className={classNames({ completed, active })}>
       {/* Icon */}
-      {/* Title */}
-      {/* Drop-down (endings only) */}
-      {/* Current time / Not started / In progress */}
       {/* Section time vs overall vs max / min? */}
       <td className="title">{title}</td>
       <td className="ending">{endingId === undefined ? "" : endingSelector}</td>
-      <td className="time">Current Time</td>
+      <td className="time">
+        {completed ? calculateSplits(splits) : active ? "🔄" : "🚧"}
+      </td>
     </tr>
   );
 };
@@ -69,14 +78,11 @@ const CheckpointsPanel: FunctionComponent<any> = () => {
   );
 
   return (
-    <Fragment>
-      <div className="time-control" />
-      <table className="checkpoints">
-        {checkpoints.map((c) => (
-          <CheckpointRow key={c.id} {...c} onChange={onChange} />
-        ))}
-      </table>
-    </Fragment>
+    <table className="checkpoints" style={{ width: "100%" }}>
+      {checkpoints.map((c) => (
+        <CheckpointRow key={c.id} {...c} onChange={onChange} />
+      ))}
+    </table>
   );
 };
 

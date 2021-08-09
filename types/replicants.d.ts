@@ -2,6 +2,7 @@ export interface Achievement {
   id: string;
   title: string;
   description: string;
+  tags: Array<string>;
   secretDescription?: string;
   achieved?: boolean;
   achievedAt?: Date;
@@ -23,4 +24,10 @@ export interface Checkpoint {
   previousYear: number;
   previousBest: number;
   thisYear?: number;
+}
+
+export interface Timer {
+  splits: Array<number>;
+  checkpoint: string | undefined;
+  state: "paused" | "playing";
 }

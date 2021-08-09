@@ -11,6 +11,14 @@ module.exports = (nodecg) => {
     defaultValue: CHECKPOINTS,
   });
 
+  nodecg.Replicant("timer", {
+    defaultValue: {
+      state: "paused",
+      splits: [],
+      checkpoint: undefined,
+    },
+  });
+
   checkpoints.on("change", (newCheckpoints, oldCheckpoints) => {
     if (oldCheckpoints === undefined) return;
 

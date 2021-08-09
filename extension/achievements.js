@@ -8,13 +8,9 @@ module.exports = (nodecg) => {
   });
 
   nodecg.listenFor("checkpoint", ({ id, endingId }) => {
-    // TODO: When checkpoints are reached, complete the associated achievement.
-    // Look up the achievement by checkpoint.id;
-    // if not found, use checkpoint.endingId
-
     // Note: `achievement` is a reference to the entry in the replicant.
     // Modifying it here modifies it in the replicant.
-    const achievement = achievements.find(
+    const achievement = achievements.value.find(
       (a) => id === a.id || endingId === a.id
     );
     if (!achievement || achievement.achievedAt) return;
