@@ -16,3 +16,8 @@ export const calculateSplits = (splits: Array<number>): number | undefined => {
 // https://stackoverflow.com/a/1322771/165988
 export const toHms = (timeInMs: number) =>
   new Date(timeInMs).toISOString().substr(11, 8);
+
+export const percent = (numerator: number, denominator: number): number => {
+  if (denominator === 0) return 0;
+  return Math.max(Math.min((numerator * 100) / denominator, 100), 0);
+};

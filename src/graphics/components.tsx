@@ -16,7 +16,16 @@ render(
     }}
   >
     <Panel>
-      <ProgressBar mode="full" markers={[0, 100]} value={25} />
+      <ProgressBar
+        mode="to-next"
+        markers={[
+          { id: "0", value: 0 },
+          { id: "2", value: 50 },
+          { id: "3", value: 100 },
+          { id: "4", value: 200 },
+        ]}
+        value={75}
+      />
     </Panel>
   </div>,
   container
