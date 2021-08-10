@@ -11,8 +11,7 @@ export interface ProgressBarProps {
   mode: "full" | "prev-next" | "to-next";
   markers: Array<Marker>;
   value?: number;
-  labels?: "auto";
-  /* Something about labels? */
+  labelFn?: (el, index, array) => string; // eslint-disable-line no-unused-vars
 }
 
 /* For now assume all progress bars are horizontal */
@@ -25,6 +24,7 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
   mode,
   markers,
   value,
+  labelFn,
 }: ProgressBarProps) => {
   const labelWidth = "3em";
   const labelHeight = "1em";
@@ -91,7 +91,7 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
           left. ALso, add label for curent */}
       </div>
       <div className="labels">
-        {markers.map((m) => (
+        {markers.map((m, index, arr) => (
           <span
             key={m.id}
             className="label"
@@ -105,7 +105,7 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
               )}% - (${labelWidth} / 2))`,
             }}
           >
-            {m.value}
+            {labelFn !== undefined ? labelFn(m, index, arr) : m.value}
           </span>
         ))}
       </div>

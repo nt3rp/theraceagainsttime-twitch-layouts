@@ -17,7 +17,7 @@ render(
   >
     <Panel>
       <ProgressBar
-        mode="to-next"
+        mode="full"
         markers={[
           { id: "0", value: 0 },
           { id: "2", value: 50 },
@@ -25,6 +25,11 @@ render(
           { id: "4", value: 200 },
         ]}
         value={75}
+        labelFn={(el, index, arr) => {
+          if (index === 0) return el.value;
+          if (index === arr.length - 1) return "Banana";
+          return undefined;
+        }}
       />
     </Panel>
   </div>,
