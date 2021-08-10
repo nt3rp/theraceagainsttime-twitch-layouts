@@ -19,11 +19,19 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
   markers,
   value,
 }: ProgressBarProps) => {
+  const width = "10px";
   return (
     <div className="progress-bar">
       <div className="bar">
         <div className="cap left" />
         <div className="progress">
+          {markers.map((m) => (
+            <span
+              key={m}
+              className="marker"
+              style={{ width, left: `calc(${m}% - (${width} / 2))` }}
+            />
+          ))}
           <span className="value" style={{ width: `${value}%` }} />
         </div>
         <div className="cap right" />
