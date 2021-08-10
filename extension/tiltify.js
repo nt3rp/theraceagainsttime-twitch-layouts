@@ -40,10 +40,10 @@ module.exports = (nodecg) => {
   nodecg.log.info("Starting Tiltify client...");
 
   const pollsRep = nodecg.Replicant("polls", { defaultValue: [] });
-  const milestonesRep = nodecg.Replicant("milestones", { defaultValue: {} });
+  const milestonesRep = nodecg.Replicant("milestones", { defaultValue: [] });
   const campaignRep = nodecg.Replicant("campaign", { defaultValue: {} });
-  const donationsRep = nodecg.Replicant("donations", { defaultValue: {} });
-  const targetsRep = nodecg.Replicant("targets", { defaultValue: {} });
+  const donationsRep = nodecg.Replicant("donations", { defaultValue: [] });
+  const targetsRep = nodecg.Replicant("targets", { defaultValue: [] });
 
   // TODO: Make the events that you want to listen to configurable.
   const campaign = CampaignClient({ accessToken, campaignId });
