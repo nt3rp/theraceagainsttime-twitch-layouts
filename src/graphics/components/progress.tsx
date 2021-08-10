@@ -11,17 +11,24 @@ export interface ProgressBarProps {
   mode: "full" | "prev-next" | "to-next";
   markers: Array<Marker>;
   value?: number;
+  labels?: "auto";
   /* Something about labels? */
 }
 
 /* For now assume all progress bars are horizontal */
 /* For now assume markers are sorted */
+// TODO: Icons
+// TODO: Labels
+// TODO: Wire to data
+// TODO: Simple animation
 export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
   mode,
   markers,
   value,
 }: ProgressBarProps) => {
-  const height = "20px";
+  const labelWidth = "3em";
+  const labelHeight = "1em";
+  const height = "5px";
   const width = "10px";
 
   if (!markers.find(({ value }) => value < 1))
@@ -78,6 +85,29 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
           />
         </div>
         <div className="cap right" />
+        {/* create a new div, iterate over markers, set labels as uniform
+          hieght / width then use same trick as above to set positions
+          except right-most is right aligned and right: 0 and reverse for
+          left. ALso, add label for curent */}
+      </div>
+      <div className="labels">
+        {markers.map((m) => (
+          <span
+            key={m.id}
+            className="label"
+            style={{
+              width: labelWidth,
+              height: labelHeight,
+              top: `calc(50% - (${labelHeight} / 2))`,
+              left: `calc(${percent(
+                m.value - min.value,
+                scale
+              )}% - (${labelWidth} / 2))`,
+            }}
+          >
+            {m.value}
+          </span>
+        ))}
       </div>
     </div>
   );

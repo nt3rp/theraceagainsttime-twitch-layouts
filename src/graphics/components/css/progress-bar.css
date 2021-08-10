@@ -10,6 +10,7 @@
   display: flex;
   flex-wrap: nowrap;
   height: 15px;
+  margin: 0.5em;
 }
 
 .progress-bar .bar .progress,
@@ -54,8 +55,28 @@
 
 .progress-bar .bar .marker {
   position: absolute;
-  top: 0;
-  bottom: 0;
   display: block;
   background: #f00;
+}
+
+.progress-bar .labels {
+  position: relative;
+  margin: 0.5em;
+}
+
+.progress-bar .label {
+  position: absolute;
+  color: var(--ct-white);
+  text-align: center;
+}
+
+.progress-bar .label:first-child {
+  left: 0 !important;
+  text-align: left;
+}
+
+.progress-bar .label:last-child {
+  left: auto !important;
+  right: 0 !important;
+  text-align: right;
 }
