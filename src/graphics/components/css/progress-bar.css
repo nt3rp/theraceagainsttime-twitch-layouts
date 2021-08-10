@@ -9,7 +9,7 @@
 .progress-bar .bar {
   display: flex;
   flex-wrap: nowrap;
-  height: 13px;
+  height: 15px;
 }
 
 .progress-bar .bar .progress,
@@ -31,10 +31,11 @@
 }
 
 .progress-bar .bar .progress {
-  border-top: 1px solid var(--ct-gray);
-  border-bottom: 1px solid var(--ct-gray);
+  border-top: 2px solid var(--ct-gray);
+  border-bottom: 2px solid var(--ct-gray);
   position: relative;
   flex-grow: 1;
+  padding: 2px 0 1px 0;
 }
 
 .progress-bar .bar .cap.right {
@@ -45,20 +46,8 @@
 /*Consider using flex instead of  absolute positioning for progress markers*/
 
 .progress-bar .bar .value {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  bottom: 0px;
-  right: 0px;
+  display: block;
+  height: 100%;
   background: var(--ct-white);
-  border-bottom: 3px solid var(--ct-gray);
-}
-
-.progress-bar .bar .marker {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 5px;
-  width: 5px;
-  background: #f00;
+  box-shadow: inset 0 -3px var(--ct-gray);
 }

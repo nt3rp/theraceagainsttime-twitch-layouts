@@ -24,14 +24,7 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
       <div className="bar">
         <div className="cap left" />
         <div className="progress">
-          {markers.map((marker) => (
-            <div
-              key={marker}
-              className="marker"
-              style={{ left: `${marker}%` }}
-            />
-          ))}
-          <div className="value" style={{ width: `${value}%` }} />
+          <span className="value" style={{ width: `${value}%` }} />
         </div>
         <div className="cap right" />
       </div>
