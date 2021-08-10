@@ -3,7 +3,7 @@
 /* TODO: have border width scale somehow? */
 .panel {
   --panel-border-width: 8px;
-  height: 64px;
+  /* height: 64px; */
   border-style: solid;
   border-width: var(--panel-border-width);
   border-image-slice: 8 fill;
@@ -27,4 +27,18 @@
   right: calc(-1 * var(--panel-border-width));
   bottom: calc(-1 * var(--panel-border-width));
   left: calc(-1 * var(--panel-border-width));
+  z-index: 0;
+}
+
+.panel.distributed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel.distributed.vertically {
+  flex-direction: column;
+}
+
+.panel > * {
+  z-index: 1;
 }

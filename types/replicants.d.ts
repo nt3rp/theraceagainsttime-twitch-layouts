@@ -48,3 +48,17 @@ export interface Camera {
   id: string;
   name: string;
 }
+
+export interface PollOption {
+  id: number;
+  name: string;
+  totalAmountRaised: number;
+  [x: string]: any; // Optionally supports other properties.
+}
+
+export interface Poll {
+  id: number;
+  visible?: boolean;
+  name: string;
+  options: Array<PollOption>;
+}

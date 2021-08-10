@@ -16,10 +16,6 @@ export interface ProgressBarProps {
 
 /* For now assume all progress bars are horizontal */
 /* For now assume markers are sorted */
-// TODO: Icons
-// TODO: Labels
-// TODO: Wire to data
-// TODO: Simple animation
 export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
   mode,
   markers,
@@ -31,27 +27,28 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
   const height = "5px";
   const width = "10px";
 
-  if (!markers.find(({ value }) => value < 1))
+  if (markers.length === 1 || !markers.find(({ value }) => value < 1))
     markers.unshift({ id: "minimum", value: 0 });
 
-  switch (mode) {
-    case "prev-next": {
-      const nextIndex = Math.min(
-        markers.findIndex((m) => m.value > value),
-        markers.length - 1
-      );
-      const prevIndex = Math.max(nextIndex - 1, 0);
-      markers = markers.slice(prevIndex, nextIndex + 1);
-      console.log(markers);
-      break;
-    }
-    case "to-next": {
-      const nextIndex = Math.min(
-        markers.findIndex((m) => m.value > value),
-        markers.length - 1
-      );
-      markers = markers.slice(0, nextIndex + 1);
-      break;
+  if (markers.length > 2) {
+    switch (mode) {
+      case "prev-next": {
+        const nextIndex = Math.min(
+          markers.findIndex((m) => m.value > value),
+          markers.length - 1
+        );
+        const prevIndex = Math.max(nextIndex - 1, 0);
+        markers = markers.slice(prevIndex, nextIndex + 1);
+        break;
+      }
+      case "to-next": {
+        const nextIndex = Math.min(
+          markers.findIndex((m) => m.value > value),
+          markers.length - 1
+        );
+        markers = markers.slice(0, nextIndex + 1);
+        break;
+      }
     }
   }
 
@@ -85,12 +82,8 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
           />
         </div>
         <div className="cap right" />
-        {/* create a new div, iterate over markers, set labels as uniform
-          hieght / width then use same trick as above to set positions
-          except right-most is right aligned and right: 0 and reverse for
-          left. ALso, add label for curent */}
       </div>
-      <div className="labels">
+      <div className="labels" style={{ height: labelHeight }}>
         {markers.map((m, index, arr) => (
           <span
             key={m.id}
