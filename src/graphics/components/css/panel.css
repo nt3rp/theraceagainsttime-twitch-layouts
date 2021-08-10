@@ -2,10 +2,9 @@
 
 /* TODO: have border width scale somehow? */
 .panel {
-  --panel-border-width: 8px;
   /* height: 64px; */
   border-style: solid;
-  border-width: var(--panel-border-width);
+  border-width: var(--panel-border-width, 8px);
   border-image-slice: 8 fill;
   border-image-repeat: repeat;
   border-image-outset: 0;
@@ -18,15 +17,15 @@
   content: "";
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.5) 0%,
+    rgba(192, 192, 192, 0.5) 0%,
     rgba(0, 0, 0, 0) 50%,
-    rgba(0, 0, 0, 0.5) 100%
+    rgba(32, 32, 32, 0.75) 100%
   );
   position: absolute;
-  top: calc(-1 * var(--panel-border-width));
-  right: calc(-1 * var(--panel-border-width));
-  bottom: calc(-1 * var(--panel-border-width));
-  left: calc(-1 * var(--panel-border-width));
+  top: calc(-1 * var(--panel-border-width, 8px));
+  right: calc(-1 * var(--panel-border-width, 8px));
+  bottom: calc(-1 * var(--panel-border-width, 8px));
+  left: calc(-1 * var(--panel-border-width, 8px));
   z-index: 0;
 }
 

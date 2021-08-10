@@ -4,17 +4,24 @@ import "./css/panel.css";
 /* Can't figure out type for JSX.HtmlAttributes
    Neither TS nor ESLint know about it :shrug:
 */
-export interface HtmlAttributes {
-  classNames?: string;
+export interface ExtraProperties {
+  properties?: any;
 }
 
 export interface PanelProps {
   children?: ComponentChildren;
 }
 
-export const Panel: FunctionComponent<PanelProps & HtmlAttributes> = ({
+export const Panel: FunctionComponent<PanelProps & ExtraProperties> = ({
   children,
-  classNames,
-}: PanelProps & HtmlAttributes) => {
-  return <div className={`panel ${classNames}`}>{children}</div>;
+  properties,
+}: PanelProps & ExtraProperties) => {
+  return (
+    <div
+      className={`panel ${properties?.classes}`}
+      {...(properties?.props || {})}
+    >
+      {children}
+    </div>
+  );
 };

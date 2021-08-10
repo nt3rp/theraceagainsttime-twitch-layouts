@@ -37,7 +37,7 @@ export const PollComponent: FunctionComponent<any> = () => {
   }
 
   return (
-    <Panel classNames="distributed vertically">
+    <Panel properties={{ classes: "distributed vertically" }}>
       {[<div key="title">{title}</div>, pollOptions]}
     </Panel>
   );

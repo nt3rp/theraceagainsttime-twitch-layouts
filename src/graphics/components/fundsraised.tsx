@@ -5,7 +5,7 @@ import { Panel } from "./panel";
 export const FundsRaised: FunctionComponent<any> = () => {
   const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
   return (
-    <Panel classNames="fundsraised">
+    <Panel properties={{ classes: "fundsraised" }}>
       <span className="symbol">$</span>
       <span className="amount">{campaign.amountRaised}</span>
       <span className="divider">/</span>
