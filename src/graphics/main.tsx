@@ -1,5 +1,6 @@
 import { h, render } from "preact";
 import { Panel } from "./components/panel";
+import { GuestCamera } from "./components/camera";
 import { FundsRaised } from "./components/fundsraised";
 
 // TODO: replace this with an 'Theme' so that you can use replicant? Pass these in as children?
@@ -40,18 +41,17 @@ const Panels = [
   >
     Chat
   </Panel>,
-  <Panel
+  <GuestCamera
+    cameraId="cam1"
     key="camera2"
+    aspectRatio="widescreen"
     style={{
       position: "absolute",
       top: "373px",
       right: "1352px",
       width: "457px",
-      aspectRatio: "4/3",
     }}
-  >
-    Camera 2
-  </Panel>,
+  />,
   <Panel
     key="omnibar"
     className="horizontally borderless"
