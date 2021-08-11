@@ -1,0 +1,39 @@
+* {
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#container {
+  background: url("../img/bg.png");
+  background-size: 200px;
+  /* background: url("../img/example-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat; */
+  --panel-border-width: 24px;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: relative;
+  animation: background 60s ease-in-out infinite;
+  image-rendering: auto;
+}
+
+@keyframes background {
+  25% {
+    background-position: 200px 200px;
+  }
+  50% {
+    background-position: 400px 0px;
+  }
+  75% {
+    background-position: 200px -200px;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

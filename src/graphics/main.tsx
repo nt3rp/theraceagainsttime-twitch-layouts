@@ -9,8 +9,8 @@ const Panels = [
         style: {
           position: "absolute",
           top: "30px",
-          right: "150px",
-          width: "1124px", // 1184px // 1068px
+          bottom: "144px",
+          left: "598px",
           aspectRatio: "4/3",
         },
       },
@@ -25,8 +25,8 @@ const Panels = [
         style: {
           position: "absolute",
           top: "30px",
-          left: "150px",
-          width: "355px", // 456px
+          right: "1352px",
+          width: "457px",
           aspectRatio: "4/3",
         },
       },
@@ -40,10 +40,10 @@ const Panels = [
       props: {
         style: {
           position: "absolute",
-          top: "344px", // 420px
-          left: "150px",
-          width: "355px",
-          height: "529px",
+          top: "373px",
+          right: "1352px",
+          width: "457px",
+          bottom: "144px",
         },
       },
     }}
@@ -56,16 +56,15 @@ const Panels = [
       props: {
         style: {
           position: "absolute",
-          top: "344px", // 420px
-          left: "150px",
-          width: "355px",
+          top: "373px",
+          right: "1352px",
+          width: "457px",
           aspectRatio: "4/3",
-          display: "none",
         },
       },
     }}
   >
-    Camera
+    Camera 2
   </Panel>,
   <Panel
     key="omnibar"
@@ -74,10 +73,9 @@ const Panels = [
         style: {
           position: "absolute",
           bottom: "0px",
-          left: "150px",
-          right: "150px",
-          // width: "1572px",
-          height: "66px",
+          left: "0px",
+          right: "0px",
+          height: "114px",
         },
       },
     }}
