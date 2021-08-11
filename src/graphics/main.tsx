@@ -1,6 +1,7 @@
 import { h, render } from "preact";
 import { Panel } from "./components/panel";
 
+// TODO: replace this with an 'Theme' so that you can use replicant? Pass these in as children?
 const Panels = [
   <Panel
     key="game"
@@ -69,6 +70,7 @@ const Panels = [
   <Panel
     key="omnibar"
     properties={{
+      classes: "horizontally borderless",
       props: {
         style: {
           position: "absolute",
@@ -80,7 +82,15 @@ const Panels = [
       },
     }}
   >
-    Omnibar
+    <Panel>
+      <span>This is the song that never ends...</span>
+    </Panel>
+    <Panel>
+      <span>Yes it goes on and on my friends....</span>
+    </Panel>
+    <Panel>
+      <span>Test</span>
+    </Panel>
   </Panel>,
 ];
 

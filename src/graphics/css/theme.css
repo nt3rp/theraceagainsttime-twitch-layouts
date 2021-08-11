@@ -14,13 +14,20 @@ body {
   /* background: url("../img/example-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat; */
+  font-family: "Chrono Trigger Proportional Regular";
+  font-size: 2em;
   --panel-border-width: 24px;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
   position: relative;
-  animation: background 60s ease-in-out infinite;
+  animation: background 60s linear infinite;
   image-rendering: auto;
+  --ct-shadow: #182028;
+  --ct-gray: #889090;
+  --ct-white: #f8f8f8;
+  text-shadow: 0px 2px var(--ct-shadow), 2px 0px var(--ct-shadow);
+  color: var(--ct-white);
 }
 
 @keyframes background {

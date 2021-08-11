@@ -2,7 +2,6 @@
 
 /* TODO: have border width scale somehow? */
 .panel {
-  /* height: 64px; */
   border-style: solid;
   border-width: var(--panel-border-width, 8px);
   border-image-slice: 8 fill;
@@ -34,10 +33,27 @@
   justify-content: space-between;
 }
 
-.panel.distributed.vertically {
+.panel.horizontally {
+  display: flex;
+  flex-direction: row;
+}
+
+.panel.vertically {
+  display: flex;
   flex-direction: column;
 }
 
+/* Elements inside a panel shouldn't have a gradient overtop. */
 .panel > * {
+  position: relative;
   z-index: 1;
+}
+
+/* Shenanigans to circumvent borders for the event bar. */
+.panel.borderless > * {
+  margin: calc(-1 * var(--panel-border-width, 8px)) 0px;
+}
+
+.panel.borderless > *:first-child {
+  margin-left: calc(-1 * var(--panel-border-width, 8px));
 }
