@@ -9,19 +9,20 @@
   left: calc(-1 * var(--panel-border-width, 8px));
 }
 
-.events .event {
+.event {
   display: flex;
   justify-content: left;
   align-items: center;
   width: 350px;
   height: 100%;
+  z-index: 1;
 }
 
-.events .event .icon {
+.event .icon {
   margin-left: 6px;
   margin-right: 14px;
 }
 
-.events .event .title {
+.event .title {
   color: var(--ct-yellow);
 }

@@ -3,9 +3,20 @@ import { Panel } from "./components/panel";
 import { Camera, GuestCamera } from "./components/camera";
 import { FundsRaised } from "./components/fundsraised";
 import { Events } from "./components/events";
+import { Toaster } from "./components/toaster";
 
 // TODO: replace this with an 'Theme' so that you can use replicant? Pass these in as children?
 const Panels = [
+  <Toaster
+    key="toaster"
+    duration={5000}
+    style={{
+      position: "absolute",
+      bottom: "114px",
+      right: "0px",
+      height: "113px",
+    }}
+  />,
   <Camera
     aspectRatio="fullscreen"
     key="game"

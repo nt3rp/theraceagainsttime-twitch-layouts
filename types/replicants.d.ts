@@ -14,7 +14,7 @@ export interface Event {
   title: string;
   description?: string;
   icon?: string;
-  shown: boolean;
+  shown?: boolean;
   occuredAt: Date;
   // TODO: add 'type'
   [x: string]: any; // Optionally supports other properties.
