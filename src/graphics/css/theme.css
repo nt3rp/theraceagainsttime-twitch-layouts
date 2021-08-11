@@ -16,7 +16,7 @@ body {
   background-repeat: no-repeat; */
   font-family: "Chrono Trigger Proportional Regular";
   font-size: 2em;
-  --panel-border-width: 24px;
+  --panel-border-width: 16px;
   width: 1920px;
   height: 1080px;
   overflow: hidden;

@@ -6,81 +6,61 @@ import { FundsRaised } from "./components/fundsraised";
 const Panels = [
   <Panel
     key="game"
-    properties={{
-      props: {
-        style: {
-          position: "absolute",
-          top: "30px",
-          bottom: "144px",
-          left: "598px",
-          aspectRatio: "4/3",
-        },
-      },
+    style={{
+      position: "absolute",
+      top: "30px",
+      bottom: "144px",
+      left: "598px",
+      aspectRatio: "4/3",
     }}
   >
     Camera
   </Panel>,
   <Panel
     key="camera"
-    properties={{
-      props: {
-        style: {
-          position: "absolute",
-          top: "30px",
-          right: "1352px",
-          width: "457px",
-          aspectRatio: "4/3",
-        },
-      },
+    style={{
+      position: "absolute",
+      top: "30px",
+      right: "1352px",
+      width: "457px",
+      aspectRatio: "4/3",
     }}
   >
     Camera
   </Panel>,
   <Panel
     key="chat"
-    properties={{
-      props: {
-        style: {
-          position: "absolute",
-          top: "373px",
-          right: "1352px",
-          width: "457px",
-          bottom: "144px",
-        },
-      },
+    style={{
+      position: "absolute",
+      top: "373px",
+      right: "1352px",
+      width: "457px",
+      bottom: "144px",
     }}
   >
-    chat
+    Chat
   </Panel>,
   <Panel
     key="camera2"
-    properties={{
-      props: {
-        style: {
-          position: "absolute",
-          top: "373px",
-          right: "1352px",
-          width: "457px",
-          aspectRatio: "4/3",
-        },
-      },
+    style={{
+      position: "absolute",
+      top: "373px",
+      right: "1352px",
+      width: "457px",
+      aspectRatio: "4/3",
     }}
   >
     Camera 2
   </Panel>,
   <Panel
     key="omnibar"
-    properties={{
-      classes: "horizontally borderless",
-      props: {
-        style: {
-          position: "absolute",
-          bottom: "0px",
-          left: "0px",
-          right: "0px",
-          height: "114px",
-        },
-      },
+    className="horizontally borderless"
+    style={{
+      position: "absolute",
+      bottom: "0px",
+      left: "0px",
+      right: "0px",
+      height: "114px",
     }}
   >
     <Panel>
@@ -93,8 +73,17 @@ const Panels = [
       <span>Test</span>
     </Panel>
   </Panel>,
-  // TODO: Properties should be here, not in component
-  <FundsRaised key="fundsraised" />,
+  <FundsRaised
+    key="fundsraised"
+    className="fundsraised"
+    style={{
+      position: "absolute",
+      bottom: "0px",
+      right: "0px",
+      height: "114px",
+      width: "250px",
+    }}
+  />,
 ];
 
 const root = document.getElementById("container");

@@ -4,23 +4,10 @@ import { Panel } from "./panel";
 import "./css/fundsraised.css";
 
 // TODO: Properties should be in layout, not here.
-export const FundsRaised: FunctionComponent<any> = () => {
+export const FundsRaised: FunctionComponent<any> = (props: any) => {
   const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
   return (
-    <Panel
-      properties={{
-        classes: "fundsraised",
-        props: {
-          style: {
-            position: "absolute",
-            bottom: "0px",
-            right: "0px",
-            height: "114px",
-            width: "250px",
-          },
-        },
-      }}
-    >
+    <Panel {...props}>
       <span className="numerator">
         <span className="symbol">$</span>
         <span className="amount">

@@ -14,8 +14,8 @@
 .fundsraised .symbol {
   position: absolute;
   top: 0;
-  left: -5px;
-  font-size: 2rem;
+  left: 0;
+  font-size: 3rem;
 }
 
 .fundsraised .denominator {
