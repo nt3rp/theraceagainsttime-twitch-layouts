@@ -1,5 +1,6 @@
 import { h, render } from "preact";
 import { Panel } from "./components/panel";
+import { FundsRaised } from "./components/fundsraised";
 
 // TODO: replace this with an 'Theme' so that you can use replicant? Pass these in as children?
 const Panels = [
@@ -92,6 +93,8 @@ const Panels = [
       <span>Test</span>
     </Panel>
   </Panel>,
+  // TODO: Properties should be here, not in component
+  <FundsRaised key="fundsraised" />,
 ];
 
 const root = document.getElementById("container");

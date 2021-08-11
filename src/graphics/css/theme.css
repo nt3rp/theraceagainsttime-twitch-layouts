@@ -26,6 +26,7 @@ body {
   --ct-shadow: #182028;
   --ct-gray: #889090;
   --ct-white: #f8f8f8;
+  --ct-yellow: #f8f800;
   text-shadow: 0px 2px var(--ct-shadow), 2px 0px var(--ct-shadow);
   color: var(--ct-white);
 }
