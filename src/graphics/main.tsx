@@ -5,7 +5,8 @@ import { FundsRaised } from "./components/fundsraised";
 
 // TODO: replace this with an 'Theme' so that you can use replicant? Pass these in as children?
 const Panels = [
-  <Panel
+  <Camera
+    aspectRatio="fullscreen"
     key="game"
     style={{
       position: "absolute",
@@ -13,10 +14,10 @@ const Panels = [
       bottom: "144px",
       left: "598px",
       aspectRatio: "4/3",
+      border: "1px solid #000", // Replace when we have transparent panels
+      background: "#f0f",
     }}
-  >
-    Camera
-  </Panel>,
+  />,
   <Camera
     aspectRatio="fullscreen"
     key="camera"
