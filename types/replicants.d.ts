@@ -12,6 +12,8 @@ export interface Event {
   id: string;
   icon?: string;
   title: string;
+  description?: string;
+  icon?: string;
   shown: boolean;
   occuredAt: Date;
   // TODO: add 'type'

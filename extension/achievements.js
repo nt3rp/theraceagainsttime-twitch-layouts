@@ -16,7 +16,6 @@ module.exports = (nodecg) => {
     if (!achievement || achievement.achievedAt) return;
     achievement.achievedAt = Date.now();
     achievement.achieved = true;
-    achievement.icon = achievement.id;
     // TODO: add 'type'
     nodecg.sendMessage("event", achievement);
   });

@@ -2,6 +2,7 @@ import { h, render } from "preact";
 import { Panel } from "./components/panel";
 import { Camera, GuestCamera } from "./components/camera";
 import { FundsRaised } from "./components/fundsraised";
+import { Events } from "./components/events";
 
 // TODO: replace this with an 'Theme' so that you can use replicant? Pass these in as children?
 const Panels = [
@@ -56,9 +57,8 @@ const Panels = [
       width: "457px",
     }}
   />,
-  <Panel
-    key="omnibar"
-    className="horizontally borderless"
+  <Events
+    key="events"
     style={{
       position: "absolute",
       bottom: "0px",
@@ -66,17 +66,7 @@ const Panels = [
       right: "0px",
       height: "114px",
     }}
-  >
-    <Panel>
-      <span>This is the song that never ends...</span>
-    </Panel>
-    <Panel>
-      <span>Yes it goes on and on my friends....</span>
-    </Panel>
-    <Panel>
-      <span>Test</span>
-    </Panel>
-  </Panel>,
+  />,
   <FundsRaised
     key="fundsraised"
     className="fundsraised"

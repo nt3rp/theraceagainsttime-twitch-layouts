@@ -48,12 +48,3 @@
   position: relative;
   z-index: 1;
 }
-
-/* Shenanigans to circumvent borders for the event bar. */
-.panel.borderless > * {
-  margin: calc(-1 * var(--panel-border-width, 8px)) 0px;
-}
-
-.panel.borderless > *:first-child {
-  margin-left: calc(-1 * var(--panel-border-width, 8px));
-}
