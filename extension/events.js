@@ -21,6 +21,7 @@ module.exports = (nodecg) => {
     );
     events.value.push({
       ...newEvent,
+      shown: false,
       occuredAt: newEvent[timestamp] || Date.now(),
     });
   });

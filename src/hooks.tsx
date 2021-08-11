@@ -23,6 +23,8 @@ export const useTimeout = (callback: () => void, delay: number | null) => {
   }, [delay]);
 };
 
+// Modified slightly from:
+// https://usehooks-typescript.com/react-hook/use-interval
 export const useInterval = (callback: () => void, delay: number | null) => {
   const savedCallback = useRef(callback);
 

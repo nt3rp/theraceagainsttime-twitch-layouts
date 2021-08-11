@@ -10,8 +10,11 @@ export interface Achievement {
 
 export interface Event {
   id: string;
+  icon?: string;
   title: string;
+  shown: boolean;
   occuredAt: Date;
+  // TODO: add 'type'
   [x: string]: any; // Optionally supports other properties.
 }
 
