@@ -18,28 +18,30 @@ const Panels = [
     }}
   />,
   <Camera
-    aspectRatio="fullscreen"
+    // aspectRatio="fullscreen"
     key="game"
     style={{
       position: "absolute",
       top: "30px",
       bottom: "144px",
       left: "598px",
-      aspectRatio: "4/3",
-      border: "1px solid #000", // Replace when we have transparent panels
+      aspectRatio: "4/3", // Not supported in OBS; set explicit height;
+      width: "1208px",
+      border: "4px solid #000", // Replace when we have transparent panels
       background: "#f0f",
     }}
   />,
   <Camera
-    aspectRatio="fullscreen"
+    // aspectRatio="fullscreen"
     key="camera"
     style={{
       position: "absolute",
       top: "30px",
       right: "1352px",
       width: "457px",
-      aspectRatio: "4/3",
-      border: "1px solid #000", // Replace when we have transparent panels
+      aspectRatio: "4/3", // Not supported in OBS; set explicit height;
+      height: "343px",
+      border: "4px solid #000", // Replace when we have transparent panels
       background: "#f0f",
     }}
   >
@@ -60,12 +62,13 @@ const Panels = [
   <GuestCamera
     cameraId="cam1"
     key="camera2"
-    aspectRatio="widescreen"
+    // aspectRatio="widescreen" // Not supported in OBS; set explicit height;
     style={{
       position: "absolute",
       top: "373px",
       right: "1352px",
       width: "457px",
+      height: "255px",
     }}
   />,
   <Events
