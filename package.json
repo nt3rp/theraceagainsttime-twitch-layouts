@@ -44,6 +44,9 @@
     "use-nodecg": "^0.4.1-1"
   },
   "nodecg": {
+    "bundleDependencies": {
+      "nodecg-twitchie": "^2.5.2"
+    },
     "compatibleRange": "^1.1.1",
     "graphics": [
       {

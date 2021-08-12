@@ -5,6 +5,7 @@ const checkpoints = require("./checkpoints");
 const events = require("./events");
 const guests = require("./guests");
 const tiltify = require("./tiltify");
+const twitchie = require("./twitchie");
 
 module.exports = (nodecg) => {
   achievements(nodecg);
@@ -12,4 +13,5 @@ module.exports = (nodecg) => {
   events(nodecg);
   guests(nodecg);
   tiltify(nodecg);
+  twitchie(nodecg);
 };
