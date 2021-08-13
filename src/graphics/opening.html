@@ -297,9 +297,21 @@
           src="./img/opening-ainst.png"
         /><img class="time" src="./img/opening-time.png" />
       </span>
-      <img class="pendulum" src="./img/opening-pendulum.png" />
+      <img class="pendulum ticking" src="./img/opening-pendulum.png" />
     </div>
     <script type="text/javascript">
+      const start = nodecg.Replicant("start");
+      let stopTicking = false;
+
+      NodeCG.waitForReplicants(start).then(() => {
+        stopTicking = start.value;
+        start.on("change", (oldValue, newValue) => {
+          if (oldValue || newValue) {
+            stopTicking = true;
+          }
+        });
+      });
+
       const pendulum = document.querySelector(".pendulum");
       const hands = document.querySelector(".hands");
       const THE = document.querySelector(".the");
@@ -308,6 +320,14 @@
       const C = document.querySelector(".c");
       const E = document.querySelector(".e");
       const AGAINSTTIME = document.querySelector(".againsttime");
+
+      let count = 0;
+      pendulum.addEventListener("animationiteration", (elem) => {
+        count++;
+        if (count % 2 == 1 && stopTicking) {
+          elem.target.classList.toggle("ticking");
+        }
+      });
 
       pendulum.addEventListener("animationend", () => {
         R.classList.toggle("hidden");

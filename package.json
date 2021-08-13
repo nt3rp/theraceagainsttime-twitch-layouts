@@ -93,6 +93,13 @@
         "file": "guests.html",
         "width": 3,
         "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "opening",
+        "title": "Opening",
+        "file": "opening.html",
+        "width": 1,
+        "workspace": "The Race Against Time VII"
       }
     ],
     "soundCues": [
