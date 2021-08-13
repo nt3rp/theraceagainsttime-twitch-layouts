@@ -20,12 +20,11 @@ export const GuestCamera: FunctionComponent<any> = (props: any) => {
   );
   const guests: Array<Guest> = copy(guestsReplicant);
   const guest: Guest | any =
-    guests.find(({ camera }) => props.cameraId === camera) || {};
+    guests.find(({ camera }) => props.cameraId === camera) || undefined;
+
+  if (guest === undefined) return <div />;
+
   const url = `https://obs.ninja/?view=${guest.id}&scene&room=the_race_against_time_vii&noaudio`;
-  // allow='autoplay' -> not valid?
-  // allow="autoplay 'src'"
-  // works in OBS?
-  // properties need to be set on iframe itself?
   return (
     <Camera {...props} aspectRatio={props.aspectRatio}>
       <iframe src={url} />
