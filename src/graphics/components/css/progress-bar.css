@@ -10,7 +10,7 @@
   display: flex;
   flex-wrap: nowrap;
   height: 15px;
-  margin: 0.5em;
+  margin: 0.5em 0.5em 0 0.5em;
 }
 
 .progress-bar .bar .progress,
@@ -56,20 +56,24 @@
 .progress-bar .bar .marker {
   position: absolute;
   display: block;
-  background: #f00;
+  background: var(--ct-white);
+  border: 1px solid var(--ct-shadow);
+  border-radius: 100px;
 }
 
 .progress-bar .labels {
   position: relative;
-  margin: 0.5em;
+  margin: 0 0.5em;
 }
 
 .progress-bar .label {
   position: absolute;
-  text-align: center;
+  text-align: right;
+  transform-origin: top right;
+  transform: rotate(-45deg);
 }
 
-.progress-bar .label:first-child {
+/* .progress-bar .label:first-child {
   left: 0 !important;
   text-align: left;
 }
@@ -78,4 +82,4 @@
   left: auto !important;
   right: 0 !important;
   text-align: right;
-}
+} */

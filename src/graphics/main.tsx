@@ -76,7 +76,7 @@ const Panels = [
       position: "absolute",
       bottom: "0px",
       left: "0px",
-      right: "0px",
+      right: "250px",
       height: "114px",
     }}
   />,

@@ -16,15 +16,15 @@ export interface ProgressBarProps {
 
 /* For now assume all progress bars are horizontal */
 /* For now assume markers are sorted */
-export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
+export const ProgressBar: FunctionComponent<any> = ({
   mode,
   markers,
   value,
   labelFn,
-}: ProgressBarProps) => {
+}: any) => {
   const labelWidth = "3em";
   const labelHeight = "1em";
-  const height = "5px";
+  const height = "10px";
   const width = "10px";
 
   if (markers.length === 1 || !markers.find(({ value }) => value < 1))
@@ -68,7 +68,7 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
               style={{
                 width,
                 height,
-                top: `calc(50% - (${height} / 2))`,
+                top: `calc(50% - (${height} / 2) - 1px)`,
                 left: `calc(${percent(
                   m.value - min.value,
                   scale
@@ -95,7 +95,7 @@ export const ProgressBar: FunctionComponent<ProgressBarProps> = ({
               left: `calc(${percent(
                 m.value - min.value,
                 scale
-              )}% - (${labelWidth} / 2))`,
+              )}% - ${labelWidth})`,
             }}
           >
             {labelFn !== undefined ? labelFn(m, index, arr) : m.value}

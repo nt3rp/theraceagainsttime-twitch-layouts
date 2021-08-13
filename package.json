@@ -105,6 +105,13 @@
         "file": "opening.html",
         "width": 1,
         "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "events-bar",
+        "title": "Events Bar",
+        "file": "events.html",
+        "width": 1,
+        "workspace": "The Race Against Time VII"
       }
     ],
     "soundCues": [

@@ -6,6 +6,7 @@ const TIMESTAMP_REGEX = /At$/;
 const copy = (obj) => JSON.parse(JSON.stringify(obj));
 
 module.exports = (nodecg) => {
+  nodecg.Replicant("events-bar", { defaultValue: "" });
   const events = nodecg.Replicant("events", { defaultValue: [] });
 
   nodecg.listenFor("event", (e) => {
