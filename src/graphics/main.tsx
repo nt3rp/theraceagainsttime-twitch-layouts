@@ -1,5 +1,4 @@
 import { h, render } from "preact";
-import { Panel } from "./components/panel";
 import { Camera, GuestCamera } from "./components/camera";
 import { FundsRaised } from "./components/fundsraised";
 import { Events } from "./components/events";
@@ -47,7 +46,8 @@ const Panels = [
   >
     <div className="label">TheRaceAgainstTime</div>
   </Camera>,
-  <Panel
+  <Camera
+    // aspectRatio="fullscreen"
     key="chat"
     style={{
       position: "absolute",
@@ -55,10 +55,9 @@ const Panels = [
       right: "1352px",
       width: "457px",
       bottom: "144px",
+      background: "#f0f",
     }}
-  >
-    Chat
-  </Panel>,
+  />,
   <GuestCamera
     cameraId="cam1"
     key="camera2"
