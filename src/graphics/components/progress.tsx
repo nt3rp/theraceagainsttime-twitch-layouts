@@ -21,6 +21,7 @@ export const ProgressBar: FunctionComponent<any> = ({
   markers,
   value,
   labelFn,
+  className,
 }: any) => {
   const labelWidth = "3em";
   const labelHeight = "1em";
@@ -57,7 +58,7 @@ export const ProgressBar: FunctionComponent<any> = ({
   const scale = max.value - min.value;
 
   return (
-    <div className="progress-bar">
+    <div className={`progress-bar ${className}`}>
       <div className="bar">
         <div className="cap left" />
         <div className="progress">

@@ -73,6 +73,10 @@
   transform: rotate(-45deg);
 }
 
+.progress-bar.small-labels .label {
+  font-size: 0.75em;
+}
+
 /* .progress-bar .label:first-child {
   left: 0 !important;
   text-align: left;

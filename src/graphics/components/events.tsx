@@ -16,7 +16,8 @@ export const Events: FunctionComponent<any> = (props: any) => {
 
   let content;
   switch (setting) {
-    case "checkpoint":
+    case "checkpoints":
+      content = <CheckpointsBar />;
       break;
     case "funds":
       content = <FundsBar />;
@@ -27,6 +28,32 @@ export const Events: FunctionComponent<any> = (props: any) => {
   }
 
   return <Panel {...props}>{content}</Panel>;
+};
+
+export const CheckpointsBar: FunctionComponent<any> = () => {
+  const [checkpointsRep, _setCheckpointsRep]: [
+    Array<any>,
+    unknown
+  ] = useReplicant("checkpoints", []);
+  const checkpoints = copy(checkpointsRep).map((c, index) => {
+    return {
+      id: c.id,
+      value: index,
+      label: c.title,
+      completed: c.completed,
+    };
+  });
+  const value = checkpoints.findIndex((c) => c.completed === false) - 1;
+
+  return (
+    <ProgressBar
+      value={value || 0}
+      markers={checkpoints}
+      labelFn={(c) => c.label}
+      mode="full"
+      className="small-labels"
+    />
+  );
 };
 
 export const FundsBar: FunctionComponent<any> = () => {
