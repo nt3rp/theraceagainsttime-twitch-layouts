@@ -72,4 +72,23 @@ module.exports = (nodecg) => {
   // TODO: Make polling frequency configurable by method.
   setInterval(fetchData, POLLING_FREQUENCY_IN_MS);
   fetchData();
+
+  const toastDonation = (donation) => {
+    const { amount, name, comment } = donation;
+    const message = {
+      title: `${name} donated $${amount}!`,
+      description: comment ? `\u201c${comment}\u201d` : "",
+      sound: "donation",
+    };
+    nodecg.sendMessage("event", message);
+    donation.shown = true;
+  };
+
+  // Toast anything that was missed.
+  donationsRep.value.filter((d) => d.shown !== true).forEach(toastDonation);
+
+  // Toast new changes.
+  donationsRep.on("change", (donations) => {
+    donations.filter((d) => d.shown !== true).forEach(toastDonation);
+  });
 };
