@@ -50,6 +50,11 @@
     "compatibleRange": "^1.1.1",
     "graphics": [
       {
+        "file": "opening.html",
+        "width": 1070,
+        "height": 602
+      },
+      {
         "file": "main.html",
         "width": 1920,
         "height": 1080
