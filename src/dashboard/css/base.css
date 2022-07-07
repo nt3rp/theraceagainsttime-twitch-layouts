@@ -1,0 +1,32 @@
+.distributed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vertically {
+  flex-direction: column;
+}
+
+.controls {
+  font-size: 3em;
+  margin-bottom: 0.5em;
+}
+
+.controls .button {
+  cursor: pointer;
+  user-select: none;
+}
+
+.controls .button.disabled {
+  cursor: default;
+  color: grey;
+  filter: grayscale(100%);
+}
+
+.controls .title {
+  font-size: 1rem;
+}
+
+.controls.distributed {
+  align-items: flex-end;
+}

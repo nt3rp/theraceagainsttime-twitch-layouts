@@ -6,8 +6,10 @@
   "author": "Nick Terwoord <me@nt3rp.io>",
   "license": "MIT",
   "scripts": {
-    "watch:graphics": "npx parcel watch 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'",
-    "build:graphics": "npx parcel build 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'"
+    "watch:dashboard": "parcel watch 'src/dashboard/*.html' --dist-dir='dashboard' --public-url='.'",
+    "build:dashboard": "parcel build 'src/dashboard/*.html' --dist-dir='dashboard' --public-url='.'",
+    "watch:graphics": "parcel watch 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'",
+    "build:graphics": "parcel build 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'"
   },
   "alias": {
     "react": "preact/compat",
@@ -24,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "app-root-path": "^3.0.0",
+    "classnames": "^2.3.1",
     "concurrently": "^6.2.0",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
@@ -36,15 +39,97 @@
     "parcel": "^2.0.0-beta.3.1",
     "preact": "^10.0.0",
     "prettier": "^2.2.1",
-    "typescript": "^4.2.0"
+    "tiltify-api-client": "^1.1.2",
+    "typescript": "^4.2.0",
+    "use-nodecg": "^0.4.1-1"
   },
   "nodecg": {
+    "bundleDependencies": {
+      "nodecg-twitchie": "^2.5.2"
+    },
     "compatibleRange": "^1.1.1",
     "graphics": [
       {
-        "file": "alert.html",
-        "width": 400,
-        "height": 280
+        "file": "opening.html",
+        "width": 1070,
+        "height": 602
+      },
+      {
+        "file": "main.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "guest2.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "panel.html",
+        "width": 100,
+        "height": 100
+      }
+    ],
+    "dashboardPanels": [
+      {
+        "name": "achievements",
+        "title": "Achievements",
+        "file": "achievements.html",
+        "width": 4,
+        "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "timer",
+        "title": "Timer",
+        "file": "timer.html",
+        "width": 3,
+        "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "checkpoints",
+        "title": "Checkpoints",
+        "file": "checkpoints.html",
+        "width": 3,
+        "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "guests",
+        "title": "Guests",
+        "file": "guests.html",
+        "width": 3,
+        "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "opening",
+        "title": "Opening",
+        "file": "opening.html",
+        "width": 1,
+        "workspace": "The Race Against Time VII"
+      },
+      {
+        "name": "events-bar",
+        "title": "Events Bar",
+        "file": "events.html",
+        "width": 1,
+        "workspace": "The Race Against Time VII"
+      }
+    ],
+    "soundCues": [
+      {
+        "name": "donation",
+        "channels": 1
+      },
+      {
+        "name": "follow"
+      },
+      {
+        "name": "raid"
+      },
+      {
+        "name": "host"
+      },
+      {
+        "name": "generic"
       }
     ]
   }

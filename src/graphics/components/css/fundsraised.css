@@ -1,0 +1,25 @@
+.fundsraised {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.fundsraised .numerator {
+  font-size: 2em;
+  display: block;
+  text-align: right;
+  /* color: var(--ct-yellow); */
+}
+
+.fundsraised .symbol {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 3rem;
+}
+
+.fundsraised .denominator {
+  display: block;
+  text-align: right;
+}

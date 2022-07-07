@@ -1,0 +1,89 @@
+.progress-bar {
+  --ct-shadow: #182028;
+  --ct-gray: #889090;
+  --ct-white: #f8f8f8;
+  width: 100%;
+  position: relative;
+}
+
+.progress-bar .bar {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 15px;
+  margin: 0.5em 0.5em 0 0.5em;
+}
+
+.progress-bar .bar .progress,
+.progress-bar .bar .cap.left,
+.progress-bar .bar .cap.right {
+  box-shadow: 0px 1px var(--ct-shadow), inset 0px 1px var(--ct-shadow);
+}
+
+.progress-bar .bar .cap.left,
+.progress-bar .bar .cap.right {
+  content: "";
+  width: 4px;
+  border: 2px solid var(--ct-gray);
+}
+
+.progress-bar .bar .cap.left {
+  border-radius: 10px 0px 0px 10px;
+  border-right: 0px;
+}
+
+.progress-bar .bar .progress {
+  border-top: 2px solid var(--ct-gray);
+  border-bottom: 2px solid var(--ct-gray);
+  position: relative;
+  flex-grow: 1;
+  padding: 2px 0 1px 0;
+}
+
+.progress-bar .bar .cap.right {
+  border-radius: 0px 10px 10px 0px;
+  border-left: 0px;
+}
+
+/*Consider using flex instead of  absolute positioning for progress markers*/
+
+.progress-bar .bar .value {
+  display: block;
+  height: 100%;
+  background: var(--ct-white);
+  box-shadow: inset 0 -3px var(--ct-gray);
+}
+
+.progress-bar .bar .marker {
+  position: absolute;
+  display: block;
+  background: var(--ct-white);
+  border: 1px solid var(--ct-shadow);
+  border-radius: 100px;
+}
+
+.progress-bar .labels {
+  position: relative;
+  margin: 0 0.5em;
+}
+
+.progress-bar .label {
+  position: absolute;
+  text-align: right;
+  transform-origin: top right;
+  transform: rotate(-45deg);
+}
+
+.progress-bar.small-labels .label {
+  font-size: 0.75em;
+}
+
+/* .progress-bar .label:first-child {
+  left: 0 !important;
+  text-align: left;
+}
+
+.progress-bar .label:last-child {
+  left: auto !important;
+  right: 0 !important;
+  text-align: right;
+} */

@@ -1,0 +1,50 @@
+/* TODO: Add theming stuff for panels here */
+
+/* TODO: have border width scale somehow? */
+.panel {
+  border-style: solid;
+  border-width: var(--panel-border-width, 8px);
+  border-image-slice: 8 fill;
+  border-image-repeat: repeat;
+  border-image-outset: 0;
+  border-image-source: url("../img/tile-slate.png");
+  position: relative;
+}
+
+/* Adds a gradient to panels; this is really close, minus the step function in the SNES version */
+.panel:before {
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    rgba(192, 192, 192, 0.5) 0%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(32, 32, 32, 0.75) 100%
+  );
+  position: absolute;
+  top: calc(-1 * var(--panel-border-width, 8px));
+  right: calc(-1 * var(--panel-border-width, 8px));
+  bottom: calc(-1 * var(--panel-border-width, 8px));
+  left: calc(-1 * var(--panel-border-width, 8px));
+  z-index: 0;
+}
+
+.panel.distributed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel.horizontally {
+  display: flex;
+  flex-direction: row;
+}
+
+.panel.vertically {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Elements inside a panel shouldn't have a gradient overtop. */
+.panel > * {
+  position: relative;
+  z-index: 1;
+}

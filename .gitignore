@@ -8,3 +8,9 @@ node_modules
 # NodeCG
 /dashboard
 /graphics
+
+# Scratch files
+scratch*
+
+# Config files
+config

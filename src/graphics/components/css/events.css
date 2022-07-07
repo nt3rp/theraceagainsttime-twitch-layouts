@@ -1,0 +1,28 @@
+.events {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  position: absolute;
+  top: calc(-1 * var(--panel-border-width, 8px));
+  right: calc(-1 * var(--panel-border-width, 8px));
+  bottom: calc(-1 * var(--panel-border-width, 8px));
+  left: calc(-1 * var(--panel-border-width, 8px));
+}
+
+.event {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 350px;
+  height: 100%;
+  z-index: 1;
+}
+
+.event .icon {
+  margin-left: 6px;
+  margin-right: 14px;
+}
+
+.event .title {
+  color: var(--ct-yellow);
+}
