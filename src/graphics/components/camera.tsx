@@ -3,7 +3,7 @@ import { useReplicant } from "use-nodecg";
 import classNames from "classnames";
 import { copy } from "../../utils";
 import "./css/camera.css";
-import { Guest } from "../../../extension/guests"
+import { Guest } from "../../../extension/guests";
 
 export const Camera: FunctionComponent<any> = (props: any) => {
   return (

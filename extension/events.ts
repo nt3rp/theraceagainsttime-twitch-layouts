@@ -1,4 +1,4 @@
-import { NodeCG, Replicant } from "nodecg-types/types/server"
+import { NodeCG, Replicant } from "nodecg-types/types/server";
 /*
 Event logger: Keeps a history of all events that happened
 during the Race Against Time.
@@ -19,7 +19,9 @@ export interface Event {
 
 export default (nodecg: NodeCG) => {
   nodecg.Replicant("events-bar", { defaultValue: "" });
-  const events: Replicant<Array<Event>> = nodecg.Replicant("events", { defaultValue: [] });
+  const events: Replicant<Array<Event>> = nodecg.Replicant("events", {
+    defaultValue: [],
+  });
 
   nodecg.listenFor("event", (e) => {
     const newEvent = copy(e);

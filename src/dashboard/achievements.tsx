@@ -34,10 +34,8 @@ const AchievementRow: FunctionComponent<Achievement & Completeable> = ({
 
 // TODO: Add the ability to add achievements on the fly.
 const AchievementsPanel: FunctionComponent<any> = () => {
-  const [achievements, setAchievements]: [
-    Array<Achievement>,
-    any
-  ] = useReplicant("achievements", []);
+  const [achievements, setAchievements]: [Array<Achievement>, any] =
+    useReplicant("achievements", []);
 
   const onComplete = useCallback(
     (id: string, event: any) => {

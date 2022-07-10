@@ -3,7 +3,7 @@ import { useReplicant } from "use-nodecg";
 import { Panel } from "./panel";
 import { ProgressBar } from "./progress";
 import { percent, copy } from "../../utils";
-import { Poll } from "../../../extension/tiltify"
+import { Poll } from "../../../extension/tiltify";
 
 export const PollComponent: FunctionComponent<any> = () => {
   const [pollsRep, _setPolls]: [Array<Poll>, any] = useReplicant("polls", []);

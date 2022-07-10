@@ -70,5 +70,5 @@ module.exports = (nodecg) => {
     });
   };
 
-  alertEvents.forEach(createListener); // eslint-disable-line
+  alertEvents.forEach(createListener);
 };

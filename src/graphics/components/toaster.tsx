@@ -24,7 +24,6 @@ export class Toaster extends Component<any> {
     this.setState({ toasts: newToasts });
   };
 
-  /* eslint-disable no-unused-vars */
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (
       !this.state.toast &&
@@ -33,7 +32,6 @@ export class Toaster extends Component<any> {
       this.toast();
     }
   }
-  /* eslint-enable no-unused-vars */
 
   toast = () => {
     // get the latest oldest untoaste

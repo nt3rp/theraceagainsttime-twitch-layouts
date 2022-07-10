@@ -11,7 +11,7 @@ export interface ProgressBarProps {
   mode: "full" | "prev-next" | "to-next";
   markers: Array<Marker>;
   value?: number;
-  labelFn?: (el, index, array) => string; // eslint-disable-line no-unused-vars
+  labelFn?: (el, index, array) => string;
 }
 
 /* For now assume all progress bars are horizontal */

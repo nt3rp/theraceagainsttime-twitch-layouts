@@ -1,4 +1,4 @@
-import { NodeCG, Replicant } from "nodecg-types/types/server"
+import { NodeCG, Replicant } from "nodecg-types/types/server";
 const GUESTS = require("../config/guests.json").map((guest) => {
   if (!guest.displayName) guest.displayName = guest.id;
   guest.socialMedia.map((social) => ({ ...social, handle: guest.id }));
