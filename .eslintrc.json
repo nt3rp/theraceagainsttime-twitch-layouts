@@ -19,7 +19,13 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint"],
+  "ignorePatterns": ["node_modules", "dashboard", "graphics"],
   "rules": {
     "no-unused-vars": ["error", { "vars": "all", "varsIgnorePattern": "^_" }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
