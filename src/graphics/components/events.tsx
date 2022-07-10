@@ -3,9 +3,10 @@ import { useReplicant } from "use-nodecg";
 import { Panel } from "./panel";
 import { ProgressBar } from "./progress";
 import { copy } from "../../utils";
-import type { Event } from "../../../types/replicants";
 import "./css/events.css";
 import "./css/icons.css";
+import { Event } from "../../../extension/events"
+
 export const Events: FunctionComponent<any> = (props: any) => {
   const [settingRep, _setting]: [string, unknown] = useReplicant(
     "events-bar",

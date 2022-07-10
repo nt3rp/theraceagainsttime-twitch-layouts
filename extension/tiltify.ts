@@ -1,17 +1,32 @@
 "use strict";
 
+import { NodeCG, Replicant } from "nodecg-types/types/server"
 const TiltifyClient = require("tiltify-api-client");
 const { replicate, replicateWithProperties } = require("./utils.js");
 const { accessToken, campaignId } = require("../config/tiltify.json");
 
 const POLLING_FREQUENCY_IN_MS = 5_000;
 
+export interface PollOption {
+  id: number;
+  name: string;
+  totalAmountRaised: number;
+  [x: string]: any; // Optionally supports other properties.
+}
+
+export interface Poll {
+  id: number;
+  visible?: boolean;
+  name: string;
+  options: Array<PollOption>;
+}
+
 // This entire method is unnecessary but I didn't want to change the API
 // that was provided and I couldn't figure out a better way to curry
 // the arguments.
 const CampaignClient = ({ accessToken, campaignId }) => {
-  const client = new TiltifyClient(accessToken);
-  const newClient = [
+  const client: any = new TiltifyClient(accessToken);
+  const newClient: any = [
     "get",
     "getChallenges",
     "getDonations",
@@ -36,13 +51,13 @@ const CampaignClient = ({ accessToken, campaignId }) => {
   return newClient;
 };
 
-module.exports = (nodecg) => {
+export default (nodecg: NodeCG) => {
   nodecg.log.info("Starting Tiltify client...");
 
-  const pollsRep = nodecg.Replicant("polls", { defaultValue: [] });
+  const pollsRep: Replicant<Array<Poll>> = nodecg.Replicant("polls", { defaultValue: [] });
   const milestonesRep = nodecg.Replicant("milestones", { defaultValue: [] });
   const campaignRep = nodecg.Replicant("campaign", { defaultValue: {} });
-  const donationsRep = nodecg.Replicant("donations", { defaultValue: [] });
+  const donationsRep: Replicant<any> = nodecg.Replicant("donations", { defaultValue: [] });
   const targetsRep = nodecg.Replicant("targets", { defaultValue: [] });
 
   // TODO: Make the events that you want to listen to configurable.

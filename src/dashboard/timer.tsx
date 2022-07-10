@@ -4,7 +4,7 @@ import { useCallback, useState } from "preact/hooks";
 import classNames from "classnames";
 import { copy, toHms, calculateSplits } from "../utils";
 import { useInterval } from "../hooks";
-import type { Checkpoint, Timer } from "../../types/replicants";
+import { Checkpoint, Timer } from "../../extension/checkpoints"
 
 const DEFAULT_TIMER: Timer = {
   splits: [],

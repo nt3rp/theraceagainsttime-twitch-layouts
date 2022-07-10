@@ -25,4 +25,4 @@ const replicate = (replicant) => {
   };
 };
 
-module.exports = { pick, replicate, replicateWithProperties };
+export { pick, replicate, replicateWithProperties };

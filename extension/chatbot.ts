@@ -1,3 +1,4 @@
+import { NodeCG } from "nodecg-types/types/server"
 const { promises: fs } = require('fs');
 const path = require('path');
 const { RefreshingAuthProvider } = require('@twurple/auth');
@@ -14,7 +15,7 @@ In the event of non-connection / needing to sign-in from scratch:
 */
 const setup = async() => {
   const TOKEN_FILE = path.join(__dirname, '../config/twitch.json');
-  const tokenData = JSON.parse(await fs.readFile(TOKEN_FILE), 'UTF-8');
+  const tokenData = JSON.parse(await fs.readFile(TOKEN_FILE, 'UTF-8'));
   const { clientId, clientSecret, channels } = tokenData;
   const authProvider = new RefreshingAuthProvider(
     {
@@ -39,7 +40,7 @@ const setup = async() => {
   return client;
 }
 
-module.exports = async (nodecg) => {
+export default async (nodecg: NodeCG) => {
   const client = await setup();
   client.onMessage((channel, user, message) => {
     console.log(`${user}: ${message}`);
