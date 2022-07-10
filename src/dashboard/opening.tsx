@@ -15,5 +15,5 @@ const OpeningPanel: FunctionComponent<any> = () => {
   );
 };
 
-const root = document.getElementById("container");
+const root = document.getElementById("container")!;
 render(<OpeningPanel />, root);

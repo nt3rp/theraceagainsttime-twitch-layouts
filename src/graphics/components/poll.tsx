@@ -3,7 +3,8 @@ import { useReplicant } from "use-nodecg";
 import { Panel } from "./panel";
 import { ProgressBar } from "./progress";
 import { percent, copy } from "../../utils";
-import { Poll } from "../../../extension/tiltify";
+
+import type { Poll, PollOption } from "../../../@types/tiltify";
 
 export const PollComponent: FunctionComponent<any> = () => {
   const [pollsRep, _setPolls]: [Array<Poll>, any] = useReplicant("polls", []);
@@ -15,25 +16,27 @@ export const PollComponent: FunctionComponent<any> = () => {
   if (activePoll !== undefined) {
     title = activePoll.name;
     const total = activePoll.options.reduce(
-      (acc, { totalAmountRaised }) => acc + totalAmountRaised,
+      (acc: number, { totalAmountRaised }: any) => acc + totalAmountRaised,
       0
     );
-    pollOptions = activePoll.options.map(({ id, name, totalAmountRaised }) => {
-      return (
-        <ProgressBar
-          key={id}
-          markers={[{ id: `${id}`, value: total }]}
-          mode="prev-next"
-          value={totalAmountRaised}
-          labelFn={(el, index, arr) => {
-            if (index === 0)
-              return `${percent(totalAmountRaised, total).toFixed(1)}%`;
-            if (index === arr.length - 1) return name;
-            return undefined;
-          }}
-        />
-      );
-    });
+    pollOptions = activePoll.options.map(
+      ({ id, name, totalAmountRaised }: PollOption) => {
+        return (
+          <ProgressBar
+            key={id}
+            markers={[{ id: `${id}`, value: total }]}
+            mode="prev-next"
+            value={totalAmountRaised}
+            labelFn={(el: any, index: number, arr: Array<any>) => {
+              if (index === 0)
+                return `${percent(totalAmountRaised, total).toFixed(1)}%`;
+              if (index === arr.length - 1) return name;
+              return undefined;
+            }}
+          />
+        );
+      }
+    );
   }
 
   return (

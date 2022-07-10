@@ -2,6 +2,7 @@
 Copied from last year. */
 import { h, Component, Fragment } from "preact";
 import { Panel } from "./panel";
+
 import "./css/toaster.css";
 import "./css/events.css";
 
@@ -19,15 +20,15 @@ export class Toaster extends Component<any> {
     this.toasts.on("change", this.onToastsChange);
   }
 
-  onToastsChange = (newToasts) => {
+  onToastsChange = (newToasts: any) => {
     if (newToasts === undefined) return;
     this.setState({ toasts: newToasts });
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
     if (
       !this.state.toast &&
-      this.state.toasts.filter((t) => !t.shown).length > 0
+      this.state.toasts.filter((t: any) => !t.shown).length > 0
     ) {
       this.toast();
     }
@@ -35,7 +36,7 @@ export class Toaster extends Component<any> {
 
   toast = () => {
     // get the latest oldest untoaste
-    const toast = this.state.toasts.find((t) => !t.shown);
+    const toast: any = this.state.toasts.find((t: any) => !t.shown);
     if (!toast) return;
     let sound;
     const sfx = toast.sound || "generic";
@@ -47,7 +48,7 @@ export class Toaster extends Component<any> {
     this.toasts.value = this.state.toasts;
   };
 
-  renderToast = ({ id, title, description }) => {
+  renderToast = ({ id, title, description }: any) => {
     return (
       <Fragment>
         <div className={`icon ${id}`} />
@@ -66,7 +67,7 @@ export class Toaster extends Component<any> {
       }, this.props.duration);
     } else {
       // TODO: Define fadeout / fancier change instead of hard stop.
-      this.state.sound && this.state.sound.stop();
+      this.state.sound && (this.state.sound as any).stop();
       this.setState({ toast: undefined, sound: undefined });
     }
   };

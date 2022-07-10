@@ -1,5 +1,6 @@
 import { h, FunctionComponent } from "preact";
 import { percent } from "../../utils";
+
 import "./css/progress-bar.css";
 
 export interface Marker {
@@ -11,7 +12,7 @@ export interface ProgressBarProps {
   mode: "full" | "prev-next" | "to-next";
   markers: Array<Marker>;
   value?: number;
-  labelFn?: (el, index, array) => string;
+  labelFn?: (el: any, index: number, array: Array<any>) => string;
 }
 
 /* For now assume all progress bars are horizontal */
@@ -28,14 +29,14 @@ export const ProgressBar: FunctionComponent<any> = ({
   const height = "10px";
   const width = "10px";
 
-  if (markers.length === 1 || !markers.find(({ value }) => value < 1))
+  if (markers.length === 1 || !markers.find(({ value }: any) => value < 1))
     markers.unshift({ id: "minimum", value: 0 });
 
   if (markers.length > 2) {
     switch (mode) {
       case "prev-next": {
         const nextIndex = Math.min(
-          markers.findIndex((m) => m.value > value),
+          markers.findIndex((m: any) => m.value > value),
           markers.length - 1
         );
         const prevIndex = Math.max(nextIndex - 1, 0);
@@ -44,7 +45,7 @@ export const ProgressBar: FunctionComponent<any> = ({
       }
       case "to-next": {
         const nextIndex = Math.min(
-          markers.findIndex((m) => m.value > value),
+          markers.findIndex((m: any) => m.value > value),
           markers.length - 1
         );
         markers = markers.slice(0, nextIndex + 1);
@@ -62,7 +63,7 @@ export const ProgressBar: FunctionComponent<any> = ({
       <div className="bar">
         <div className="cap left" />
         <div className="progress">
-          {markers.map((m) => (
+          {markers.map((m: any) => (
             <span
               key={m.id}
               className="marker"
@@ -85,7 +86,7 @@ export const ProgressBar: FunctionComponent<any> = ({
         <div className="cap right" />
       </div>
       <div className="labels" style={{ height: labelHeight }}>
-        {markers.map((m, index, arr) => (
+        {markers.map((m: any, index: number, arr: Array<any>) => (
           <span
             key={m.id}
             className="label"

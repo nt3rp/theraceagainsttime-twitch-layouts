@@ -1,31 +1,9 @@
-import { NodeCG, Replicant } from "nodecg-types/types/server";
+import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import type { Timer, Checkpoint } from "../@types/events";
 
-export interface Completeable {
-  onComplete: (id: string, event: any) => void;
-}
+import * as checkpoints from "../config/checkpoints.json";
 
-export interface Changeable {
-  onChange: (id: string, event: any) => void;
-}
-
-export interface Checkpoint {
-  id: string;
-  title: string;
-  splits: Array<number>;
-  completed: boolean;
-  endingId?: string;
-  previousYear: number;
-  previousBest: number;
-  thisYear?: number;
-}
-
-export interface Timer {
-  splits: Array<number>;
-  checkpoint: string | undefined;
-  state: "paused" | "playing"; // TODO: Change to boolean 'paused'
-}
-
-const CHECKPOINTS = require("../config/checkpoints.json").map((checkpoint) => ({
+const CHECKPOINTS = checkpoints.map((checkpoint: Checkpoint) => ({
   ...checkpoint,
   splits: [],
   completed: false,
@@ -41,6 +19,7 @@ export default (nodecg: NodeCG) => {
     }
   );
 
+  // eslint-disable-next-line no-unused-vars
   const timer: Replicant<Timer> = nodecg.Replicant("timer", {
     defaultValue: {
       state: "paused",
@@ -55,7 +34,7 @@ export default (nodecg: NodeCG) => {
     // Assumption: Both checkpoints are the same length.
     for (const entries of Object.entries(newCheckpoints)) {
       const [index, checkpoint]: [string, any] = entries;
-      const oldCheckpoint = oldCheckpoints[index];
+      const oldCheckpoint = oldCheckpoints[parseInt(index)];
       // TODO: Remove this check; might not be necessary.
       if (checkpoint.index !== oldCheckpoint.index) {
         nodecg.log.info("values don't match!");

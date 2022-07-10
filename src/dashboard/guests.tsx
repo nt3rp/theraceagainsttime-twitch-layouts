@@ -1,7 +1,7 @@
 import { h, render, FunctionComponent } from "preact";
 import { useCallback } from "preact/hooks";
 import { useReplicant } from "use-nodecg";
-import type { Guest, Camera } from "../../extension/guests";
+import type { Guest, Camera } from "../../@types/guests";
 
 const GuestsPanel: FunctionComponent<any> = () => {
   const [guests, setGuests]: [Array<Guest>, any] = useReplicant("guests", []);
@@ -14,7 +14,8 @@ const GuestsPanel: FunctionComponent<any> = () => {
     (guestId: string, e: any) => {
       const cameraId = e.target.value;
       // Update the relevant guest.
-      guests.find(({ id }) => id === guestId).camera = cameraId;
+      const guest: Guest | any = guests.find(({ id }) => id === guestId);
+      guest.camera = cameraId;
       // Clear the camera from others.
       if (cameraId !== "") {
         guests.forEach((c) => {
@@ -58,5 +59,5 @@ const GuestsPanel: FunctionComponent<any> = () => {
   );
 };
 
-const root = document.getElementById("container");
+const root = document.getElementById("container")!;
 render(<GuestsPanel />, root);

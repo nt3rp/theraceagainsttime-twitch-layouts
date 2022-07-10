@@ -1,21 +1,12 @@
-import { NodeCG, Replicant } from "nodecg-types/types/server";
+import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import type { Event } from "../@types/events";
+
 /*
 Event logger: Keeps a history of all events that happened
 during the Race Against Time.
 */
 const TIMESTAMP_REGEX = /At$/;
-const copy = (obj) => JSON.parse(JSON.stringify(obj));
-
-export interface Event {
-  id: string;
-  icon?: string;
-  title: string;
-  description?: string;
-  shown?: boolean;
-  occuredAt: Date;
-  // TODO: add 'type'
-  [x: string]: any; // Optionally supports other properties.
-}
+const copy = (obj: any) => JSON.parse(JSON.stringify(obj));
 
 export default (nodecg: NodeCG) => {
   nodecg.Replicant("events-bar", { defaultValue: "" });

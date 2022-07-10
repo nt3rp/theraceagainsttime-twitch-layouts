@@ -87,5 +87,5 @@ const Panels = [
   />,
 ];
 
-const root = document.getElementById("container");
+const root = document.getElementById("container")!;
 render(Panels, root);
