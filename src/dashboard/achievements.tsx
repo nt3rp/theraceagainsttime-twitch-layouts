@@ -2,8 +2,9 @@
 import { h, render, FunctionComponent, Fragment } from "preact";
 import { useCallback, useState } from "preact/hooks";
 import { useReplicant } from "use-nodecg";
-import type { Achievement } from "../../extension/achievements";
-import type { Completeable } from "../../extension/checkpoints";
+
+import type { Achievement } from "../../@types/replicants";
+import type { Completeable } from "../../@types/events";
 
 const copy = (obj: any) => JSON.parse(JSON.stringify(obj));
 
@@ -100,5 +101,5 @@ const AchievementsPanel: FunctionComponent<any> = () => {
   );
 };
 
-const root = document.getElementById("container");
+const root: Element = document.getElementById("container")!;
 render(<AchievementsPanel />, root);

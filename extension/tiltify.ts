@@ -1,30 +1,24 @@
-"use strict";
+import * as TiltifyClient from "tiltify-api-client";
 
-import { NodeCG, Replicant } from "nodecg-types/types/server";
-const TiltifyClient = require("tiltify-api-client");
-const { replicate, replicateWithProperties } = require("./utils.js");
-const { accessToken, campaignId } = require("../config/tiltify.json");
+import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import type { Poll } from "../@types/tiltify";
+
+import { replicate, replicateWithProperties } from "./utils.js";
+import * as tiltifyData from "../config/tiltify.json";
+const { accessToken, campaignId }: any = tiltifyData;
 
 const POLLING_FREQUENCY_IN_MS = 5_000;
-
-export interface PollOption {
-  id: number;
-  name: string;
-  totalAmountRaised: number;
-  [x: string]: any; // Optionally supports other properties.
-}
-
-export interface Poll {
-  id: number;
-  visible?: boolean;
-  name: string;
-  options: Array<PollOption>;
-}
 
 // This entire method is unnecessary but I didn't want to change the API
 // that was provided and I couldn't figure out a better way to curry
 // the arguments.
-const CampaignClient = ({ accessToken, campaignId }) => {
+const CampaignClient = ({
+  accessToken,
+  campaignId,
+}: {
+  accessToken: string;
+  campaignId: string;
+}) => {
   const client: any = new TiltifyClient(accessToken);
   const newClient: any = [
     "get",
@@ -36,16 +30,16 @@ const CampaignClient = ({ accessToken, campaignId }) => {
     "getSchedule",
     "getSupportingCampaigns",
   ].reduce(
-    (obj, method) => ({
-      ...obj,
-      [method]: (func) => client.Campaigns[method](campaignId, func),
+    (acc, method) => ({
+      ...acc,
+      [method]: (func: any) => client.Campaigns[method](campaignId, func),
     }),
     {}
   );
 
   // This is not listed in the docs, but is available:
   // https://github.com/Tiltify/api/issues/20
-  newClient.getMilestones = (func) =>
+  newClient.getMilestones = (func: any) =>
     client.Campaigns._sendRequest(`campaigns/${campaignId}/milestones`, func);
 
   return newClient;
@@ -92,7 +86,7 @@ export default (nodecg: NodeCG) => {
   setInterval(fetchData, POLLING_FREQUENCY_IN_MS);
   fetchData();
 
-  const toastDonation = (donation) => {
+  const toastDonation = (donation: any) => {
     const { amount, name, comment } = donation;
     const message = {
       title: `${name} donated $${amount}!`,
@@ -104,10 +98,12 @@ export default (nodecg: NodeCG) => {
   };
 
   // Toast anything that was missed.
-  donationsRep.value.filter((d) => d.shown !== true).forEach(toastDonation);
+  donationsRep.value
+    .filter((d: any) => d.shown !== true)
+    .forEach(toastDonation);
 
   // Toast new changes.
   donationsRep.on("change", (donations) => {
-    donations.filter((d) => d.shown !== true).forEach(toastDonation);
+    donations.filter((d: any) => d.shown !== true).forEach(toastDonation);
   });
 };

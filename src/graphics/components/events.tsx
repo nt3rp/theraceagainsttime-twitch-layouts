@@ -3,9 +3,11 @@ import { useReplicant } from "use-nodecg";
 import { Panel } from "./panel";
 import { ProgressBar } from "./progress";
 import { copy } from "../../utils";
+
+import type { Checkpoint, Event } from "../../../@types/events";
+
 import "./css/events.css";
 import "./css/icons.css";
-import { Event } from "../../../extension/events";
 
 export const Events: FunctionComponent<any> = (props: any) => {
   const [settingRep, _setting]: [string, unknown] = useReplicant(
@@ -34,21 +36,24 @@ export const Events: FunctionComponent<any> = (props: any) => {
 export const CheckpointsBar: FunctionComponent<any> = () => {
   const [checkpointsRep, _setCheckpointsRep]: [Array<any>, unknown] =
     useReplicant("checkpoints", []);
-  const checkpoints = copy(checkpointsRep).map((c, index) => {
-    return {
-      id: c.id,
-      value: index,
-      label: c.title,
-      completed: c.completed,
-    };
-  });
-  const value = checkpoints.findIndex((c) => c.completed === false) - 1;
+  const checkpoints = copy(checkpointsRep).map(
+    (c: Checkpoint, index: number) => {
+      return {
+        id: c.id,
+        value: index,
+        label: c.title,
+        completed: c.completed,
+      };
+    }
+  );
+  const value =
+    checkpoints.findIndex((c: Checkpoint) => c.completed === false) - 1;
 
   return (
     <ProgressBar
       value={value || 0}
       markers={checkpoints}
-      labelFn={(c) => c.label}
+      labelFn={(c: any) => c.label}
       mode="full"
       className="small-labels"
     />
@@ -63,7 +68,7 @@ export const FundsBar: FunctionComponent<any> = () => {
   const [milestonesRep, _setMilestonesRep]: [Array<any>, unknown] =
     useReplicant("milestones", []);
   const campaign = copy(campaignRep);
-  const milestones = copy(milestonesRep).map(({ id, amount }) => ({
+  const milestones = copy(milestonesRep).map(({ id, amount }: Event) => ({
     id,
     value: amount,
   }));
@@ -71,7 +76,7 @@ export const FundsBar: FunctionComponent<any> = () => {
     <ProgressBar
       value={campaign.totalAmountRaised || 0}
       markers={milestones}
-      labelFn={(m) => `$${m.value}`}
+      labelFn={(m: Event) => `$${m.value}`}
       mode="full"
     />
   );

@@ -4,7 +4,7 @@ import { useCallback, useState } from "preact/hooks";
 import classNames from "classnames";
 import { copy, toHms, calculateSplits } from "../utils";
 import { useInterval } from "../hooks";
-import { Checkpoint, Timer } from "../../extension/checkpoints";
+import { Checkpoint, Timer } from "../../@types/events";
 
 const DEFAULT_TIMER: Timer = {
   splits: [],
@@ -53,7 +53,7 @@ const TimerPanel = () => {
       ...timer,
       splits: [...timer.splits, ...splits],
       state: "playing",
-      checkpoint: nextCheckpoint.id,
+      checkpoint: nextCheckpoint?.id,
     });
     if (currentIndex <= -1) {
       checkpoints[0].splits.push(now);
@@ -76,7 +76,7 @@ const TimerPanel = () => {
       const previousSplits = current.splits.slice(0, limit);
       const newDuration = calculateSplits(previousSplits);
       const [start] = current.splits.slice(-1);
-      setDuration(newDuration + (Date.now() - start));
+      setDuration((newDuration || 0) + (Date.now() - start));
     },
     timer.state !== "paused" ? 1000 : null
   );
@@ -102,13 +102,13 @@ const TimerPanel = () => {
         </div>
         <span
           className={classNames({ button: true, disabled: !canPlayPause })}
-          onClick={canPlayPause && onPlayPause}
+          onClick={() => canPlayPause && onPlayPause}
         >
           {timer.state === "paused" ? "▶️" : "⏸"}
         </span>
         <span
           className={classNames({ button: true, disabled: !canAdvance })}
-          onClick={canAdvance && onAdvance}
+          onClick={() => canAdvance && onAdvance}
         >
           ⏭
         </span>
@@ -117,5 +117,5 @@ const TimerPanel = () => {
   );
 };
 
-const root = document.getElementById("container");
+const root = document.getElementById("container")!;
 render(<TimerPanel />, root);

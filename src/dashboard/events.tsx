@@ -20,5 +20,5 @@ const EventsPanel: FunctionComponent<any> = () => {
   );
 };
 
-const root = document.getElementById("container");
+const root = document.getElementById("container")!;
 render(<EventsPanel />, root);

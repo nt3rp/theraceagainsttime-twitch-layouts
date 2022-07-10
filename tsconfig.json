@@ -1,6 +1,9 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "strict": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
     "lib": ["es7"],
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
