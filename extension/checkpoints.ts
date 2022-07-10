@@ -1,4 +1,4 @@
-import { NodeCG, Replicant } from "nodecg-types/types/server"
+import { NodeCG, Replicant } from "nodecg-types/types/server";
 
 export interface Completeable {
   onComplete: (id: string, event: any) => void;
@@ -34,9 +34,12 @@ const CHECKPOINTS = require("../config/checkpoints.json").map((checkpoint) => ({
 export default (nodecg: NodeCG) => {
   nodecg.log.info("Starting checkpoints client...");
 
-  const checkpoints: Replicant<Array<Checkpoint>>  = nodecg.Replicant("checkpoints", {
-    defaultValue: CHECKPOINTS,
-  });
+  const checkpoints: Replicant<Array<Checkpoint>> = nodecg.Replicant(
+    "checkpoints",
+    {
+      defaultValue: CHECKPOINTS,
+    }
+  );
 
   const timer: Replicant<Timer> = nodecg.Replicant("timer", {
     defaultValue: {
@@ -51,7 +54,7 @@ export default (nodecg: NodeCG) => {
 
     // Assumption: Both checkpoints are the same length.
     for (const entries of Object.entries(newCheckpoints)) {
-      const [index, checkpoint]: [string, any] = entries
+      const [index, checkpoint]: [string, any] = entries;
       const oldCheckpoint = oldCheckpoints[index];
       // TODO: Remove this check; might not be necessary.
       if (checkpoint.index !== oldCheckpoint.index) {

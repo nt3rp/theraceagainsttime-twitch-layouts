@@ -1,6 +1,6 @@
 "use strict";
 
-import { NodeCG, Replicant } from "nodecg-types/types/server"
+import { NodeCG, Replicant } from "nodecg-types/types/server";
 const TiltifyClient = require("tiltify-api-client");
 const { replicate, replicateWithProperties } = require("./utils.js");
 const { accessToken, campaignId } = require("../config/tiltify.json");
@@ -54,10 +54,14 @@ const CampaignClient = ({ accessToken, campaignId }) => {
 export default (nodecg: NodeCG) => {
   nodecg.log.info("Starting Tiltify client...");
 
-  const pollsRep: Replicant<Array<Poll>> = nodecg.Replicant("polls", { defaultValue: [] });
+  const pollsRep: Replicant<Array<Poll>> = nodecg.Replicant("polls", {
+    defaultValue: [],
+  });
   const milestonesRep = nodecg.Replicant("milestones", { defaultValue: [] });
   const campaignRep = nodecg.Replicant("campaign", { defaultValue: {} });
-  const donationsRep: Replicant<any> = nodecg.Replicant("donations", { defaultValue: [] });
+  const donationsRep: Replicant<any> = nodecg.Replicant("donations", {
+    defaultValue: [],
+  });
   const targetsRep = nodecg.Replicant("targets", { defaultValue: [] });
 
   // TODO: Make the events that you want to listen to configurable.

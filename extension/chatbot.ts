@@ -1,8 +1,8 @@
-import { NodeCG } from "nodecg-types/types/server"
-const { promises: fs } = require('fs');
-const path = require('path');
-const { RefreshingAuthProvider } = require('@twurple/auth');
-const { ChatClient } = require('@twurple/chat');
+import { NodeCG } from "nodecg-types/types/server";
+const { promises: fs } = require("fs");
+const path = require("path");
+const { RefreshingAuthProvider } = require("@twurple/auth");
+const { ChatClient } = require("@twurple/chat");
 
 /*
 In the event of non-connection / needing to sign-in from scratch:
@@ -13,9 +13,9 @@ In the event of non-connection / needing to sign-in from scratch:
   ```
 3. In the `Network` tab, retrieve the `access_token` and `refresh_token`
 */
-const setup = async() => {
-  const TOKEN_FILE = path.join(__dirname, '../config/twitch.json');
-  const tokenData = JSON.parse(await fs.readFile(TOKEN_FILE, 'UTF-8'));
+const setup = async () => {
+  const TOKEN_FILE = path.join(__dirname, "../config/twitch.json");
+  const tokenData = JSON.parse(await fs.readFile(TOKEN_FILE, "UTF-8"));
   const { clientId, clientSecret, channels } = tokenData;
   const authProvider = new RefreshingAuthProvider(
     {
@@ -25,24 +25,24 @@ const setup = async() => {
         await fs.writeFile(
           TOKEN_FILE,
           JSON.stringify(
-            {...newTokenData, clientId, clientSecret, channels},
+            { ...newTokenData, clientId, clientSecret, channels },
             null,
             2
           ),
-          'UTF-8'
-      )
+          "UTF-8"
+        ),
     },
     tokenData
   );
 
-  const client = new ChatClient({ authProvider, channels});
-  await client.connect()
+  const client = new ChatClient({ authProvider, channels });
+  await client.connect();
   return client;
-}
+};
 
 export default async (nodecg: NodeCG) => {
   const client = await setup();
   client.onMessage((channel, user, message) => {
     console.log(`${user}: ${message}`);
   });
-}
+};

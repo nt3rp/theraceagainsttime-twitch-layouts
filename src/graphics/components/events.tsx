@@ -5,7 +5,7 @@ import { ProgressBar } from "./progress";
 import { copy } from "../../utils";
 import "./css/events.css";
 import "./css/icons.css";
-import { Event } from "../../../extension/events"
+import { Event } from "../../../extension/events";
 
 export const Events: FunctionComponent<any> = (props: any) => {
   const [settingRep, _setting]: [string, unknown] = useReplicant(
@@ -32,10 +32,8 @@ export const Events: FunctionComponent<any> = (props: any) => {
 };
 
 export const CheckpointsBar: FunctionComponent<any> = () => {
-  const [checkpointsRep, _setCheckpointsRep]: [
-    Array<any>,
-    unknown
-  ] = useReplicant("checkpoints", []);
+  const [checkpointsRep, _setCheckpointsRep]: [Array<any>, unknown] =
+    useReplicant("checkpoints", []);
   const checkpoints = copy(checkpointsRep).map((c, index) => {
     return {
       id: c.id,
@@ -62,10 +60,8 @@ export const FundsBar: FunctionComponent<any> = () => {
     "campaign",
     {}
   );
-  const [milestonesRep, _setMilestonesRep]: [
-    Array<any>,
-    unknown
-  ] = useReplicant("milestones", []);
+  const [milestonesRep, _setMilestonesRep]: [Array<any>, unknown] =
+    useReplicant("milestones", []);
   const campaign = copy(campaignRep);
   const milestones = copy(milestonesRep).map(({ id, amount }) => ({
     id,
