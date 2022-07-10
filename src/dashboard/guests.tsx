@@ -1,7 +1,7 @@
 import { h, render, FunctionComponent } from "preact";
 import { useCallback } from "preact/hooks";
 import { useReplicant } from "use-nodecg";
-import type { Camera, Guest } from "../../types/replicants";
+import type { Guest, Camera } from "../../extension/guests"
 
 const GuestsPanel: FunctionComponent<any> = () => {
   const [guests, setGuests]: [Array<Guest>, any] = useReplicant("guests", []);

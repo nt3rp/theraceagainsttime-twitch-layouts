@@ -1,4 +1,6 @@
-module.exports = (nodecg) => {
+import { NodeCG } from "nodecg-types/types/server"
+
+export default (nodecg: NodeCG) => {
   [
     'achievements',
     'checkpoints',

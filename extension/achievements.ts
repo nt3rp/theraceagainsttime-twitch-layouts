@@ -1,9 +1,20 @@
+import { NodeCG, Replicant } from "nodecg-types/types/server"
 const ACHIEVEMENTS = require("../config/achievements.json");
 
-module.exports = (nodecg) => {
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  tags: Array<string>;
+  secretDescription?: string;
+  achieved?: boolean;
+  achievedAt?: Date;
+}
+
+export default (nodecg: NodeCG) => {
   // TODO: Assign to variable, etc.
   nodecg.log.info("Starting achievements client...");
-  const achievements = nodecg.Replicant("achievements", {
+  const achievements: Replicant<Array<Achievement>> = nodecg.Replicant("achievements", {
     defaultValue: ACHIEVEMENTS,
   });
 
@@ -14,7 +25,7 @@ module.exports = (nodecg) => {
       (a) => id === a.id || endingId === a.id
     );
     if (!achievement || achievement.achievedAt) return;
-    achievement.achievedAt = Date.now();
+    achievement.achievedAt = new Date();
     achievement.achieved = true;
     // TODO: add 'type'
     nodecg.sendMessage("event", achievement);

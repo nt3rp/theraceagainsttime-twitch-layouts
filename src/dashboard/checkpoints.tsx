@@ -3,8 +3,8 @@ import { useReplicant } from "use-nodecg";
 import { useCallback } from "preact/hooks";
 import classNames from "classnames";
 import { copy, calculateSplits, toHms } from "../utils";
-import type { Achievement, Checkpoint, Timer } from "../../types/replicants";
-import type { Changeable } from "../../types/events";
+import type { Timer, Checkpoint, Changeable } from "../../extension/checkpoints"
+import type { Achievement } from "../../extension/achievements"
 
 const DEFAULT_TIMER: Timer = {
   splits: [],

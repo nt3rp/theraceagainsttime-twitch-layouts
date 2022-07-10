@@ -1,9 +1,9 @@
 import { h, FunctionComponent } from "preact";
 import { useReplicant } from "use-nodecg";
 import classNames from "classnames";
-import type { Guest } from "../../../types/replicants";
 import { copy } from "../../utils";
 import "./css/camera.css";
+import { Guest } from "../../../extension/guests"
 
 export const Camera: FunctionComponent<any> = (props: any) => {
   return (
