@@ -4,7 +4,7 @@ import { Panel } from "./panel";
 import { ProgressBar } from "./progress";
 import { percent, copy } from "../../utils";
 
-import type { Poll, PollOption } from "../../../@types/tiltify";
+import type { Poll, PollOption } from "../../../types/tiltify";
 
 export const PollComponent: FunctionComponent<any> = () => {
   const [pollsRep, _setPolls]: [Array<Poll>, any] = useReplicant("polls", []);

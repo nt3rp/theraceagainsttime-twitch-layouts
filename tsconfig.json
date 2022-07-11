@@ -1,8 +1,9 @@
 {
-  "include": ["src/**/*"],
+  "include": ["types", "extension", "src/**/*"],
   "compilerOptions": {
     "strict": true,
     "resolveJsonModule": true,
+    "typeRoots": ["types", "./node_modules/@types"],
     "moduleResolution": "node",
     "lib": ["es7"],
     "jsx": "react-jsx",
