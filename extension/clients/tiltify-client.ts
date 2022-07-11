@@ -1,5 +1,5 @@
 import { TiltifyClient } from "tiltify-api-client";
-import type { Campaign } from "tiltify-api-client";
+import type { CampaignClass } from "tiltify-api-client";
 
 export interface CampaignClientArgs {
   accessToken: string;
@@ -21,20 +21,20 @@ export class CampaignClient {
   }
 
   public on(
-    method: keyof Campaign,
+    method: keyof CampaignClass,
     handler: Function,
     frequency?: number
   ): void {
     let func;
     switch (method) {
-      case "getMilestones" as keyof Campaign:
+      case "getMilestones" as keyof CampaignClass:
         func = () =>
           this.client.Campaigns._sendRequest(
             `campaigns/${this.campaignId}/milestones`,
             handler
           );
         break;
-      case "getCampaign" as keyof Campaign:
+      case "getCampaign" as keyof CampaignClass:
         func = () => this.client.Campaigns.get(this.campaignId, handler);
         break;
       default:

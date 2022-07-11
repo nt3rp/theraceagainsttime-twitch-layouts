@@ -1,15 +1,16 @@
-import { replicateWithProperties } from "./utils";
+import { replicateCollectionWithProperties } from "./utils";
 
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import type { Donation } from "tiltify-api-client";
 import type { CampaignClient } from "./clients/tiltify-client";
 
 export default (nodecg: NodeCG, client: CampaignClient) => {
-  const donations: Replicant<any> = nodecg.Replicant("donations", {
+  const donations: Replicant<Array<Donation>> = nodecg.Replicant("donations", {
     defaultValue: [],
   });
 
   client.on(
     "getDonations",
-    replicateWithProperties(donations, ["shown", "read"])
+    replicateCollectionWithProperties(donations, ["shown", "read"])
   );
 };
