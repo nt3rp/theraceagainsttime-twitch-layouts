@@ -32,3 +32,13 @@ export const replicate = (replicant: Replicant<any>) => {
     }
   };
 };
+
+export const diff = (a: Array<any>, b: Array<any> | undefined) =>
+  !b ? a : a.filter((x) => !b.includes(x));
+
+const operators = {
+  "==": (a: any, b: any) => a === b,
+  ">=": (a: any, b: any) => a >= b,
+};
+export const compare = (operator: string, a: any, b: any): boolean =>
+  (operators as any)[operator](a, b);

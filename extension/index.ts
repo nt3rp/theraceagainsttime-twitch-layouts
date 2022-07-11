@@ -7,6 +7,7 @@ import type { NodeCG } from "nodecg-types/types/server";
 import type { CampaignClientArgs } from "./clients/tiltify-client";
 
 import * as TILTIFY_CONFIG from "../config/tiltify.json";
+import secrets from "./secrets";
 
 // Inject any dependencies manually.
 export default async (nodecg: NodeCG) => {
@@ -19,4 +20,5 @@ export default async (nodecg: NodeCG) => {
   milestones(nodecg, campaignClient);
   donations(nodecg, campaignClient);
   campaign(nodecg, campaignClient);
+  secrets(nodecg);
 };
