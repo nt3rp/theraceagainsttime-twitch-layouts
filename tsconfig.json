@@ -4,7 +4,7 @@
     "strict": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "lib": ["es7"],
+    "target": "es2016",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "skipLibCheck": true

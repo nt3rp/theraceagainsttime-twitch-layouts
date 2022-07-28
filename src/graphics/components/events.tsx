@@ -4,7 +4,7 @@ import { Panel } from "./panel";
 import { ProgressBar } from "./progress";
 import { copy } from "../../utils";
 
-import type { Checkpoint, Event } from "../../../@types/events";
+import type { Checkpoint, Event } from "../../types/events";
 
 import "./css/events.css";
 import "./css/icons.css";

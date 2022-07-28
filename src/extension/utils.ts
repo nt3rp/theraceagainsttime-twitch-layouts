@@ -2,7 +2,7 @@ import { Replicant } from "nodecg-types/types/server";
 
 // https://www.30secondsofcode.org/js/s/pick
 /* eslint-disable no-sequences */
-const pick = (obj: any, arr: any) =>
+export const pick = (obj: any, arr: any) =>
   arr.reduce(
     (acc: any, curr: any) => (curr in obj && (acc[curr] = obj[curr]), acc),
     {}
@@ -10,7 +10,7 @@ const pick = (obj: any, arr: any) =>
 /* eslint-enable no-sequences */
 
 // Only works for collections (i.e. `[{obj}}`)
-const replicateWithProperties = (
+export const replicateCollectionWithProperties = (
   replicant: Replicant<any>,
   propertiesList: Array<string>
 ) => {
@@ -25,12 +25,21 @@ const replicateWithProperties = (
   };
 };
 
-const replicate = (replicant: Replicant<any>) => {
-  return (value: any) => {
-    if (JSON.stringify(replicant.value) !== JSON.stringify(value)) {
-      replicant.value = value;
+export const replicate = (replicant: Replicant<any>) => {
+  return (newValue: any) => {
+    if (JSON.stringify(replicant.value) !== JSON.stringify(newValue)) {
+      replicant.value = newValue;
     }
   };
 };
 
-export { pick, replicate, replicateWithProperties };
+export const diff = (a: Array<any>, b: Array<any> | undefined) =>
+  !b ? a : a.filter((x) => !b.includes(x));
+
+const operators = {
+  "==": (a: any, b: any) => a === b,
+  ">=": (a: any, b: any) => a >= b,
+  regexp: (a: string, b: RegExp) => b.test(a),
+};
+export const compare = (operator: string, a: any, b: any): boolean =>
+  (operators as any)[operator](a, b);

@@ -1,7 +1,7 @@
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
-import type { Timer, Checkpoint } from "../@types/events";
+import type { Timer, Checkpoint } from "../../types/events";
 
-import * as checkpoints from "../config/checkpoints.json";
+import * as checkpoints from "../../../config/checkpoints.json";
 
 const CHECKPOINTS = checkpoints.map((checkpoint: Checkpoint) => ({
   ...checkpoint,

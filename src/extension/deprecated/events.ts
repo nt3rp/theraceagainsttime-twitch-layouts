@@ -1,5 +1,5 @@
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
-import type { Event } from "../@types/events";
+import type { Event } from "../../types/events";
 
 /*
 Event logger: Keeps a history of all events that happened

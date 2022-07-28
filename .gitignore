@@ -8,6 +8,7 @@ node_modules
 # NodeCG
 /dashboard
 /graphics
+/extension
 
 # Scratch files
 scratch*
