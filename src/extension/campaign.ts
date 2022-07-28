@@ -10,4 +10,10 @@ export default (nodecg: NodeCG, client: CampaignClient) => {
   });
 
   client.on("getCampaign", replicate(campaign));
+
+  campaign.on("change", (newValue, oldValue) => {
+    // Don't fire an event when we're starting up or have no data.
+    if (!oldValue || !newValue) return;
+    nodecg.sendMessage("campaign.total", (newValue as any).totalAmountRaised);
+  });
 };

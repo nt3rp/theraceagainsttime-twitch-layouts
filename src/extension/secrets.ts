@@ -1,4 +1,4 @@
-import { diff, compare } from "./utils";
+import { compare } from "./utils";
 
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
@@ -96,29 +96,13 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     defaultValue: SECRETS as Array<Secret>,
   });
 
-  const donations: Replicant<Array<object>> = nodecg.Replicant("donations", {
-    defaultValue: [],
-  });
+  nodecg.listenFor("donation", (donation) =>
+    maybeMeetCriteria("donation", donation.amount, secrets)
+  );
 
-  const campaign: Replicant<object> = nodecg.Replicant("campaign", {
-    defaultValue: {},
-  });
-
-  donations.on("change", (newValue, oldValue) => {
-    // Not sure of performance implications of this.
-    const newValues = diff(newValue, oldValue);
-    newValues.forEach((donation) =>
-      maybeMeetCriteria("donation", donation.amount, secrets)
-    );
-  });
-
-  campaign.on("change", (newValue) => {
-    maybeMeetCriteria(
-      "donation",
-      (newValue as any).totalAmountRaised,
-      secrets
-    );
-  });
+  nodecg.listenFor("campaign.total", (total) =>
+    maybeMeetCriteria("donation", total, secrets)
+  );
 
   twitch.chat.onMessage((channel, user, message) => {
     maybeMeetCriteria("chat", message, secrets);
