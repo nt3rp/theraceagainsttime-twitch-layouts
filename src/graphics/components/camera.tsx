@@ -3,7 +3,7 @@ import { useReplicant } from "use-nodecg";
 import classNames from "classnames";
 import { copy } from "../../utils";
 
-import type { Guest } from "../../../types/guests";
+import type { Guest } from "../../types/guests";
 
 import "./css/camera.css";
 

@@ -1,7 +1,7 @@
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { Guest, Camera } from "../../types/guests";
 
-import * as guests from "../../config/guests.json";
+import * as guests from "../../../config/guests.json";
 const GUESTS = guests.map((guest: Guest) => {
   if (!guest.displayName) guest.displayName = guest.id;
   guest.socialMedia.map((social) => ({ ...social, handle: guest.id }));

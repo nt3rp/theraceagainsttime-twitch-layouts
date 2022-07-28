@@ -1,6 +1,14 @@
 import { promises as fs } from "fs";
 import { RefreshingAuthProvider } from "@twurple/auth";
-import { ChatClient } from "@twurple/chat";
+import {
+  ChatClient,
+  ChatCommunitySubInfo,
+  ChatSubExtendInfo,
+  ChatSubGiftInfo,
+  ChatSubGiftUpgradeInfo,
+  ChatSubInfo,
+  ChatSubUpgradeInfo,
+} from "@twurple/chat";
 
 /*
 In the event of non-connection / needing to sign-in from scratch:
@@ -13,7 +21,7 @@ In the event of non-connection / needing to sign-in from scratch:
 */
 
 export class TwitchClient {
-  private chat: any;
+  private _chat!: ChatClient;
 
   public static create = async (
     credentialsPath: string
@@ -45,22 +53,25 @@ export class TwitchClient {
     const chat = new ChatClient({ authProvider, channels });
     await chat.connect();
 
-    instance.chat = chat;
+    instance._chat = chat;
     return instance;
   };
+
+  public get chat(): ChatClient {
+    return this._chat;
+  }
 }
 
-// export default async (nodecg: NodeCG) => {
-//   nodecg.log.info("⬆ Starting Twitch client");
-//   const TOKEN_FILE = path.join(__dirname, "../config/twitch.json");
-//   const client = await setup(TOKEN_FILE);
+export const isChatCommunitySubInfo = (x: any): x is ChatCommunitySubInfo =>
+  !!x.count;
+export const isChatSubExtendInfo = (x: any): x is ChatSubExtendInfo =>
+  !!x.endMonth;
+export const isChatSubInfo = (x: any): x is ChatSubInfo => !!x.isPrime;
+export const isChatSubGiftInfo = (x: any): x is ChatSubGiftInfo =>
+  !!x.giftDuration;
+export const isChatSubGiftUpgradeInfo = (x: any): x is ChatSubGiftUpgradeInfo =>
+  !!x.gifter && !!x.plan;
+export const isChatSubUpgradeInfo = (x: any): x is ChatSubUpgradeInfo =>
+  !!x.plan;
 
-//   // Events that we need to tell other replicants about.
-//   client.onMessage((channel, user, message) => {
-//     console.log(`${user}: ${message}`);
-//   });
-
-//   // Events that we need to respond to Twitch with.
-//   // eslint-disable-next-line no-unused-vars
-//   nodecg.listenFor("topic", (event: any) => {});
-// };
+// ChatPrimeCommunityGiftInfo doesn't have anything differentiating it.

@@ -39,6 +39,7 @@ export const diff = (a: Array<any>, b: Array<any> | undefined) =>
 const operators = {
   "==": (a: any, b: any) => a === b,
   ">=": (a: any, b: any) => a >= b,
+  regexp: (a: string, b: RegExp) => b.test(a),
 };
 export const compare = (operator: string, a: any, b: any): boolean =>
   (operators as any)[operator](a, b);

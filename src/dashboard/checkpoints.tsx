@@ -5,8 +5,8 @@ import classNames from "classnames";
 
 import { copy, calculateSplits, toHms } from "../utils";
 
-import type { Timer, Checkpoint, Changeable } from "../../types/events";
-import type { Achievement } from "../../types/replicants";
+import type { Timer, Checkpoint, Changeable } from "../types/events";
+import type { Achievement } from "../types/replicants";
 
 const DEFAULT_TIMER: Timer = {
   splits: [],

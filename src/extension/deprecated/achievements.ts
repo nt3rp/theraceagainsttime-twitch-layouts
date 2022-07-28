@@ -2,7 +2,7 @@
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { Achievement } from "../../types/replicants";
 
-import * as ACHIEVEMENTS from "../../config/achievements.json";
+import * as ACHIEVEMENTS from "../../../config/achievements.json";
 
 export default (nodecg: NodeCG) => {
   nodecg.log.info("Starting achievements client...");
