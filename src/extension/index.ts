@@ -3,9 +3,9 @@
 import * as path from "path";
 import { CampaignClient } from "./clients/tiltify-client";
 import { TwitchClient } from "./clients/twitch-client";
-import milestones from "./milestones";
-import donations from "./donations";
-import campaign from "./campaign";
+import milestones from "./domains/milestones";
+import donations from "./domains/donations";
+import campaign from "./domains/campaign";
 import bot from "./bot";
 // import secrets from "./secrets";
 
