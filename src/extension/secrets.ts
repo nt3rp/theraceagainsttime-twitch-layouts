@@ -54,6 +54,12 @@ Game (manual buttons)
 
 ... then reveal secret in dashboard?
 
+// Multiple secrets completed unlocks a secret?
+Shenanigans: Someone mentioned shenanigans
+Emulator: someone askes aboout how we're running
+Beta: SOMEONE mentions Beta
+Generous: Someone gifts a sub to one of the crew
+Extra generous: Someone gifts a sub to robo.
 */
 export interface Secret {
   name: string;
@@ -91,6 +97,7 @@ const maybeMeetCriteria = (
   });
 };
 
+// eslint-disable-next-line no-unused-vars
 export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Starting Secrets extension...");
   const secrets: Replicant<Array<Secret>> = nodecg.Replicant("secrets", {
@@ -105,14 +112,18 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     maybeMeetCriteria("donation", total, secrets, nodecg)
   );
 
-  // TODO: Move these to NodeCG events.
-  twitch.chat.onMessage((channel, user, message) => {
+  // eslint-disable-next-line no-unused-vars
+  nodecg.listenFor("chat", ({ channel, user, message }) => {
     maybeMeetCriteria("chat", message, secrets, nodecg);
   });
 
-  twitch.chat.onCommunitySub((channel, user, { count }) => {
-    maybeMeetCriteria("subscriptions", count, secrets, nodecg);
-  });
+  nodecg.listenFor(
+    "subscription",
+    // eslint-disable-next-line no-unused-vars
+    ({ channel, gifter, recipient, subInfo, count }) => {
+      maybeMeetCriteria("subscriptions", count, secrets, nodecg);
+    }
+  );
 
   // TODO: Listen for secret events so that you can post to chat about them
   // ...Either when a certain number of secrets is reached, or just to give hints

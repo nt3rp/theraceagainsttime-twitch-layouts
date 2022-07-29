@@ -96,8 +96,39 @@ const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   });
 };
 
-// eslint-disable-next-line no-unused-vars
-const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {};
+// TODO: When someone extends their subscription?
+// TODO: Make this a replicant? If we want to track total gifts sent by people?
+const giftCounts = new Map<string | undefined, number>();
+const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
+  nodecg.log.info("⬆ Listening for subscriptions...");
+  twitch.chat.onCommunitySub((channel, gifter, subInfo) => {
+    const previousGiftCount = giftCounts.get(gifter) ?? 0;
+    giftCounts.set(gifter, previousGiftCount + subInfo.count);
+    // TODO: Make a separate event for multiple gift subs vs individual?
+    nodecg.sendMessage("subscription", {
+      channel,
+      gifter,
+      count: subInfo.count,
+      subInfo,
+    });
+  });
+
+  twitch.chat.onSubGift((channel, recipient, subInfo) => {
+    const gifter = subInfo.gifter;
+    const previousGiftCount = giftCounts.get(gifter) ?? 0;
+    if (previousGiftCount > 0) {
+      giftCounts.set(gifter, previousGiftCount - 1);
+    } else {
+      nodecg.sendMessage("subscription", {
+        channel,
+        gifter,
+        recipient,
+        count: 1,
+        subInfo,
+      });
+    }
+  });
+};
 
 // eslint-disable-next-line no-unused-vars
 const setupRaids = (nodecg: NodeCG, twitch: TwitchClient) => {};
