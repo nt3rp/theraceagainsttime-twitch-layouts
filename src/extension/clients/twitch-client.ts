@@ -10,6 +10,8 @@ import {
   ChatSubUpgradeInfo,
 } from "@twurple/chat";
 
+import type { NodeCG } from "nodecg-types/types/server";
+
 /*
 In the event of non-connection / needing to sign-in from scratch:
 1. Visit https://id.twitch.tv/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=chat:read+chat:edit+whispers:edit+channel:read:subscriptions
@@ -75,3 +77,37 @@ export const isChatSubUpgradeInfo = (x: any): x is ChatSubUpgradeInfo =>
   !!x.plan;
 
 // ChatPrimeCommunityGiftInfo doesn't have anything differentiating it.
+
+const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
+  nodecg.log.info("⬆ Listening for chat messages...");
+  twitch.chat.onMessage((channel, user, message) =>
+    nodecg.sendMessage("chat", { channel, user, message })
+  );
+};
+
+// eslint-disable-next-line no-unused-vars
+const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {};
+
+// eslint-disable-next-line no-unused-vars
+const setupRaids = (nodecg: NodeCG, twitch: TwitchClient) => {};
+
+// eslint-disable-next-line no-unused-vars
+const setupHosts = (nodecg: NodeCG, twitch: TwitchClient) => {};
+
+// eslint-disable-next-line no-unused-vars
+const setupFollows = (nodecg: NodeCG, twitch: TwitchClient) => {};
+
+// Setup Twitch.
+// We *could* just listen for events on the twitch instance, but firing NodeCG
+// events means we have a consistent interface to use for everything.
+export default async (nodecg: NodeCG, configPath: string) => {
+  nodecg.log.info("⬆ Setting up Twitch client...");
+  const client = await TwitchClient.create(configPath);
+  setupChat(nodecg, client);
+  setupSubscriptions(nodecg, client);
+  setupRaids(nodecg, client);
+  setupHosts(nodecg, client);
+  setupFollows(nodecg, client);
+
+  return client;
+};
