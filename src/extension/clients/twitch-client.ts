@@ -24,16 +24,19 @@ In the event of non-connection / needing to sign-in from scratch:
 
 export class TwitchClient {
   private _chat!: ChatClient;
+  private _name!: string;
 
   public static create = async (
     credentialsPath: string
   ): Promise<TwitchClient> => {
     const instance = new TwitchClient();
 
-    const tokenData = JSON.parse(
+    const config = JSON.parse(
       await fs.readFile(credentialsPath, { encoding: "utf8" })
     );
-    const { clientId, clientSecret, channels } = tokenData;
+    const { clientId, clientSecret, channels, botName } = config;
+    instance._name = botName;
+
     const authProvider = new RefreshingAuthProvider(
       {
         clientId,
@@ -49,7 +52,7 @@ export class TwitchClient {
             "utf8"
           ),
       },
-      tokenData
+      config
     );
 
     const chat = new ChatClient({ authProvider, channels });
@@ -61,6 +64,10 @@ export class TwitchClient {
 
   public get chat(): ChatClient {
     return this._chat;
+  }
+
+  public get name(): string {
+    return this._name;
   }
 }
 
@@ -80,9 +87,13 @@ export const isChatSubUpgradeInfo = (x: any): x is ChatSubUpgradeInfo =>
 
 const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for chat messages...");
-  twitch.chat.onMessage((channel, user, message) =>
-    nodecg.sendMessage("chat", { channel, user, message })
-  );
+  twitch.chat.onMessage((channel, user, message) => {
+    if (user === twitch.name) {
+      // Ignore message; it's from ourselves.
+      return;
+    }
+    nodecg.sendMessage("chat", { channel, user, message });
+  });
 };
 
 // eslint-disable-next-line no-unused-vars
