@@ -103,11 +103,8 @@ const setupFollows = (nodecg: NodeCG, twitch: TwitchClient) => {};
 export default async (nodecg: NodeCG, configPath: string) => {
   nodecg.log.info("⬆ Setting up Twitch client...");
   const client = await TwitchClient.create(configPath);
-  setupChat(nodecg, client);
-  setupSubscriptions(nodecg, client);
-  setupRaids(nodecg, client);
-  setupHosts(nodecg, client);
-  setupFollows(nodecg, client);
-
+  [setupChat, setupSubscriptions, setupRaids, setupHosts, setupFollows].forEach(
+    (method) => method(nodecg, client)
+  );
   return client;
 };

@@ -94,9 +94,9 @@ const setupMilestones = (nodecg: NodeCG, client: CampaignClient) => {
 export default (nodecg: NodeCG, config: CampaignClientArgs) => {
   nodecg.log.info("⬆ Setting up Tiltify client...");
   const client = new CampaignClient(config);
-  setupDonations(nodecg, client);
-  setupCampaign(nodecg, client);
-  setupMilestones(nodecg, client);
+  [setupDonations, setupCampaign, setupMilestones].forEach((method) =>
+    method(nodecg, client)
+  );
 
   return client;
 };
