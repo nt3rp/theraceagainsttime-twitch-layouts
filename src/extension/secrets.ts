@@ -1,4 +1,4 @@
-import { diff, compare } from "./utils";
+import { compare } from "./utils";
 
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
@@ -70,7 +70,8 @@ export interface Secret {
 const maybeMeetCriteria = (
   subject: string,
   criteria: any,
-  secrets: Replicant<Array<Secret>>
+  secrets: Replicant<Array<Secret>>,
+  nodecg: NodeCG
 ) => {
   const unmetCriteria = secrets.value.filter(
     ({ completedAt, subject: s }) => !completedAt && s === subject
@@ -83,7 +84,7 @@ const maybeMeetCriteria = (
       secrets.value.find((secret) => {
         if (name !== secret.name) return false;
         secret.completedAt = new Date();
-        // TODO: Fire event for front-end.
+        nodecg.sendMessage("secret", secret);
         return true;
       });
     }
@@ -96,37 +97,26 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     defaultValue: SECRETS as Array<Secret>,
   });
 
-  const donations: Replicant<Array<object>> = nodecg.Replicant("donations", {
-    defaultValue: [],
-  });
+  nodecg.listenFor("donation", (donation) =>
+    maybeMeetCriteria("donation", donation.amount, secrets, nodecg)
+  );
 
-  const campaign: Replicant<object> = nodecg.Replicant("campaign", {
-    defaultValue: {},
-  });
+  nodecg.listenFor("campaign.total", (total) =>
+    maybeMeetCriteria("donation", total, secrets, nodecg)
+  );
 
-  donations.on("change", (newValue, oldValue) => {
-    // Not sure of performance implications of this.
-    const newValues = diff(newValue, oldValue);
-    newValues.forEach((donation) =>
-      maybeMeetCriteria("donation", donation.amount, secrets)
-    );
-  });
-
-  campaign.on("change", (newValue) => {
-    maybeMeetCriteria(
-      "donation",
-      (newValue as any).totalAmountRaised,
-      secrets
-    );
-  });
-
+  // TODO: Move these to NodeCG events.
   twitch.chat.onMessage((channel, user, message) => {
-    maybeMeetCriteria("chat", message, secrets);
+    maybeMeetCriteria("chat", message, secrets, nodecg);
   });
 
   twitch.chat.onCommunitySub((channel, user, { count }) => {
-    maybeMeetCriteria("subscriptions", count, secrets);
+    maybeMeetCriteria("subscriptions", count, secrets, nodecg);
   });
+
+  // TODO: Listen for secret events so that you can post to chat about them
+  // ...Either when a certain number of secrets is reached, or just to give hints
+  // that something has happened!
 
   // TODO: Cheers / Bits (pubsub)
   // TODO: Raids / hosts (chat)
