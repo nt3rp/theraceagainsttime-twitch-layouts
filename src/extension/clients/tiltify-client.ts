@@ -1,3 +1,7 @@
+import { diff, replicate, replicateCollectionWithProperties } from "../utils";
+
+import type { NodeCG, Replicant } from "nodecg-types/types/server";
+
 const TiltifyClient = require("tiltify-api-client");
 
 export interface CampaignClientArgs {
@@ -19,11 +23,7 @@ export class CampaignClient {
     this.client = new TiltifyClient(accessToken);
   }
 
-  public on(
-    method: string,
-    handler: Function,
-    frequency?: number
-  ): void {
+  public on(method: string, handler: Function, frequency?: number): void {
     let func;
     switch (method) {
       case "getMilestones":
@@ -44,3 +44,59 @@ export class CampaignClient {
     setInterval(func, frequency || this.frequency);
   }
 }
+
+const setupDonations = (nodecg: NodeCG, client: CampaignClient) => {
+  nodecg.log.info("⬆ Listening for donations...");
+
+  const donations: Replicant<Array<object>> = nodecg.Replicant("donations", {
+    defaultValue: [],
+  });
+
+  client.on(
+    "getDonations",
+    replicateCollectionWithProperties(donations, ["shown", "read"])
+  );
+
+  donations.on("change", (newValue, oldValue) => {
+    // Not sure of performance implications of this.
+    const newValues = diff(newValue, oldValue);
+    newValues.forEach((donation) => nodecg.sendMessage("donation", donation));
+  });
+};
+
+const setupCampaign = (nodecg: NodeCG, client: CampaignClient) => {
+  nodecg.log.info("⬆ Listening for campaign changes...");
+  const campaign: Replicant<object> = nodecg.Replicant("campaign", {
+    defaultValue: {},
+  });
+
+  client.on("getCampaign", replicate(campaign));
+
+  campaign.on("change", (newValue, oldValue) => {
+    // Don't fire an event when we're starting up or have no data.
+    if (!oldValue || !newValue) return;
+    nodecg.sendMessage("campaign.total", (newValue as any).totalAmountRaised);
+  });
+};
+
+const setupMilestones = (nodecg: NodeCG, client: CampaignClient) => {
+  nodecg.log.info("⬆ Listening for milestone changes...");
+  const milestones: Replicant<Array<object>> = nodecg.Replicant("milestones", {
+    defaultValue: [],
+  });
+
+  client.on("getMilestones", replicate(milestones));
+
+  // TODO: Are there events we need to set up here?
+};
+
+// Setup Tiltify.
+export default (nodecg: NodeCG, config: CampaignClientArgs) => {
+  nodecg.log.info("⬆ Setting up Tiltify client...");
+  const client = new CampaignClient(config);
+  setupDonations(nodecg, client);
+  setupCampaign(nodecg, client);
+  setupMilestones(nodecg, client);
+
+  return client;
+};
