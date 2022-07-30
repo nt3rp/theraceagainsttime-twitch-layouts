@@ -4,8 +4,15 @@ import { RefreshingAuthProvider } from "@twurple/auth";
 import { ChatClient } from "@twurple/chat";
 import { EventSubListener } from "@twurple/eventsub";
 import { NgrokAdapter } from "@twurple/eventsub-ngrok";
+import { diff } from "../utils";
 
-import type { NodeCG } from "nodecg-types/types/server";
+import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import type {
+  HostEvent,
+  FollowEvent,
+  SubscriptionEvent,
+  SubscriptionExtendedEvent,
+} from "../../types/events";
 
 /*
 In the event of non-connection / needing to sign-in from scratch:
@@ -102,27 +109,38 @@ export class TwitchClient {
   }
 }
 
-/*
-            Logged | Alert
-            --------------
-  Community    X   |       
-  Gifted           |   X
-  Regular      X   |   X
-  */
-
 const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for subscriptions...");
+
+  const subscriptions: Replicant<
+    Array<SubscriptionEvent | SubscriptionExtendedEvent>
+  > = nodecg.Replicant("subscriptions", {
+    defaultValue: [],
+  });
+
+  subscriptions.on("change", (newValue, oldValue) => {
+    nodecg.sendMessage("subscription.total", newValue.length);
+
+    const newValues = diff(newValue, oldValue);
+    newValues.forEach((sub) =>
+      nodecg.sendMessage(
+        sub.isGifted ? "subscription.gift" : "subscription",
+        sub
+      )
+    );
+  });
 
   twitch.chat.onSub((channel, subscriber, info) => {
     const { isPrime, months, plan, streak } = info;
     nodecg.log.debug(
       `[Twitch] [Subscription]: #${channel} @${subscriber}: ${info}`
     );
-    nodecg.sendMessage("subscription", {
+    subscriptions.value.push({
       channel,
       subscriber,
       tier: parseInt(plan, 10) / 1000,
       isPrime,
+      isGifted: false,
       months,
       streak,
     });
@@ -133,11 +151,12 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
     nodecg.log.debug(
       `[Twitch] [Re-Subscription]: #${channel} @${subscriber}: ${info}`
     );
-    nodecg.sendMessage("subscription", {
+    subscriptions.value.push({
       channel,
       subscriber,
       tier: parseInt(plan, 10) / 1000,
       isPrime,
+      isGifted: false,
       months,
       streak,
     });
@@ -148,25 +167,11 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
     nodecg.log.debug(
       `[Twitch] [Subscription Extend]: #${channel} @${subscriber}: ${info}`
     );
-    nodecg.sendMessage("subscription", {
+    subscriptions.value.push({
       channel,
       subscriber,
       months,
       extendedMonths: Math.abs(endMonth - (new Date().getMonth() + 1)),
-    });
-  });
-
-  twitch.chat.onCommunitySub((channel, gifter, info) => {
-    const { count, gifterGiftCount, plan } = info;
-    nodecg.log.debug(
-      `[Twitch] [Community Subscription]: #${channel} @${gifter}: ${info}`
-    );
-    nodecg.sendMessage("subscription.community", {
-      channel,
-      gifter,
-      tier: parseInt(plan, 10) / 1000,
-      count,
-      totalGifts: gifterGiftCount,
     });
   });
 
@@ -177,16 +182,32 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
     nodecg.log.debug(
       `[Twitch] [Gifted Subscription]: #${channel} @${recipient}: ${info}`
     );
-    nodecg.sendMessage("subscription.gift", {
+    subscriptions.push({
       channel,
       subscriber: recipient,
       tier: parseInt(plan, 10) / 1000,
       isPrime,
+      isGifted: true,
       months,
       streak,
       gifter,
       message,
       giftedDuration: giftDuration,
+    });
+  });
+
+  twitch.chat.onCommunitySub((channel, gifter, info) => {
+    const { count, gifterGiftCount, plan } = info;
+    nodecg.log.debug(
+      `[Twitch] [Community Subscription]: #${channel} @${gifter}: ${info}`
+    );
+
+    nodecg.sendMessage("subscription.community", {
+      channel,
+      gifter,
+      tier: parseInt(plan, 10) / 1000,
+      count,
+      totalGifts: gifterGiftCount,
     });
   });
 };
@@ -207,34 +228,46 @@ const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   });
 };
 
-const setupRaids = (nodecg: NodeCG, twitch: TwitchClient) => {
-  nodecg.log.info("⬆ Listening for raids...");
-  twitch.chat.onRaid((raided, raider, info) => {
-    const { viewerCount } = info;
-    nodecg.log.debug(`[Twitch] [Raid]: #${raided} @${raider}: ${info}`);
-    if (!twitch.channels.includes(raided)) {
-      // We only care about channels we're authorized to host.
-      // At the moment, there's just one channel.
-      return;
-    }
+// We do not really care about the distinction between hosts and raids
+// other than for messaging purposes.
+const setupHostsAndRaids = (nodecg: NodeCG, twitch: TwitchClient) => {
+  nodecg.log.info("⬆ Listening for hosts and raids...");
 
-    nodecg.sendMessage("raid", { raided, raider, count: viewerCount });
+  // We don't really care about the distinction between these two things,
+  // so just call them all 'hosts'.
+  const hosts: Replicant<Array<HostEvent>> = nodecg.Replicant("hosts", {
+    defaultValue: [],
   });
-};
 
-const setupHosts = (nodecg: NodeCG, twitch: TwitchClient) => {
-  nodecg.log.info("⬆ Listening for hosts...");
-  twitch.chat.onHost((host, hosted, viewers) => {
+  hosts.on("change", (newValue, oldValue) => {
+    nodecg.sendMessage("host.total", newValue.length);
+    const newValues = diff(newValue, oldValue);
+    newValues.forEach((host) => nodecg.sendMessage("host", host));
+  });
+
+  twitch.chat.onHost((host, channel, viewers) => {
     nodecg.log.debug(
-      `[Twitch] [Host]: #${hosted} @${host}: ${viewers} viewers`
+      `[Twitch] [Host]: #${channel} @${host}: ${viewers} viewers`
     );
-    if (!twitch.channels.includes(hosted)) {
+    if (!twitch.channels.includes(channel)) {
       // We only care about channels we're authorized to host.
       // At the moment, there's just one channel.
       return;
     }
 
-    nodecg.sendMessage("host", { host, hosted, viewers });
+    hosts.value.push({ channel, host, viewers: viewers ?? 0, isRaid: false });
+  });
+
+  twitch.chat.onRaid((channel, host, info) => {
+    const { viewerCount } = info;
+    nodecg.log.debug(`[Twitch] [Raid]: #${channel} @${host}: ${info}`);
+    if (!twitch.channels.includes(channel)) {
+      // We only care about channels we're authorized to host.
+      // At the moment, there's just one channel.
+      return;
+    }
+
+    hosts.value.push({ channel, host, viewers: viewerCount, isRaid: true });
   });
 };
 
@@ -257,9 +290,19 @@ const setupViewers = async (nodecg: NodeCG, twitch: TwitchClient) => {
   }, 60_000);
 };
 
-// TODO: This won't aggregate follows or hypetrains; will probably have to do a replicant.
 const setupEvents = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for Twitch events...");
+
+  const follows: Replicant<Array<FollowEvent>> = nodecg.Replicant("follows", {
+    defaultValue: [],
+  });
+
+  follows.on("change", (newValue, oldValue) => {
+    nodecg.sendMessage("follow.total", newValue.length);
+    const newValues = diff(newValue, oldValue);
+    newValues.forEach((follow) => nodecg.sendMessage("follow", follow));
+  });
+
   twitch.channels.forEach(async (channel) => {
     const user = await twitch.api.users.getUserByName(channel);
     if (!user) {
@@ -272,7 +315,7 @@ const setupEvents = (nodecg: NodeCG, twitch: TwitchClient) => {
     twitch.eventSub.subscribeToChannelFollowEvents(user, (event) => {
       const { userName } = event;
       nodecg.log.debug(`[Twitch] [Follow]: #${channel} @${userName} followed`);
-      nodecg.sendMessage("follow", { channel, user: userName });
+      follows.value.push({ channel, user: userName });
     });
 
     twitch.eventSub.subscribeToChannelHypeTrainBeginEvents(user, (event) => {
@@ -304,8 +347,7 @@ export default async (nodecg: NodeCG, configPath: string) => {
   [
     setupChat,
     setupSubscriptions,
-    setupRaids,
-    setupHosts,
+    setupHostsAndRaids,
     setupEvents,
     setupViewers,
   ].forEach((method) => method(nodecg, client));

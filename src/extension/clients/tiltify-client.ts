@@ -75,7 +75,7 @@ const setupCampaign = (nodecg: NodeCG, client: CampaignClient) => {
   campaign.on("change", (newValue, oldValue) => {
     // Don't fire an event when we're starting up or have no data.
     if (!oldValue || !newValue) return;
-    nodecg.sendMessage("campaign.total", (newValue as any).totalAmountRaised);
+    nodecg.sendMessage("donation.total", (newValue as any).totalAmountRaised);
   });
 };
 

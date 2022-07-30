@@ -18,16 +18,11 @@ export interface ChatMessageEvent {
   bits?: number;
 }
 
-export interface RaidEvent {
-  channel: string;
-  raider: string;
-  viewers: number;
-}
-
 export interface HostEvent {
   channel: string;
   host: string;
   viewers: number;
+  isRaid: boolean;
 }
 
 export interface ViewersSnapshotEvent {
@@ -49,6 +44,7 @@ export interface BaseSubscriptionEvent {
 export interface SubscriptionEvent extends BaseSubscriptionEvent {
   tier: number;
   isPrime: boolean;
+  isGifted: boolean;
   streak?: number;
   gifter?: string;
   giftedDuration?: number;

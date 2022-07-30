@@ -4,7 +4,7 @@ import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type {
   ChatMessageEvent,
   CommunitySubscriptionEvent,
-  RaidEvent,
+  HostEvent,
 } from "../types/events";
 import type { TwitchClient } from "./clients/twitch-client";
 
@@ -28,12 +28,13 @@ export interface Secret {
   completedAt?: Date;
   subject:
     | "donation"
-    | "total-raised"
+    | "donation.total"
     | "chat"
-    | "subscriptions"
+    | "subscription.community"
     | "bits"
     | "viewers"
-    | "raid";
+    | "host.total"
+    | "follow.total";
   criteria: {
     comparator: "==" | ">=" | "regexp";
     value: any;
@@ -79,8 +80,8 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     maybeMeetCriteria("donation", donation.amount, secrets, nodecg)
   );
 
-  nodecg.listenFor("campaign.total", (total) =>
-    maybeMeetCriteria("donation", total, secrets, nodecg)
+  nodecg.listenFor("donation.total", (total: number) =>
+    maybeMeetCriteria("donation.total", total, secrets, nodecg)
   );
 
   nodecg.listenFor("chat", (event: ChatMessageEvent) => {
@@ -93,15 +94,19 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.listenFor(
     "subscription.community",
     (event: CommunitySubscriptionEvent) => {
-      maybeMeetCriteria("subscriptions", event.count, secrets, nodecg);
+      maybeMeetCriteria("subscription.community", event.count, secrets, nodecg);
     }
   );
 
-  nodecg.listenFor("raid", (event: RaidEvent) => {
-    maybeMeetCriteria("raid", event.viewers, secrets, nodecg);
+  nodecg.listenFor("host.total", (count: number) => {
+    maybeMeetCriteria("host.total", count, secrets, nodecg);
   });
 
-  nodecg.listenFor("viewers", (event: RaidEvent) => {
+  nodecg.listenFor("viewers", (event: HostEvent) => {
     maybeMeetCriteria("viewers", event.viewers, secrets, nodecg);
+  });
+
+  nodecg.listenFor("follow.total", (count: number) => {
+    maybeMeetCriteria("follow.total", count, secrets, nodecg);
   });
 };
