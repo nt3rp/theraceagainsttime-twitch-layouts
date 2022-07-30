@@ -1,5 +1,5 @@
 import type { NodeCG } from "nodecg-types/types/server";
-import type { TwitchClient } from "./clients/twitch-client";
+import type { TwitchClient } from "../clients/twitch-client";
 
 const CREDITS: any = {};
 
