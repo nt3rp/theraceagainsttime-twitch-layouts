@@ -9,7 +9,7 @@ export const pick = (obj: any, arr: any) =>
   );
 /* eslint-enable no-sequences */
 
-// Only works for collections (i.e. `[{obj}}`)
+// Only works for collections (i.e. `[{obj}]`)
 export const replicateCollectionWithProperties = (
   replicant: Replicant<any>,
   propertiesList: Array<string>
@@ -33,10 +33,19 @@ export const replicate = (replicant: Replicant<any>) => {
   };
 };
 
-// Not sure of performance implications of this.
-export const diff = (a: Array<any>, b: Array<any> | undefined) =>
-  !b ? a : a.filter((x) => !b.includes(x));
+// eslint-disable-next-line no-unused-vars
+export type EqualityComparator<T> = (a: T, b: T) => boolean;
 
+// Not sure of performance implications of this.
+export const diff = <T>(
+  arr: Array<T>,
+  old: Array<T> | undefined,
+  compareFn: EqualityComparator<T> = (a, b) => a === b
+): Array<T> => {
+  if (!old) return arr;
+
+  return arr.filter((newEl) => !old.some((oldEl) => compareFn(newEl, oldEl)));
+};
 const operators = {
   "==": (a: any, b: any) => a === b,
   ">=": (a: any, b: any) => a >= b,

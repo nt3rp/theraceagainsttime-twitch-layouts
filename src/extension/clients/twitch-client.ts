@@ -135,7 +135,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
     const newValues = diff(newValue, oldValue);
     newValues.forEach((sub) =>
       nodecg.sendMessage(
-        sub.isGifted ? "subscription.gift" : "subscription",
+        (sub as any).isGifted ? "subscription.gift" : "subscription",
         sub
       )
     );
