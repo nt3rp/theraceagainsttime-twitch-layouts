@@ -131,13 +131,13 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
   });
 
   twitch.chat.onSub((channel, subscriber, info) => {
-    const { isPrime, months, plan, streak } = info;
+    const { displayName, isPrime, months, plan, streak } = info;
     nodecg.log.debug(
-      `[Twitch] [Subscription]: #${channel} @${subscriber}: ${info}`
+      `[Twitch] [Subscription]: #${channel} @${displayName}: ${info}`
     );
     subscriptions.value.push({
       channel,
-      subscriber,
+      subscriber: displayName,
       tier: parseInt(plan, 10) / 1000,
       isPrime,
       isGifted: false,
@@ -147,13 +147,13 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
   });
 
   twitch.chat.onResub((channel, subscriber, info) => {
-    const { isPrime, months, plan, streak } = info;
+    const { displayName, isPrime, months, plan, streak } = info;
     nodecg.log.debug(
-      `[Twitch] [Re-Subscription]: #${channel} @${subscriber}: ${info}`
+      `[Twitch] [Re-Subscription]: #${channel} @${displayName}: ${info}`
     );
     subscriptions.value.push({
       channel,
-      subscriber,
+      subscriber: displayName,
       tier: parseInt(plan, 10) / 1000,
       isPrime,
       isGifted: false,
@@ -163,13 +163,13 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
   });
 
   twitch.chat.onSubExtend((channel, subscriber, info) => {
-    const { endMonth, months } = info;
+    const { displayName, endMonth, months } = info;
     nodecg.log.debug(
-      `[Twitch] [Subscription Extend]: #${channel} @${subscriber}: ${info}`
+      `[Twitch] [Subscription Extend]: #${channel} @${displayName}: ${info}`
     );
     subscriptions.value.push({
       channel,
-      subscriber,
+      subscriber: displayName,
       months,
       extendedMonths: Math.abs(endMonth - (new Date().getMonth() + 1)),
     });
@@ -177,8 +177,15 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
 
   // Triggered by 'onCommunitySub'.
   twitch.chat.onSubGift((channel, recipient, info) => {
-    const { giftDuration, gifter, isPrime, message, months, plan, streak } =
-      info;
+    const {
+      giftDuration,
+      gifterDisplayName,
+      isPrime,
+      message,
+      months,
+      plan,
+      streak,
+    } = info;
     nodecg.log.debug(
       `[Twitch] [Gifted Subscription]: #${channel} @${recipient}: ${info}`
     );
@@ -190,21 +197,21 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
       isGifted: true,
       months,
       streak,
-      gifter,
+      gifter: gifterDisplayName,
       message,
       giftedDuration: giftDuration,
     });
   });
 
   twitch.chat.onCommunitySub((channel, gifter, info) => {
-    const { count, gifterGiftCount, plan } = info;
+    const { count, gifterDisplayName, gifterGiftCount, plan } = info;
     nodecg.log.debug(
-      `[Twitch] [Community Subscription]: #${channel} @${gifter}: ${info}`
+      `[Twitch] [Community Subscription]: #${channel} @${gifterDisplayName}: ${info}`
     );
 
     nodecg.sendMessage("subscription.community", {
       channel,
-      gifter,
+      gifter: gifterDisplayName,
       tier: parseInt(plan, 10) / 1000,
       count,
       totalGifts: gifterGiftCount,
@@ -215,16 +222,21 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
 const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for chat messages...");
   twitch.chat.onMessage((channel, user, message, info) => {
-    const { bits } = info;
+    const { bits, userInfo } = info;
     nodecg.log.debug(
-      `[Twitch] [Chat]: #${channel} @${user}: ${message} (${info})`
+      `[Twitch] [Chat]: #${channel} @${userInfo.displayName}: ${message} (${info})`
     );
     if (user === twitch.name) {
       // Ignore message; it's from ourselves.
       return;
     }
 
-    nodecg.sendMessage("chat", { channel, user, message, bits });
+    nodecg.sendMessage("chat", {
+      channel,
+      user: userInfo.displayName,
+      message,
+      bits,
+    });
   });
 };
 
@@ -259,19 +271,24 @@ const setupHostsAndRaids = (nodecg: NodeCG, twitch: TwitchClient) => {
   });
 
   twitch.chat.onRaid((channel, host, info) => {
-    const { viewerCount } = info;
-    nodecg.log.debug(`[Twitch] [Raid]: #${channel} @${host}: ${info}`);
+    const { viewerCount, displayName } = info;
+    nodecg.log.debug(`[Twitch] [Raid]: #${channel} @${displayName}: ${info}`);
     if (!twitch.channels.includes(channel)) {
       // We only care about channels we're authorized to host.
       // At the moment, there's just one channel.
       return;
     }
 
-    hosts.value.push({ channel, host, viewers: viewerCount, isRaid: true });
+    hosts.value.push({
+      channel,
+      host: displayName,
+      viewers: viewerCount,
+      isRaid: true,
+    });
   });
 };
 
-const setupViewers = async (nodecg: NodeCG, twitch: TwitchClient) => {
+const setupViewers = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Monitoring viewer count...");
   setTimeout(() => {
     twitch.channels.forEach(async (channel) => {
@@ -313,20 +330,22 @@ const setupEvents = (nodecg: NodeCG, twitch: TwitchClient) => {
     }
 
     twitch.eventSub.subscribeToChannelFollowEvents(user, (event) => {
-      const { userName } = event;
-      nodecg.log.debug(`[Twitch] [Follow]: #${channel} @${userName} followed`);
-      follows.value.push({ channel, user: userName });
+      const { userDisplayName } = event;
+      nodecg.log.debug(
+        `[Twitch] [Follow]: #${channel} @${userDisplayName} followed`
+      );
+      follows.value.push({ channel, user: userDisplayName });
     });
 
     twitch.eventSub.subscribeToChannelHypeTrainBeginEvents(user, (event) => {
       const { startDate, lastContribution } = event;
       nodecg.log.debug(
-        `[Twitch] [Hypetrain]: #${channel} @${lastContribution.userName} started the hypetrain: ${event}`
+        `[Twitch] [Hypetrain]: #${channel} @${lastContribution.userDisplayName} started the hypetrain: ${event}`
       );
       nodecg.sendMessage("hypetrain.start", {
         channel,
         startDate,
-        conductor: lastContribution.userName,
+        conductor: lastContribution.userDisplayName,
       });
     });
 
