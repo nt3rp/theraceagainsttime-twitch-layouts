@@ -33,6 +33,7 @@ export const replicate = (replicant: Replicant<any>) => {
   };
 };
 
+// Not sure of performance implications of this.
 export const diff = (a: Array<any>, b: Array<any> | undefined) =>
   !b ? a : a.filter((x) => !b.includes(x));
 

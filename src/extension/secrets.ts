@@ -1,74 +1,40 @@
 import { compare } from "./utils";
 
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import type {
+  ChatMessageEvent,
+  CommunitySubscriptionEvent,
+  HostEvent,
+} from "../types/events";
 import type { TwitchClient } from "./clients/twitch-client";
 
-import * as secrets from "../../config/secrets.json";
-const SECRETS = secrets.map((secret) => {
-  if (secret.criteria.comparator !== "regexp") {
-    return secret;
-  }
-  return {
-    ...secret,
-    criteria: {
-      ...secret.criteria,
-      value: new RegExp(secret.criteria.value as string, "i"),
-    },
-  };
-});
+import * as SECRETS from "../../config/secrets.json";
 
-/*
-SECRETS
-
-Chat
-- 1st: 10 folks in chat
-- 1st: 20 folks in chat
-- 1st: 30 folks in chat
-- 1st: 40 folks in chat
-- 1st: Raid
-- 1st: 10 person raid
-- 1st: 20 person raid
-- 1st: 42 bits
-- 1st: 69 bits
-- 1st: 420 bits
-- (Prometheus Circuit / Robo related?)
-- (Starfox reference)
-- (Hifumi / Danganronpa / ZE)
-- (BABY -> Jay)
-- (Buns)
-- (Robo is best boi)
-- (Berzerkayla?)
-- (Umaro)
-
-Game (manual buttons)
-- Beat Frog Spekkio
-- Beat Dragon Tank 1st time
-- Beat Golem
-- Save Fritz
-- Not Guilty
-- Boss skip
-- Ozzie no fall
-- Boss overflow kill
-
-... Look at some of the previous achievements
-
-... then reveal secret in dashboard?
-
-*/
 export interface Secret {
   name: string;
   description?: string;
   completedAt?: Date;
-  subject: "donation" | "total-raised" | "chat" | "subscriptions";
+  subject:
+    | "donation"
+    | "donation.total"
+    | "chat"
+    | "subscription.community"
+    | "bits"
+    | "viewers"
+    | "host.total"
+    | "follow.total";
   criteria: {
     comparator: "==" | ">=" | "regexp";
-    value: any;
-    response?: string;
+    _value: any;
+    value?: any;
   };
 }
 
+// TODO: Consider making this even more generic
+// Could dig / pluck the subject from the criteria.
+// Might need to do something about filtering, if so.
 const maybeMeetCriteria = (
-  subject: string,
+  subject: Secret["subject"],
   criteria: any,
   secrets: Replicant<Array<Secret>>,
   nodecg: NodeCG
@@ -84,6 +50,7 @@ const maybeMeetCriteria = (
       secrets.value.find((secret) => {
         if (name !== secret.name) return false;
         secret.completedAt = new Date();
+        nodecg.log.debug(`[Secret] ${secret.name} completed`);
         nodecg.sendMessage("secret", secret);
         return true;
       });
@@ -91,35 +58,60 @@ const maybeMeetCriteria = (
   });
 };
 
+// eslint-disable-next-line no-unused-vars
 export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Starting Secrets extension...");
   const secrets: Replicant<Array<Secret>> = nodecg.Replicant("secrets", {
     defaultValue: SECRETS as Array<Secret>,
   });
 
+  // JSON Doesn't support RegExp, so we need to rehydrate it every time.
+  // In case there are similar type issues, store the permanent value
+  // in `_value` and put the computed value in `value`.
+  secrets.value = secrets.value.map((secret) => {
+    return {
+      ...secret,
+      criteria: {
+        ...secret.criteria,
+        value:
+          secret.criteria.comparator === "regexp"
+            ? new RegExp(secret.criteria._value as string, "i")
+            : secret.criteria._value,
+      },
+    };
+  });
+
   nodecg.listenFor("donation", (donation) =>
     maybeMeetCriteria("donation", donation.amount, secrets, nodecg)
   );
 
-  nodecg.listenFor("campaign.total", (total) =>
-    maybeMeetCriteria("donation", total, secrets, nodecg)
+  nodecg.listenFor("donation.total", (total: number) =>
+    maybeMeetCriteria("donation.total", total, secrets, nodecg)
   );
 
-  // TODO: Move these to NodeCG events.
-  twitch.chat.onMessage((channel, user, message) => {
-    maybeMeetCriteria("chat", message, secrets, nodecg);
+  nodecg.listenFor("chat", (event: ChatMessageEvent) => {
+    maybeMeetCriteria("chat", event.message, secrets, nodecg);
+    if (event.bits) {
+      maybeMeetCriteria("bits", event.bits, secrets, nodecg);
+    }
   });
 
-  twitch.chat.onCommunitySub((channel, user, { count }) => {
-    maybeMeetCriteria("subscriptions", count, secrets, nodecg);
+  nodecg.listenFor(
+    "subscription.community",
+    (event: CommunitySubscriptionEvent) => {
+      maybeMeetCriteria("subscription.community", event.count, secrets, nodecg);
+    }
+  );
+
+  nodecg.listenFor("host.total", (count: number) => {
+    maybeMeetCriteria("host.total", count, secrets, nodecg);
   });
 
-  // TODO: Listen for secret events so that you can post to chat about them
-  // ...Either when a certain number of secrets is reached, or just to give hints
-  // that something has happened!
+  nodecg.listenFor("viewers", (event: HostEvent) => {
+    maybeMeetCriteria("viewers", event.viewers, secrets, nodecg);
+  });
 
-  // TODO: Cheers / Bits (pubsub)
-  // TODO: Raids / hosts (chat)
-  // TODO: Follows (eventsub only)
-  // TODO: Viewers (API: Stream)
+  nodecg.listenFor("follow.total", (count: number) => {
+    maybeMeetCriteria("follow.total", count, secrets, nodecg);
+  });
 };

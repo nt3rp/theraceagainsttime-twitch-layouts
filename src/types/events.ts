@@ -1,3 +1,69 @@
+// Twitch Events
+export interface HypetrainStartEvent {
+  channel: string;
+  conductor: string;
+  startDate: Date;
+}
+
+export interface HypetrainEndEvent {
+  channel: string;
+  level: string;
+  endDate: Date;
+}
+
+export interface ChatMessageEvent {
+  channel: string;
+  user: string;
+  message: string;
+  bits?: number;
+}
+
+export interface HostEvent {
+  channel: string;
+  host: string;
+  viewers: number;
+  isRaid: boolean;
+}
+
+export interface ViewersSnapshotEvent {
+  channel: string;
+  viewers: number;
+}
+
+export interface FollowEvent {
+  channel: string;
+  user: string;
+}
+
+export interface BaseSubscriptionEvent {
+  channel: string;
+  subscriber: string;
+  months: number;
+}
+
+export interface SubscriptionEvent extends BaseSubscriptionEvent {
+  tier: number;
+  isPrime: boolean;
+  isGifted: boolean;
+  streak?: number;
+  gifter?: string;
+  giftedDuration?: number;
+  message?: string;
+}
+
+export interface SubscriptionExtendedEvent extends BaseSubscriptionEvent {
+  extendedMonths: number;
+}
+
+export interface CommunitySubscriptionEvent {
+  channel: string;
+  gifter: string;
+  tier: number;
+  count: number;
+  totalGifts?: number;
+}
+
+// TODO: Deprecate events below this point.
 export interface Completeable {
   // eslint-disable-next-line no-unused-vars
   onComplete: (id: string, event: any) => void;

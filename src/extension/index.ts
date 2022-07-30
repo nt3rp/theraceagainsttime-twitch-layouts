@@ -2,7 +2,7 @@ import * as path from "path";
 import setupTiltify from "./clients/tiltify-client";
 import setupTwitch from "./clients/twitch-client";
 import bot from "./bot";
-// import secrets from "./secrets";
+import secrets from "./secrets";
 
 import type { NodeCG } from "nodecg-types/types/server";
 
@@ -18,5 +18,5 @@ export default async (nodecg: NodeCG) => {
   );
 
   bot(nodecg, twitchClient);
-  // secrets(nodecg, twitchClient);
+  secrets(nodecg, twitchClient);
 };
