@@ -220,6 +220,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
       `[Twitch] [Community Subscription]: #${channel} @${gifterDisplayName}: ${info}`
     );
 
+    // Note: We don't include sub gifts in the list of subscriptions.
     nodecg.sendMessage("subscription.community", {
       channel,
       gifter: gifterDisplayName,
