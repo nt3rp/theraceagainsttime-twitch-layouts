@@ -1,4 +1,16 @@
 // Twitch Events
+export interface HypetrainStartEvent {
+  channel: string;
+  conductor: string;
+  startDate: Date;
+}
+
+export interface HypetrainEndEvent {
+  channel: string;
+  level: string;
+  endDate: Date;
+}
+
 export interface ChatMessageEvent {
   channel: string;
   user: string;

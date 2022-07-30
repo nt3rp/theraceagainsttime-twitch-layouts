@@ -104,10 +104,4 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.listenFor("viewers", (event: RaidEvent) => {
     maybeMeetCriteria("viewers", event.viewers, secrets, nodecg);
   });
-
-  /*
-  TODO (No access):
-  - Follows (eventsub only)
-  - Hypetrain (eventsub only)
-  */
 };

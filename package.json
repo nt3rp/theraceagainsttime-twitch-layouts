@@ -38,6 +38,7 @@
     "@twurple/api": "^5.1.8",
     "@twurple/auth": "^5.1.6",
     "@twurple/chat": "^5.1.6",
+    "@twurple/eventsub-ngrok": "^5.1.8",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "app-root-path": "^3.0.0",
