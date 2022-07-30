@@ -8,19 +8,7 @@ import type {
 } from "../types/events";
 import type { TwitchClient } from "./clients/twitch-client";
 
-import * as secrets from "../../config/secrets.json";
-const SECRETS = secrets.map((secret) => {
-  if (secret.criteria.comparator !== "regexp") {
-    return secret;
-  }
-  return {
-    ...secret,
-    criteria: {
-      ...secret.criteria,
-      value: new RegExp(secret.criteria.value as string, "i"),
-    },
-  };
-});
+import * as SECRETS from "../../config/secrets.json";
 
 export interface Secret {
   name: string;
@@ -37,8 +25,8 @@ export interface Secret {
     | "follow.total";
   criteria: {
     comparator: "==" | ">=" | "regexp";
-    value: any;
-    response?: string;
+    _value: any;
+    value?: any;
   };
 }
 
@@ -62,6 +50,7 @@ const maybeMeetCriteria = (
       secrets.value.find((secret) => {
         if (name !== secret.name) return false;
         secret.completedAt = new Date();
+        nodecg.log.debug(`[Secret] ${secret.name} completed`);
         nodecg.sendMessage("secret", secret);
         return true;
       });
@@ -74,6 +63,22 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Starting Secrets extension...");
   const secrets: Replicant<Array<Secret>> = nodecg.Replicant("secrets", {
     defaultValue: SECRETS as Array<Secret>,
+  });
+
+  // JSON Doesn't support RegExp, so we need to rehydrate it every time.
+  // In case there are similar type issues, store the permanent value
+  // in `_value` and put the computed value in `value`.
+  secrets.value = secrets.value.map((secret) => {
+    return {
+      ...secret,
+      criteria: {
+        ...secret.criteria,
+        value:
+          secret.criteria.comparator === "regexp"
+            ? new RegExp(secret.criteria._value as string, "i")
+            : secret.criteria._value,
+      },
+    };
   });
 
   nodecg.listenFor("donation", (donation) =>

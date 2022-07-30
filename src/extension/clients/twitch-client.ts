@@ -1,6 +1,9 @@
 import { promises as fs } from "fs";
 import { ApiClient } from "@twurple/api";
-import { RefreshingAuthProvider } from "@twurple/auth";
+import {
+  RefreshingAuthProvider,
+  ClientCredentialsAuthProvider,
+} from "@twurple/auth";
 import { ChatClient } from "@twurple/chat";
 import { EventSubListener } from "@twurple/eventsub";
 import { NgrokAdapter } from "@twurple/eventsub-ngrok";
@@ -15,13 +18,18 @@ import type {
 } from "../../types/events";
 
 /*
-In the event of non-connection / needing to sign-in from scratch:
-1. Visit https://id.twitch.tv/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=chat:read+chat:edit+whispers:edit+channel:read:subscriptions
+In the event of non-connection / needing to sign-in from scratch.
+You'll need to complete step 1 for the account that you want to grant access to, since it will give the necessary permissions.
+1. Visit https://id.twitch.tv/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=bits:read+channel:manage:broadcast+channel:read:hype_train+channel:read:subscriptions+chat:edit+chat:read+moderator:manage:announcements+user:read:follows+user:read:subscriptions
 2. From the Chrome developer console, execute the following:
   ```
   await fetch('https://id.twitch.tv/oauth2/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=CODE_FROM_LAST_REQUEST&grant_type=authorization_code&redirect_uri=http://localhost', { method: 'POST' });
   ```
 3. In the `Network` tab, retrieve the `access_token` and `refresh_token`
+
+To get the EventSub permissions working, refer to:
+- https://twurple.js.org/docs/faq/
+- https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow
 */
 
 /*
@@ -56,11 +64,7 @@ export class TwitchClient {
         onRefresh: async (newTokenData) =>
           await fs.writeFile(
             credentialsPath,
-            JSON.stringify(
-              { ...newTokenData, clientId, clientSecret, channels },
-              null,
-              2
-            ),
+            JSON.stringify({ ...config, ...newTokenData }, null, 2),
             "utf8"
           ),
       },
@@ -71,7 +75,14 @@ export class TwitchClient {
     instance._chat = chat;
     await chat.connect();
 
-    const api = new ApiClient({ authProvider });
+    // We don't need user-specific data for API / EventSub
+    // so use a ClientCredentialsAuthProvider.
+    // https://twurple.js.org/docs/auth/
+    const appTokenAuthProvider = new ClientCredentialsAuthProvider(
+      clientId,
+      clientSecret
+    );
+    const api = new ApiClient({ authProvider: appTokenAuthProvider });
     instance._api = api;
 
     // This is necessary to prevent conflict errors resulting from ngrok assigning a new host name every time
@@ -221,7 +232,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
 
 const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for chat messages...");
-  twitch.chat.onMessage((channel, user, message, info) => {
+  twitch.chat.onMessage(async (channel, user, message, info) => {
     const { bits, userInfo } = info;
     nodecg.log.debug(
       `[Twitch] [Chat]: #${channel} @${userInfo.displayName}: ${message} (${info})`
@@ -329,7 +340,7 @@ const setupEvents = (nodecg: NodeCG, twitch: TwitchClient) => {
       return;
     }
 
-    twitch.eventSub.subscribeToChannelFollowEvents(user, (event) => {
+    await twitch.eventSub.subscribeToChannelFollowEvents(user, (event) => {
       const { userDisplayName } = event;
       nodecg.log.debug(
         `[Twitch] [Follow]: #${channel} @${userDisplayName} followed`
@@ -337,23 +348,29 @@ const setupEvents = (nodecg: NodeCG, twitch: TwitchClient) => {
       follows.value.push({ channel, user: userDisplayName });
     });
 
-    twitch.eventSub.subscribeToChannelHypeTrainBeginEvents(user, (event) => {
-      const { startDate, lastContribution } = event;
-      nodecg.log.debug(
-        `[Twitch] [Hypetrain]: #${channel} @${lastContribution.userDisplayName} started the hypetrain: ${event}`
-      );
-      nodecg.sendMessage("hypetrain.start", {
-        channel,
-        startDate,
-        conductor: lastContribution.userDisplayName,
-      });
-    });
+    await twitch.eventSub.subscribeToChannelHypeTrainBeginEvents(
+      user,
+      (event) => {
+        const { startDate, lastContribution } = event;
+        nodecg.log.debug(
+          `[Twitch] [Hypetrain]: #${channel} @${lastContribution.userDisplayName} started the hypetrain: ${event}`
+        );
+        nodecg.sendMessage("hypetrain.start", {
+          channel,
+          startDate,
+          conductor: lastContribution.userDisplayName,
+        });
+      }
+    );
 
-    twitch.eventSub.subscribeToChannelHypeTrainEndEvents(user, (event) => {
-      const { endDate, level } = event;
-      nodecg.log.debug(`[Twitch] [Hypetrain]: #${channel} ended: ${event}`);
-      nodecg.sendMessage("hypetrain.end", { channel, endDate, level });
-    });
+    await twitch.eventSub.subscribeToChannelHypeTrainEndEvents(
+      user,
+      (event) => {
+        const { endDate, level } = event;
+        nodecg.log.debug(`[Twitch] [Hypetrain]: #${channel} ended: ${event}`);
+        nodecg.sendMessage("hypetrain.end", { channel, endDate, level });
+      }
+    );
   });
 };
 
