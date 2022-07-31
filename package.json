@@ -6,6 +6,7 @@
   "author": "Nick Terwoord <me@nt3rp.io>",
   "license": "MIT",
   "scripts": {
+    "watch:extension": "parcel watch 'src/extension/index.ts' --target extension",
     "build:extension": "parcel build 'src/extension/index.ts' --target extension",
     "watch:dashboard": "parcel watch 'src/dashboard/*.html' --dist-dir='dashboard' --public-url='.'",
     "build:dashboard": "parcel build 'src/dashboard/*.html' --dist-dir='dashboard' --public-url='.'",
