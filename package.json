@@ -8,13 +8,20 @@
   "scripts": {
     "watch:extension": "parcel watch 'src/extension/index.ts' --target extension",
     "build:extension": "parcel build 'src/extension/index.ts' --target extension",
-    "watch:dashboard": "parcel watch 'src/dashboard/*.html' --dist-dir='dashboard' --public-url='.'",
-    "build:dashboard": "parcel build 'src/dashboard/*.html' --dist-dir='dashboard' --public-url='.'",
-    "watch:graphics": "parcel watch 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'",
-    "build:graphics": "parcel build 'src/graphics/*.html' --dist-dir='graphics' --public-url='.'"
+    "watch:dashboard": "parcel watch 'src/dashboard/*.html' --target dashboard",
+    "build:dashboard": "parcel build 'src/dashboard/*.html' --target dashboard",
+    "watch:graphics": "parcel watch 'src/graphics/*.html' --target graphics",
+    "build:graphics": "parcel build 'src/graphics/*.html' --target graphics"
   },
   "targets": {
-    "default": {},
+    "graphics": {
+      "distDir": "graphics",
+      "publicUrl": "."
+    },
+    "dashboard": {
+      "distDir": "dashboard",
+      "publicUrl": "."
+    },
     "extension": {
       "context": "node",
       "distDir": "extension",
@@ -62,6 +69,14 @@
     "use-nodecg": "^0.4.1-1"
   },
   "nodecg": {
-    "compatibleRange": "^1.1.1"
+    "compatibleRange": "^1.1.1",
+    "dashboardPanels": [],
+    "graphics": [
+      {
+        "file": "main.html",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
   }
 }
