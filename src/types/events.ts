@@ -22,10 +22,12 @@ export interface HypetrainEndEvent {
 }
 
 export interface ChatMessageEvent {
+  id: string;
   channel: string;
   user: string;
   message: string;
   bits?: number;
+  isMod?: boolean;
 }
 
 export interface HostEvent {

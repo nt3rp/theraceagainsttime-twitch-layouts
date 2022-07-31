@@ -234,7 +234,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
 const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for chat messages...");
   twitch.chat.onMessage(async (channel, user, message, info) => {
-    const { bits, userInfo } = info;
+    const { bits, userInfo, id } = info;
     nodecg.log.debug(
       `[Twitch] [Chat]: #${channel} @${userInfo.displayName}: ${message} (${info})`
     );
@@ -248,6 +248,8 @@ const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
       user: userInfo.displayName,
       message,
       bits,
+      id,
+      isMod: userInfo.isMod,
     });
   });
 };
