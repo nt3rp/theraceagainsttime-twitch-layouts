@@ -1,6 +1,7 @@
-import { diff, replicate, replicateCollectionWithProperties } from "../utils";
+import { diff, replicate } from "../utils";
 
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
+import { DonationEvent } from "../../types/events";
 
 const TiltifyClient = require("tiltify-api-client");
 
@@ -48,18 +49,23 @@ export class CampaignClient {
 const setupDonations = (nodecg: NodeCG, client: CampaignClient) => {
   nodecg.log.info("⬆ Listening for donations...");
 
-  const donations: Replicant<Array<object>> = nodecg.Replicant("donations", {
-    defaultValue: [],
-  });
-
-  client.on(
-    "getDonations",
-    replicateCollectionWithProperties(donations, ["shown", "read"])
+  const donations: Replicant<Array<DonationEvent>> = nodecg.Replicant(
+    "donations",
+    {
+      defaultValue: [],
+    }
   );
+
+  client.on("getDonations", replicate(donations));
 
   donations.on("change", (newValue, oldValue) => {
     // Not sure of performance implications of this.
-    const newValues = diff(newValue, oldValue);
+    // What do we want to use as the diff function here?
+    const newValues = diff(
+      newValue,
+      oldValue,
+      (a: DonationEvent, b: DonationEvent) => a.id === b.id
+    );
     newValues.forEach((donation) => nodecg.sendMessage("donation", donation));
   });
 };

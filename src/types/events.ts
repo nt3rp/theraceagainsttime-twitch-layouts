@@ -1,3 +1,13 @@
+// Tiltify Events
+export interface DonationEvent {
+  id: number;
+  amount: number;
+  name: string;
+  comment: string;
+  completedAt: number;
+  rewardId?: number;
+}
+
 // Twitch Events
 export interface HypetrainStartEvent {
   channel: string;
@@ -12,10 +22,12 @@ export interface HypetrainEndEvent {
 }
 
 export interface ChatMessageEvent {
+  id: string;
   channel: string;
   user: string;
   message: string;
   bits?: number;
+  isMod?: boolean;
 }
 
 export interface HostEvent {

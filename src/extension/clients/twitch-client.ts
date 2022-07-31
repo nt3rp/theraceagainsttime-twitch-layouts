@@ -135,7 +135,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
     const newValues = diff(newValue, oldValue);
     newValues.forEach((sub) =>
       nodecg.sendMessage(
-        sub.isGifted ? "subscription.gift" : "subscription",
+        (sub as any).isGifted ? "subscription.gift" : "subscription",
         sub
       )
     );
@@ -220,6 +220,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
       `[Twitch] [Community Subscription]: #${channel} @${gifterDisplayName}: ${info}`
     );
 
+    // Note: We don't include sub gifts in the list of subscriptions.
     nodecg.sendMessage("subscription.community", {
       channel,
       gifter: gifterDisplayName,
@@ -233,7 +234,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
 const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Listening for chat messages...");
   twitch.chat.onMessage(async (channel, user, message, info) => {
-    const { bits, userInfo } = info;
+    const { bits, userInfo, id } = info;
     nodecg.log.debug(
       `[Twitch] [Chat]: #${channel} @${userInfo.displayName}: ${message} (${info})`
     );
@@ -247,6 +248,8 @@ const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
       user: userInfo.displayName,
       message,
       bits,
+      id,
+      isMod: userInfo.isMod,
     });
   });
 };
