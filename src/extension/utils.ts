@@ -57,3 +57,13 @@ export const compare = (operator: string, a: any, b: any): boolean =>
 // https://www.30secondsofcode.org/js/s/sample
 export const sample = <T>(arr: Array<T>) =>
   arr[Math.floor(Math.random() * arr.length)];
+
+// https://www.30secondsofcode.org/js/s/shuffle
+export const shuffle = <T>([...arr]: Array<T>) => {
+  let m = arr.length;
+  while (m) {
+    const i = Math.floor(Math.random() * m--);
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  return arr;
+};
