@@ -53,3 +53,7 @@ const operators = {
 };
 export const compare = (operator: string, a: any, b: any): boolean =>
   (operators as any)[operator](a, b);
+
+// https://www.30secondsofcode.org/js/s/sample
+export const sample = <T>(arr: Array<T>) =>
+  arr[Math.floor(Math.random() * arr.length)];
