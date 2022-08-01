@@ -16,11 +16,11 @@ export const Camera: FunctionComponent<any> = (props: any) => {
 };
 
 export const GuestCamera: FunctionComponent<any> = (props: any) => {
-  const [guestsReplicant, _setGuests]: [Array<Guest>, any] = useReplicant(
-    "guests",
-    []
-  );
-  const guests: Array<Guest> = copy(guestsReplicant);
+  // const [guestsReplicant, _setGuests]: [Array<Guest>, any] = useReplicant(
+  //   "guests",
+  //   []
+  // );
+  const guests: Array<Guest> = [];
   const guest: Guest | any =
     guests.find(({ camera }) => props.cameraId === camera) || undefined;
 
