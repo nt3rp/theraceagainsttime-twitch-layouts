@@ -10,12 +10,12 @@ import "./css/events.css";
 import "./css/icons.css";
 
 export const Events: FunctionComponent<any> = (props: any) => {
-  const [settingRep, _setting]: [string, unknown] = useReplicant(
-    "events-bar",
-    ""
-  );
+  // const [settingRep, _setting]: [string, unknown] = useReplicant(
+  //   "events-bar",
+  //   ""
+  // );
 
-  const setting = copy(settingRep);
+  const setting: string = "";
 
   let content;
   switch (setting) {
@@ -83,12 +83,13 @@ export const FundsBar: FunctionComponent<any> = () => {
 };
 
 export const EventsBar: FunctionComponent<any> = (props: any) => {
-  const [eventsRep, _setEvents]: [Array<Event>, unknown] = useReplicant(
-    "events",
-    []
-  );
-  const limit = props.limit || 10;
-  const events: Array<Event> = copy(eventsRep).slice(-limit).reverse();
+  // const [eventsRep, _setEvents]: [Array<Event>, unknown] = useReplicant(
+  //   "events",
+  //   []
+  // );
+  // const limit = props.limit || 10;
+  // const events: Array<Event> = copy(eventsRep).slice(-limit).reverse();
+  const events: Array<Event> = [];
   return (
     <div className="events horizontally reversed">
       {events.map(({ id, title, description }: Event) => (
