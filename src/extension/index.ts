@@ -5,6 +5,7 @@ import secrets from "./secrets";
 import credits from "./credits";
 import giveaways from "./giveaways";
 import ladder from "./ladder";
+import guests from "./guests";
 
 import type { NodeCG } from "nodecg-types/types/server";
 
@@ -23,4 +24,5 @@ export default async (nodecg: NodeCG) => {
   credits(nodecg, twitchClient);
   giveaways(nodecg, twitchClient);
   ladder(nodecg, twitchClient);
+  guests(nodecg, twitchClient);
 };
