@@ -3,7 +3,7 @@ export interface Guest {
   id: string;
   display?: string;
   live?: boolean;
-  socials: Record<string, string | boolean>;
+  socials: Partial<Record<string, string | boolean>>;
 }
 
 // Tiltify Events
