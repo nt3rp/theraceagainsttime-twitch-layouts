@@ -200,7 +200,7 @@ const setupSubscriptions = (nodecg: NodeCG, twitch: TwitchClient) => {
     nodecg.log.debug(
       `[Twitch] [Gifted Subscription]: #${channel} @${recipient}: ${info}`
     );
-    subscriptions.push({
+    subscriptions.value.push({
       channel,
       subscriber: recipient,
       tier: parseInt(plan, 10) / 1000,
