@@ -60,7 +60,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   nodecg.listenFor(
     "chat",
-    ({ id, channel, user, message, isMod }: ChatMessageEvent) => {
+    ({ id, channel, user, message, privileged }: ChatMessageEvent) => {
       if (!message.startsWith("!giveaway")) return;
 
       const [_, cmd, arg] = message.split(" ");
@@ -70,7 +70,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
       switch (cmd) {
         case "list": {
-          if (!isMod) return;
+          if (!privileged) return;
           const ids = giveaways.value
             .filter(({ unlocked, winner }) => !!unlocked && !winner)
             .map(({ id }) => id)
@@ -79,7 +79,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           break;
         }
         case "start": {
-          if (!arg || !isMod) return;
+          if (!arg || !privileged) return;
           const giveaway = giveaways.value.find(
             ({ id }: Giveaway) => id === arg
           );
@@ -90,7 +90,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           break;
         }
         case "end": {
-          if (!isMod || !giveaway) return;
+          if (!privileged || !giveaway) return;
           const winner = sample(giveaway.entrants ?? []);
           twitch.chat.say(
             channel,

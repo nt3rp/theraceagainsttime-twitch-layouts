@@ -72,35 +72,38 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   trackEvents(nodecg, credits);
 
-  nodecg.listenFor("chat", ({ channel, message, isMod }: ChatMessageEvent) => {
-    if (!isMod || !message.startsWith("!credits")) return;
+  nodecg.listenFor(
+    "chat",
+    ({ channel, message, privileged }: ChatMessageEvent) => {
+      if (!privileged || !message.startsWith("!credits")) return;
 
-    const [_, cmd] = message.split(" ");
+      const [_, cmd] = message.split(" ");
 
-    switch (cmd) {
-      case "reset":
-        nodecg.sendMessage("credits.reset");
-        break;
-      default: {
-        // Longest twitch name is 25 characters, message length is ~500 characters.
-        // Send multiple messages assuming 25 character long names.
-        // (There are likely better ways to do this, but for now, just keep it simple)
-        const users = Object.keys(credits.value);
-        for (let i = 0; i < users.length; i += 16) {
-          const greeting =
-            i === 0
-              ? "The Race Against Time would like to thank the following people"
-              : "...and ALSO";
+      switch (cmd) {
+        case "reset":
+          nodecg.sendMessage("credits.reset");
+          break;
+        default: {
+          // Longest twitch name is 25 characters, message length is ~500 characters.
+          // Send multiple messages assuming 25 character long names.
+          // (There are likely better ways to do this, but for now, just keep it simple)
+          const users = Object.keys(credits.value);
+          for (let i = 0; i < users.length; i += 16) {
+            const greeting =
+              i === 0
+                ? "The Race Against Time would like to thank the following people"
+                : "...and ALSO";
 
-          twitch.chat.say(
-            channel,
-            `${greeting}: ${users.slice(i, i + 16).join(", ")}`
-          );
+            twitch.chat.say(
+              channel,
+              `${greeting}: ${users.slice(i, i + 16).join(", ")}`
+            );
+          }
+          break;
         }
-        break;
       }
     }
-  });
+  );
 
   nodecg.listenFor("credits.reset", () => {
     credits.value = {};
