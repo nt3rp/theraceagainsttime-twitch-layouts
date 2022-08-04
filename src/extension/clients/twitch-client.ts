@@ -249,7 +249,7 @@ const setupChat = (nodecg: NodeCG, twitch: TwitchClient) => {
       message,
       bits,
       id,
-      isMod: userInfo.isMod,
+      privileged: userInfo.isMod || userInfo.isVip || userInfo.isBroadcaster,
     });
   });
 };

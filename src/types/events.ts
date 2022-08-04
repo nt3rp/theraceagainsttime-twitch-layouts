@@ -35,7 +35,7 @@ export interface ChatMessageEvent {
   user: string;
   message: string;
   bits?: number;
-  isMod?: boolean;
+  privileged?: boolean;
 }
 
 export interface HostEvent {

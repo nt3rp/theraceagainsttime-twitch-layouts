@@ -78,7 +78,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   nodecg.listenFor(
     "chat",
-    ({ message, channel, user, isMod }: ChatMessageEvent) => {
+    ({ message, channel, user, privileged }: ChatMessageEvent) => {
       if (!message.startsWith("!ladder")) return;
 
       const [_, arg] = message.split(" ");
@@ -104,7 +104,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           break;
         }
         case "next": {
-          if (!isMod) return;
+          if (!privileged) return;
           const next = nextRound(round);
           if (!next) {
             // TODO: Say something;

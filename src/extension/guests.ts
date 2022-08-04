@@ -54,7 +54,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   nodecg.listenFor(
     "chat",
-    ({ message, channel, isMod, id }: ChatMessageEvent) => {
+    ({ message, channel, privileged, id }: ChatMessageEvent) => {
       if (!message.startsWith("!guest")) return;
 
       const [_, arg] = message.split(" ");
@@ -87,12 +87,12 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           break;
         }
         case "offline": {
-          if (!isMod) return;
+          if (!privileged) return;
           nodecg.sendMessage("guest.change", undefined);
           break;
         }
         default: {
-          if (!isMod) return;
+          if (!privileged) return;
           nodecg.sendMessage("guest.change", arg);
           break;
         }
