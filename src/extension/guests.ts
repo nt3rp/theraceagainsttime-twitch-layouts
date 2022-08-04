@@ -58,11 +58,11 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
       if (!message.startsWith("!guest")) return;
 
       const [_, arg] = message.split(" ");
+      const currentGuest = guests.value.find(({ live }: Guest) => !!live);
+
       switch (arg) {
         case "":
         case undefined: {
-          const currentGuest = guests.value.find(({ live }: Guest) => !!live);
-
           if (!currentGuest) {
             twitch.chat.say(channel, "There is no guest at the moment 🤷‍♂️", {
               replyTo: id,
@@ -87,26 +87,31 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           break;
         }
         case "offline": {
-          if (!privileged) return;
-          nodecg.sendMessage("guest.change", undefined);
+          if (!privileged || !currentGuest) return;
+          const { id: guestId, display } = currentGuest;
+
+          nodecg.sendMessage("guest.change", [undefined, display ?? guestId]);
           break;
         }
         default: {
           if (!privileged) return;
-          nodecg.sendMessage("guest.change", arg);
+          nodecg.sendMessage("guest.change", [arg]);
           break;
         }
       }
     }
   );
 
-  nodecg.listenFor("guest.change", (guestId: string | undefined) => {
-    if (guestId !== undefined) {
-      const availableGuest = guests.value.find(
-        ({ id }) => id.toLowerCase() === guestId.toLowerCase()
-      );
-      if (!availableGuest) return;
+  nodecg.listenFor(
+    "guest.change",
+    ([guestId]: [string, undefined] | [undefined, string]) => {
+      if (guestId !== undefined) {
+        const availableGuest = guests.value.find(
+          ({ id }) => id.toLowerCase() === guestId.toLowerCase()
+        );
+        if (!availableGuest) return;
+      }
+      guest.value = guestId;
     }
-    guest.value = guestId;
-  });
+  );
 };

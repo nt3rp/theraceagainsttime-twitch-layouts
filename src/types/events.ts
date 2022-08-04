@@ -1,4 +1,14 @@
+// TODO: If you convert types to classes, can define methods
+// Mostly helpful in a few instances.
 // Domain Objects
+export interface StreamEvent {
+  when: Date;
+  type: string;
+  title: string;
+  description: string;
+  icon?: string;
+}
+
 export interface Guest {
   id: string;
   display?: string;
