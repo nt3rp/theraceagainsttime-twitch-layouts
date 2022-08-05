@@ -60,17 +60,34 @@ body {
 .infoNav {
   width: 424px;
   height: 100%;
+  margin: var(--gap) 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .display {
   flex: 1;
 }
 
-.primaryVideo {
+.widescreen {
   width: 100%;
-  aspect-ratio: 4/3; /* TODO: Check if supported in new versions of Chromium */
+  aspect-ratio: 16/9; /* TODO: Check if aspect-ratio in new versions of Chromium */
+}
+
+.standard {
+  width: 100%;
+  aspect-ratio: 4/3; /* TODO: Check if aspect-ratio in new versions of Chromium */
 }
 
 .transparent {
   background-color: #f0f;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.border {
+  border: 1px solid var(--ct-white);
+  box-shadow: 1px 1px var(--ct-shadow);
 }
