@@ -21,6 +21,29 @@
   background: radial-gradient(rgba(192, 192, 192, 0.5), rgba(0, 0, 0, 0.725));
 }
 
+/* TODO: Consider .<status> .icon instead. That way, can set other attributes */
+.icon.failure:after {
+  content: "✖";
+  font-size: 1.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: #f00;
+  right: 0;
+}
+
+.icon.success:after {
+  content: "✔";
+  font-size: 1.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: #0f0;
+  right: 0;
+}
+
 /* Achievement mappings */
 .icon.start {
   background-position: calc(0 * 72px) calc(0 * 72px);

@@ -18,6 +18,30 @@ const MainPage = [
       }}
     >
       <Panel className="event">
+        <div className="icon yakra failure"></div>
+        <div className="text">
+          <div className="title">C donated $Y</div>
+          <div className="description">
+            This is a really long message that the person wrote and it's unclear
+            what is going to happen but we're going to show the whole thing here
+            and see what happens in the HTML and maybe we'll need to fix it?
+            Yeah I think we will.
+          </div>
+        </div>
+      </Panel>
+      <Panel className="event">
+        <div className="icon guardian success"></div>
+        <div className="text">
+          <div className="title">C donated $Y</div>
+          <div className="description">
+            This is a really long message that the person wrote and it's unclear
+            what is going to happen but we're going to show the whole thing here
+            and see what happens in the HTML and maybe we'll need to fix it?
+            Yeah I think we will.
+          </div>
+        </div>
+      </Panel>
+      <Panel className="event">
         <div className="icon"></div>
         <div className="text">
           <div className="title">C donated $Y</div>
