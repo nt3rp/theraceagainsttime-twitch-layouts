@@ -1,12 +1,35 @@
 import { h, render } from "preact";
 import { Panel } from "./components/panel";
 
+import "./components/css/icons.css";
+import "./css/event.css";
+
 // TODO: console.log panel positions to help with OBS settings.
 const MainPage = [
   <div className="infoNav transparent">
     <div className="widescreen border">Video</div>
     <div className="widescreen border">Video 2</div>
-    <div className="spacer"></div>
+    <div
+      className="spacer"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        placeContent: "flex-end",
+      }}
+    >
+      <Panel className="event">
+        <div className="icon"></div>
+        <div className="text">
+          <div className="title">C donated $Y</div>
+          <div className="description">
+            This is a really long message that the person wrote and it's unclear
+            what is going to happen but we're going to show the whole thing here
+            and see what happens in the HTML and maybe we'll need to fix it?
+            Yeah I think we will.
+          </div>
+        </div>
+      </Panel>
+    </div>
     <Panel className="border">
       <div className="label" style={{ paddingBottom: "8px" }}>
         Raised for Trans Lifeline:
