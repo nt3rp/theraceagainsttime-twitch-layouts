@@ -1,3 +1,13 @@
+:root {
+  --gap: 60px;
+  --zoom: 0.5; /* Developing on small monitor */
+  --panel-border-width: 16px;
+  --ct-shadow: #182028;
+  --ct-gray: #889090;
+  --ct-white: #f8f8f8;
+  --ct-yellow: #f8f800;
+}
+
 * {
   image-rendering: pixelated;
   -webkit-font-smoothing: none;
@@ -8,27 +18,23 @@ body {
   margin: 0;
 }
 
-#container {
+#app {
   background: url("../img/bg.png");
   background-size: 200px;
-  /* background: url("../img/example-bg.jpg");
-  background-size: cover;
-  background-repeat: no-repeat; */
   font-family: "Chrono Trigger Proportional Regular";
   font-size: 2em;
-  --panel-border-width: 16px;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
   position: relative;
   animation: background 60s linear infinite;
   image-rendering: auto;
-  --ct-shadow: #182028;
-  --ct-gray: #889090;
-  --ct-white: #f8f8f8;
-  --ct-yellow: #f8f800;
   text-shadow: 0px 2px var(--ct-shadow), 2px 0px var(--ct-shadow);
   color: var(--ct-white);
+  display: flex;
+  padding: 0 var(--gap);
+  gap: var(--gap);
+  zoom: var(--zoom);
 }
 
 @keyframes background {
@@ -44,4 +50,27 @@ body {
   100% {
     background-position: 0 0;
   }
+}
+
+#app > * {
+  align-self: center;
+}
+
+/* TODO: If too narrow, adjust */
+.infoNav {
+  width: 424px;
+  height: 100%;
+}
+
+.display {
+  flex: 1;
+}
+
+.primaryVideo {
+  width: 100%;
+  aspect-ratio: 4/3; /* TODO: Check if supported in new versions of Chromium */
+}
+
+.transparent {
+  background-color: #f0f;
 }
