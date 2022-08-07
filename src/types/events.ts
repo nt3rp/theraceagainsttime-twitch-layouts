@@ -1,6 +1,32 @@
 // TODO: If you convert types to classes, can define methods
 // Mostly helpful in a few instances.
 // Domain Objects
+// TODO: Unite secrets and unlockables
+export interface Unlockable {
+  id: string;
+  type: "giveaway" | "challenge" | "secret";
+  title: string;
+  subject: string;
+  unlocked?: boolean;
+  criteria: {
+    comparator: string;
+    value: number;
+  };
+}
+
+export interface Giveaway extends Unlockable {
+  active: boolean;
+  prizes?: Array<string>;
+  winner?: string;
+  entrants?: Array<string>;
+}
+
+// TODO: Category?
+export interface Challenge extends Unlockable {
+  active?: boolean;
+  title: string;
+}
+
 export interface StreamEvent {
   when: Date;
   type: string;

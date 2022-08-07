@@ -1,7 +1,6 @@
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
 
-import * as GIVEAWAYS from "../../config/giveaways.json";
 import { ChatMessageEvent } from "../types/events";
 import { sample } from "./utils";
 
@@ -25,7 +24,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   // TODO: Make an announcement when milestone surpased; might need to emit from tiltify
   const giveaways: Replicant<Array<Giveaway>> = nodecg.Replicant("giveaways", {
-    defaultValue: GIVEAWAYS,
+    defaultValue: [],
   });
 
   const currentGiveaway: Replicant<string | undefined> = nodecg.Replicant(
@@ -115,4 +114,8 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
       }
     }
   );
+
+  nodecg.listenFor("giveaway.new", (event) => {
+    giveaways.value.push(event);
+  });
 };
