@@ -1,4 +1,5 @@
-import { Replicant } from "nodecg-types/types/server";
+import * as os from "os";
+import type { Replicant } from "nodecg-types/types/server";
 
 // https://www.30secondsofcode.org/js/s/pick
 /* eslint-disable no-sequences */
@@ -67,3 +68,6 @@ export const shuffle = <T>([...arr]: Array<T>) => {
   }
   return arr;
 };
+
+export const toCsv = (...arr: Array<any>) =>
+  arr.map((e) => `"${e}"`).join(",") + os.EOL;
