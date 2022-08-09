@@ -20,7 +20,10 @@ const MainPage = [
       <Panel className="event">
         <div className="icon yakra failure"></div>
         <div className="text">
-          <div className="title">C donated $Y</div>
+          <div className="title">
+            C donated $Y and this is a really long message to see what happens
+            when it is too long
+          </div>
           <div className="description">
             This is a really long message that the person wrote and it's unclear
             what is going to happen but we're going to show the whole thing here

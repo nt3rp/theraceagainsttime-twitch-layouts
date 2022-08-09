@@ -1,6 +1,6 @@
 :root {
   --gap: 60px;
-  --zoom: 0.5; /* Developing on small monitor */
+  --zoom: 1; /* Developing on small monitor */
   --panel-border-width: 16px;
   --ct-shadow: #182028;
   --ct-gray: #889090;
