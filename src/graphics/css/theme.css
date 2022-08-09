@@ -91,3 +91,33 @@ body {
   border: 1px solid var(--ct-white);
   box-shadow: 1px 1px var(--ct-shadow);
 }
+
+/* Need to do shenanigans to make panels work correctly  */
+.slide-open.vertical.hide,
+.slide-open.vertical.show {
+  transform: scaleY(0);
+  max-height: 0;
+  transform-origin: top;
+  transition: all 1s;
+}
+
+.slide-open.vertical.show {
+  transform: scaleY(1);
+  max-height: 100%;
+}
+
+.panel.slide-open.vertical {
+  transform-origin: bottom;
+}
+
+.panel.slide-open.vertical.hide {
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+
+.panel.slide-open.vertical.hide:before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

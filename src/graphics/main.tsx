@@ -8,7 +8,9 @@ import "./css/event.css";
 const MainPage = [
   <div className="infoNav transparent">
     <div className="widescreen border">Video</div>
-    <div className="widescreen border">Video 2</div>
+    <div className="widescreen border guest slide-open vertical show">
+      Video 2
+    </div>
     <div
       className="spacer"
       style={{
@@ -17,7 +19,7 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
-      <Panel className="event">
+      <Panel className="event slide-open vertical show">
         <div className="icon yakra failure"></div>
         <div className="text">
           <div className="title">
@@ -32,7 +34,7 @@ const MainPage = [
           </div>
         </div>
       </Panel>
-      <Panel className="event">
+      <Panel className="event slide-open vertical show">
         <div className="icon guardian success"></div>
         <div className="text">
           <div className="title">C donated $Y</div>
@@ -44,7 +46,7 @@ const MainPage = [
           </div>
         </div>
       </Panel>
-      <Panel className="event">
+      <Panel className="event slide-open vertical show">
         <div className="icon"></div>
         <div className="text">
           <div className="title">C donated $Y</div>
