@@ -58,7 +58,7 @@ body {
 
 /* TODO: If too narrow, adjust */
 .infoNav {
-  width: 424px;
+  width: 580px;
   height: 100%;
   margin: var(--gap) 0;
   display: flex;
