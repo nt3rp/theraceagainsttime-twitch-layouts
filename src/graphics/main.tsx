@@ -1,8 +1,40 @@
 import { h, render } from "preact";
 import { Panel } from "./components/panel";
+import { useReplicant } from "use-nodecg";
 
 import "./components/css/icons.css";
 import "./css/event.css";
+
+const FundsRaised = () => {
+  const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
+
+  return (
+    <Panel className="border">
+      <div className="label" style={{ paddingBottom: "8px" }}>
+        Raised for Trans Lifeline:
+      </div>
+      <div
+        className="details"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+        }}
+      >
+        <span
+          className="current"
+          style={{ flex: 1, textAlign: "right", fontSize: "2em" }}
+        >
+          ${(campaign.amountRaised || 0).toFixed(2)}
+        </span>
+        <span className="divider">/</span>
+        <span className="goal">
+          {(campaign.fundraiserGoalAmount || 0).toFixed(2)}
+        </span>
+      </div>
+    </Panel>
+  );
+};
 
 // TODO: console.log panel positions to help with OBS settings.
 const MainPage = [
@@ -59,28 +91,7 @@ const MainPage = [
         </div>
       </Panel>
     </div>
-    <Panel className="border">
-      <div className="label" style={{ paddingBottom: "8px" }}>
-        Raised for Trans Lifeline:
-      </div>
-      <div
-        className="details"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-        }}
-      >
-        <span
-          className="current"
-          style={{ flex: 1, textAlign: "right", fontSize: "2em" }}
-        >
-          $135.00
-        </span>
-        <span className="divider">/</span>
-        <span className="goal">2300.00</span>
-      </div>
-    </Panel>
+    <FundsRaised />
   </div>,
   <div className="display">
     <div className="primaryVideo transparent standard"></div>
