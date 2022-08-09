@@ -106,7 +106,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     defaultValue: [],
   });
 
-  const eventLog = path.join(__dirname, `../../logs/events}.csv`);
+  const eventLog = path.join(__dirname, `../../logs/events.csv`);
 
   [
     "checkpoint",
