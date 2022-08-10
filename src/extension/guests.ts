@@ -1,6 +1,8 @@
+import { copy } from "../utils";
+
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
-import { Guest, ChatMessageEvent } from "../types/events";
+import type { Guest, ChatMessageEvent } from "../types/events";
 
 import * as GUESTS from "../../config/guests.json";
 
@@ -15,7 +17,7 @@ const PLATFORM_URLS: Record<string, string> = {
 export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.log.info("⬆ Setting up 'guests' extension...");
 
-  const guest: Replicant<string | undefined> = nodecg.Replicant(
+  const guest: Replicant<Guest | undefined> = nodecg.Replicant(
     "guests.current",
     {
       defaultValue: undefined,
@@ -25,15 +27,15 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     defaultValue: GUESTS,
   });
 
-  guest.on("change", (newValue) => {
+  guest.on("change", (newGuest) => {
     if (!guests.value || guests.value.length === 0) return;
     guests.value.forEach((g) => {
       g.live = false;
     });
-    if (!newValue) return;
+    if (!newGuest) return;
 
     const liveGuest = guests.value.find(
-      ({ id }) => id.toLowerCase() === newValue.toLowerCase()
+      ({ id }) => id.toLowerCase() === newGuest.id.toLowerCase()
     );
     // This should be impossible since we only trigger changes via an event
     // (where we explicitly check) but just in case.
@@ -58,7 +60,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
       if (!message.startsWith("!guest")) return;
 
       const [_, arg] = message.split(" ");
-      const currentGuest = guests.value.find(({ live }: Guest) => !!live);
+      const currentGuest = guest.value;
 
       switch (arg) {
         case "":
@@ -105,13 +107,11 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
   nodecg.listenFor(
     "guest.change",
     ([guestId]: [string, undefined] | [undefined, string]) => {
-      if (guestId !== undefined) {
-        const availableGuest = guests.value.find(
-          ({ id }) => id.toLowerCase() === guestId.toLowerCase()
-        );
-        if (!availableGuest) return;
-      }
-      guest.value = guestId;
+      const availableGuest = guests.value.find(
+        ({ id }) => id.toLowerCase() === guestId?.toLowerCase()
+      );
+
+      guest.value = availableGuest ? copy(availableGuest) : undefined;
     }
   );
 };
