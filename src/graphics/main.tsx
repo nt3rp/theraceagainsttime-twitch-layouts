@@ -9,7 +9,7 @@ const FundsRaised = () => {
   const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
 
   return (
-    <Panel className="border">
+    <Panel>
       <div className="label" style={{ paddingBottom: "8px" }}>
         Raised for Trans Lifeline:
       </div>
@@ -71,7 +71,7 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
-      <Panel className="event slide-open vertical show">
+      {/* <Panel className="event slide-open vertical show">
         <div className="icon yakra failure"></div>
         <div className="text">
           <div className="title">
@@ -109,7 +109,7 @@ const MainPage = [
             Yeah I think we will.
           </div>
         </div>
-      </Panel>
+      </Panel> */}
     </div>
     <FundsRaised />
   </div>,
