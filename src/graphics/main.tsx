@@ -36,13 +36,30 @@ const FundsRaised = () => {
   );
 };
 
+const Guest = () => {
+  const [guest, _setGuest]: [any, any] = useReplicant("guests.current", {});
+
+  if (!guest) {
+    return (
+      <div className={`widescreen border guest slide-open vertical hide`}></div>
+    );
+  }
+
+  const { id } = guest;
+  const url = `https://vdo.ninja/?view=${id}&scene&room=the_race_against_time_viii&noaudio`;
+
+  return (
+    <div className={`widescreen border guest slide-open vertical show`}>
+      <iframe src={url} />
+    </div>
+  );
+};
+
 // TODO: console.log panel positions to help with OBS settings.
 const MainPage = [
   <div className="infoNav transparent">
     <div className="widescreen border">Video</div>
-    <div className="widescreen border guest slide-open vertical show">
-      Video 2
-    </div>
+    <Guest />
     <div
       className="spacer"
       style={{
