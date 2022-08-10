@@ -37,7 +37,10 @@ const FundsRaised = () => {
 };
 
 const Guest = () => {
-  const [guest, _setGuest]: [any, any] = useReplicant("guests.current", {});
+  const [guest, _setGuest]: [any, any] = useReplicant(
+    "guests.current",
+    undefined
+  );
 
   if (!guest) {
     return (
@@ -46,7 +49,7 @@ const Guest = () => {
   }
 
   const { id } = guest;
-  const url = `https://vdo.ninja/?view=${id}&scene&room=the_race_against_time_viii&noaudio`;
+  const url = `https://vdo.ninja/?view=${id.toLowerCase()}&scene&room=the_race_against_time_viii&noaudio`;
 
   return (
     <div className={`widescreen border guest slide-open vertical show`}>
