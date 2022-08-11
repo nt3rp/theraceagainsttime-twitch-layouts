@@ -8,6 +8,19 @@ import type { StreamEvent } from "../types/events";
 import "./components/css/icons.css";
 import "./css/event.css";
 
+const Milestones = () => {
+  /*
+  Keep track of current "stage" as well as next "stage"
+  For now, hard-code "stages" (but still draw milestones from ... milestone replicant?)
+  On stage complete, transition away from previous milestone to next one, as with 
+  alert bar below?
+
+  Simple slide down, slide up
+
+  BUT FOR NOW, get checkpoints working again
+  */
+};
+
 const EventToast = ({ type, title, description }: any) => {
   return (
     <Fragment>
