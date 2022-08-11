@@ -5,6 +5,7 @@ import { toCsv } from "./utils";
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
 import type {
+  Checkpoint,
   CommunitySubscriptionEvent,
   DonationEvent,
   FollowEvent,
@@ -19,7 +20,7 @@ import type {
 // TODO: Secret
 // TODO: Checkpoint
 type ToEventStreamArgs =
-  | { type: "checkpoint"; event: unknown }
+  | { type: "checkpoint"; event: Checkpoint }
   | { type: "donation"; event: DonationEvent }
   | { type: "follow"; event: FollowEvent }
   | { type: "guest.change"; event: [string | undefined, string?] }
@@ -41,13 +42,16 @@ const toStreamEvent = ({
   let when: Date = new Date();
   let description = "";
   let title: string;
+  let icon: string = type;
   switch (type) {
     case "checkpoint":
-      title = "???";
+      title = event.title;
+      description = "Checkpoint Completed!";
+      icon = title;
       break;
     case "donation":
       when = new Date(event.completedAt);
-      title = `${event.name} donated ${event.amount}`;
+      title = `${event.name} donated $${event.amount}`;
       description = event.comment ?? "No comment";
       break;
     case "follow":
@@ -94,7 +98,7 @@ const toStreamEvent = ({
     type,
     title,
     description,
-    icon: type,
+    icon,
   };
 };
 

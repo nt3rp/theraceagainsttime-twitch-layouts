@@ -70,7 +70,22 @@
   },
   "nodecg": {
     "compatibleRange": "^1.1.1",
-    "dashboardPanels": [],
+    "dashboardPanels": [
+      {
+        "name": "checkpoints",
+        "title": "Checkpoints",
+        "file": "checkpoints.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
+      },
+      {
+        "name": "timer",
+        "title": "Timer",
+        "file": "timer.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
+      }
+    ],
     "graphics": [
       {
         "file": "main.html",

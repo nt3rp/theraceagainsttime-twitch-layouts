@@ -85,6 +85,7 @@ const TimerPanel = () => {
   const canAdvance =
     currentIndex === -1 ||
     (timer.state !== "paused" && nextCheckpoint !== undefined);
+
   return (
     <Fragment>
       <div className="controls distributed">
@@ -102,13 +103,17 @@ const TimerPanel = () => {
         </div>
         <span
           className={classNames({ button: true, disabled: !canPlayPause })}
-          onClick={() => canPlayPause && onPlayPause}
+          onClick={() => {
+            canPlayPause && onPlayPause();
+          }}
         >
           {timer.state === "paused" ? "▶️" : "⏸"}
         </span>
         <span
           className={classNames({ button: true, disabled: !canAdvance })}
-          onClick={() => canAdvance && onAdvance}
+          onClick={() => {
+            canAdvance && onAdvance();
+          }}
         >
           ⏭
         </span>

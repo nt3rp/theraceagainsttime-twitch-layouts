@@ -21,10 +21,10 @@ const Milestones = () => {
   */
 };
 
-const EventToast = ({ type, title, description }: any) => {
+const EventToast = ({ icon, title, description }: any) => {
   return (
     <Fragment>
-      <div className={`icon ${type}`} />
+      <div className={`icon ${icon}`} />
       <div className="text">
         <div className="title">{title}</div>
         <div className="description">{description}</div>
@@ -67,7 +67,6 @@ const EventToaster = ({ duration }: any) => {
   }, [visible, setState, sound, duration]);
 
   const fireEvent = useCallback(() => {
-    console.log("FireEvent", events);
     const [earliest, ...remaining] = events;
     if (!earliest) return;
     const eventSound: any = undefined;
@@ -87,7 +86,6 @@ const EventToaster = ({ duration }: any) => {
   }, [events]);
 
   useEffect(() => {
-    console.log("useEffect", event, events);
     if (!event && events.length > 0) {
       fireEvent();
     }

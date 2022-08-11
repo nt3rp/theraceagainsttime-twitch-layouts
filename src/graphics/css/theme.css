@@ -130,8 +130,10 @@ body {
   height: 100%;
 }
 
+/* TODO: Use different style. */
 .alert {
   position: absolute !important;
   right: 0;
   bottom: 0;
+  width: 100%;
 }

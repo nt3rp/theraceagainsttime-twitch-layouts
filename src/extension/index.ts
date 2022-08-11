@@ -9,6 +9,7 @@ import guests from "./guests";
 import eventstream from "./eventstream";
 import donations from "./donations";
 import clip from "./clip";
+import checkpoints from "./checkpoints";
 
 import type { NodeCG } from "nodecg-types/types/server";
 
@@ -23,6 +24,7 @@ export default async (nodecg: NodeCG) => {
     path.join(__dirname, "../../config/twitch.json")
   );
 
+  checkpoints(nodecg, twitchClient);
   secrets(nodecg, twitchClient);
   credits(nodecg, twitchClient);
   eventstream(nodecg, twitchClient);
