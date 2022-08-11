@@ -18,7 +18,7 @@ import type {
 } from "../types/events";
 
 // TODO: Secret
-// TODO: Checkpoint
+// TODO: GIVEAWAY
 type ToEventStreamArgs =
   | { type: "checkpoint"; event: Checkpoint }
   | { type: "donation"; event: DonationEvent }

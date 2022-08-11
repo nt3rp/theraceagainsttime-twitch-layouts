@@ -2,23 +2,109 @@ import { h, render, Fragment } from "preact";
 import { useCallback, useState, useEffect } from "preact/hooks";
 import { Panel } from "./components/panel";
 import { useReplicant, useListenFor } from "use-nodecg";
+import { clamp, percent } from "../utils";
 
 import type { Checkpoint, StreamEvent, Timer } from "../types/events";
 
 import "./components/css/icons.css";
 import "./css/event.css";
 
+const STAGES = [
+  [0, 600],
+  [600, 1000],
+  [1000, 1999],
+  [2000, 2300],
+  [2300, 2300],
+];
+
+const percentClamp = (numerator: number, denominator: number) =>
+  clamp(percent(numerator, denominator), 0, 100);
+
 const Milestones = () => {
   /*
-  Keep track of current "stage" as well as next "stage"
-  For now, hard-code "stages" (but still draw milestones from ... milestone replicant?)
-  On stage complete, transition away from previous milestone to next one, as with 
-  alert bar below?
-
-  Simple slide down, slide up
-
-  BUT FOR NOW, get checkpoints working again
+  - Keep track of current and next 'stage'
+  - Plot milestones
+  - Keep track of current funds raised
+  - Show when:
+    - Event happens. OR
+    - Activated
+  - On stage completed, transition to next stage, similar to how we do alerts.
   */
+
+  const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
+  const [milestones, _setMilestones]: [any, any] = useReplicant(
+    "milestones",
+    []
+  );
+
+  if (!campaign || milestones.length === 0) return <Fragment />;
+
+  const { amountRaised } = campaign;
+  const stageId = STAGES.findIndex(([start]) => amountRaised >= start);
+  const [start, end] = STAGES[stageId];
+  const nextStage = STAGES[stageId + 1] || STAGES.at(-1);
+
+  const scale = end - start;
+  const position = percentClamp(amountRaised - start, scale);
+  console.log(position);
+
+  const currentMarkers = milestones.filter(
+    ({ amount }: any) => end >= amount && amount >= start
+  );
+
+  // TODO: Pass in height / width; then, you can do calcs here.
+  const width = "3em";
+  const height = "1em";
+  return (
+    <Panel
+      className="progress"
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100px",
+        backgroundColor: "#f00",
+      }}
+    >
+      <div className="path">
+        <div
+          className="current"
+          style={{
+            top: `calc(50% - ${height}/2)`,
+            left: `calc(${position}% - ${width}/2)`,
+            width,
+            height,
+          }}
+        ></div>
+        <div
+          className="marker"
+          style={{
+            top: `calc(90% - ${height}/2)`,
+            left: `calc(0% - ${width}/2)`,
+            width,
+            height,
+          }}
+        >
+          ${start}
+        </div>
+        {currentMarkers.map(({ amount }: any) => (
+          <div
+            className="marker"
+            style={{
+              top: `calc(90% - ${height}/2)`,
+              left: `calc(${percentClamp(
+                amount - start,
+                scale
+              )}% - ${width}/2)`,
+              width,
+              height,
+            }}
+          >
+            ${amount}
+          </div>
+        ))}
+      </div>
+    </Panel>
+  );
 };
 
 const DEFAULT_TIMER: Timer = {
@@ -242,8 +328,10 @@ const MainPage = [
     <FundsRaised />
   </div>,
   <div className="display">
-    <div className="primaryVideo transparent standard"></div>
-    <EventToaster duration={5000} />
+    <div className="primaryVideo transparent standard">
+      <EventToaster duration={5000} />
+    </div>
+    <Milestones />
   </div>,
 ];
 

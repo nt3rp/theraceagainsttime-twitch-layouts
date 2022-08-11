@@ -21,3 +21,7 @@ export const percent = (numerator: number, denominator: number): number => {
   if (denominator === 0) return 0;
   return Math.max(Math.min((numerator * 100) / denominator, 100), 0);
 };
+
+export const clamp = (num: number, min: number, max: number) => {
+  return Math.min(Math.max(num, min), max);
+};

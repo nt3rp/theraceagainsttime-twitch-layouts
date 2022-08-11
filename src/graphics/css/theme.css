@@ -51,6 +51,7 @@ body {
   padding: 0 var(--gap);
   gap: var(--gap);
   zoom: var(--zoom);
+  align-items: center;
 }
 
 @keyframes background {
@@ -66,10 +67,6 @@ body {
   100% {
     background-position: 0 0;
   }
-}
-
-#app > * {
-  align-self: center;
 }
 
 /* TODO: If too narrow, adjust */
@@ -170,4 +167,23 @@ body {
 .goal.event .icon {
   margin-right: 0px;
   margin-left: 14px;
+}
+
+.progress .path {
+  height: 100%;
+  position: relative;
+  margin: 0 40px;
+}
+
+.progress .path .current,
+.progress .path .marker {
+  position: absolute;
+}
+
+.progress .path .current {
+  background-color: #fff;
+}
+
+.progress .path .marker {
+  text-align: center;
 }
