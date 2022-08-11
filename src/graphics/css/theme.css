@@ -137,3 +137,19 @@ body {
   bottom: 0;
   width: 100%;
 }
+
+.goal .label {
+  width: 150px;
+}
+
+.goal .text {
+  flex: 1;
+  text-align: right;
+  font-size: 1.25em;
+  margin-top: 6px;
+}
+
+.goal.event .icon {
+  margin-right: 0px;
+  margin-left: 14px;
+}

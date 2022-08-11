@@ -3,7 +3,7 @@ import { useCallback, useState, useEffect } from "preact/hooks";
 import { Panel } from "./components/panel";
 import { useReplicant, useListenFor } from "use-nodecg";
 
-import type { StreamEvent } from "../types/events";
+import type { Checkpoint, StreamEvent, Timer } from "../types/events";
 
 import "./components/css/icons.css";
 import "./css/event.css";
@@ -19,6 +19,37 @@ const Milestones = () => {
 
   BUT FOR NOW, get checkpoints working again
   */
+};
+
+const DEFAULT_TIMER: Timer = {
+  splits: [],
+  checkpoint: undefined,
+  state: "paused",
+};
+
+const Goals = () => {
+  const [checkpoints, _setCheckpoints]: [Array<Checkpoint>, any] = useReplicant(
+    "checkpoints",
+    []
+  );
+  const [timer, _setTimer]: [Timer, any] = useReplicant("timer", DEFAULT_TIMER);
+  const currentCheckpoint = checkpoints.find(
+    (c: Checkpoint) => c.id === timer.checkpoint
+  );
+
+  if (!currentCheckpoint) return <Fragment />;
+
+  const { id, title } = currentCheckpoint;
+
+  return (
+    <Panel className="event goal">
+      <div className="label">Current checkpoint:</div>
+      <div className="text">
+        <div className="title">{title}</div>
+      </div>
+      <div className={`icon ${id}`}></div>
+    </Panel>
+  );
 };
 
 const EventToast = ({ icon, title, description }: any) => {
@@ -167,6 +198,7 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
+      <Goals />
       {/* <Panel className="event slide-open vertical show">
         <div className="icon yakra failure"></div>
         <div className="text">
