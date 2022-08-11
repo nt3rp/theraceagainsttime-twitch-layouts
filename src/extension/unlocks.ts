@@ -55,5 +55,5 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     }
   });
 
-  // TODO: Other giveaways
+  // TODO: Other unlocks
 };
