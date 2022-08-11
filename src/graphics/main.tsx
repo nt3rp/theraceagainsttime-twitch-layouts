@@ -82,7 +82,7 @@ const EventToaster = ({ duration }: any) => {
 
   return (
     <Panel
-      className={`event slide-open vertical ${visible ? "show" : "hide"}`}
+      className={`alert event slide-open vertical ${visible ? "show" : "hide"}`}
       onTransitionEnd={onTransitionEnd}
     >
       {event ? <EventToast {...event} /> : ""}
@@ -156,7 +156,6 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
-      <EventToaster duration={5000} />
       {/* <Panel className="event slide-open vertical show">
         <div className="icon yakra failure"></div>
         <div className="text">
@@ -201,6 +200,7 @@ const MainPage = [
   </div>,
   <div className="display">
     <div className="primaryVideo transparent standard"></div>
+    <EventToaster duration={5000} />
   </div>,
 ];
 
