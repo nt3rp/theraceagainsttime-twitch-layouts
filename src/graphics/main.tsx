@@ -1,9 +1,94 @@
-import { h, render } from "preact";
+import { h, render, Fragment } from "preact";
+import { useCallback, useState, useEffect } from "preact/hooks";
 import { Panel } from "./components/panel";
-import { useReplicant } from "use-nodecg";
+import { useReplicant, useListenFor } from "use-nodecg";
+
+import type { StreamEvent } from "../types/events";
 
 import "./components/css/icons.css";
 import "./css/event.css";
+
+const EventToast = ({ type, title, description }: any) => {
+  return (
+    <Fragment>
+      <div className={`icon ${type}`} />
+      <div className="text">
+        <div className="title">{title}</div>
+        <div className="description">{description}</div>
+      </div>
+    </Fragment>
+  );
+};
+
+const EventToaster = ({ duration }: any) => {
+  const [state, setState]: [any, any] = useState({
+    event: undefined,
+    events: [],
+    visible: false,
+    sound: undefined,
+  });
+
+  useListenFor("stream-event", (event: StreamEvent) => {
+    setState((currentState: any) => ({
+      ...currentState,
+      events: [...currentState?.events, event],
+    }));
+  });
+
+  const { event, events, visible, sound } = state;
+
+  const onTransitionEnd = useCallback(() => {
+    if (visible) {
+      setTimeout(() => {
+        setState((current: any) => ({ ...current, visible: false }));
+      }, duration);
+    } else {
+      // TODO: Define fadeout / fancier change instead of hard stop.
+      sound && (sound as any).stop();
+      setState((current: any) => ({
+        ...current,
+        event: undefined,
+        sound: undefined,
+      }));
+    }
+  }, [visible, setState, sound, duration]);
+
+  const fireEvent = useCallback(() => {
+    console.log("FireEvent", events);
+    const [earliest, ...remaining] = events;
+    if (!earliest) return;
+    const eventSound: any = undefined;
+    const sfx = earliest.sound || "generic";
+    // TODO: SFX
+    // if (sfx && nodecg.findCue(sfx)) {
+    //   eventSound = nodecg.playSound(sfx);
+    // }
+
+    setState((current: any) => ({
+      ...current,
+      visible: true,
+      event: earliest,
+      events: remaining,
+      sound: eventSound,
+    }));
+  }, [events]);
+
+  useEffect(() => {
+    console.log("useEffect", event, events);
+    if (!event && events.length > 0) {
+      fireEvent();
+    }
+  }, [event, events]);
+
+  return (
+    <Panel
+      className={`event slide-open vertical ${visible ? "show" : "hide"}`}
+      onTransitionEnd={onTransitionEnd}
+    >
+      {event ? <EventToast {...event} /> : ""}
+    </Panel>
+  );
+};
 
 const FundsRaised = () => {
   const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
@@ -71,6 +156,7 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
+      <EventToaster duration={5000} />
       {/* <Panel className="event slide-open vertical show">
         <div className="icon yakra failure"></div>
         <div className="text">
