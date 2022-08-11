@@ -4,7 +4,12 @@ import { Panel } from "./components/panel";
 import { useReplicant, useListenFor } from "use-nodecg";
 import { clamp, percent } from "../utils";
 
-import type { Checkpoint, StreamEvent, Timer } from "../types/events";
+import type {
+  Checkpoint,
+  DonationEvent,
+  StreamEvent,
+  Timer,
+} from "../types/events";
 
 import "./components/css/icons.css";
 import "./css/event.css";
@@ -20,17 +25,8 @@ const STAGES = [
 const percentClamp = (numerator: number, denominator: number) =>
   clamp(percent(numerator, denominator), 0, 100);
 
-const Milestones = () => {
-  /*
-  - Keep track of current and next 'stage'
-  - Plot milestones
-  - Keep track of current funds raised
-  - Show when:
-    - Event happens. OR
-    - Activated
-  - On stage completed, transition to next stage, similar to how we do alerts.
-  */
-
+const Milestones = ({ hideAfter = 10000 }: any) => {
+  const [visibility, setVisibility] = useState(false);
   const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
   const [milestones, _setMilestones]: [any, any] = useReplicant(
     "milestones",
@@ -41,7 +37,7 @@ const Milestones = () => {
 
   const { amountRaised } = campaign;
   const stageId = STAGES.findIndex(({ range }) => amountRaised >= range[0]);
-  const { theme, range } = STAGES[stageId];
+  const { theme, range } = STAGES[stageId] || STAGES.at(-1);
   const [start, end] = range;
   const nextStage = STAGES[stageId + 1] || STAGES.at(-1);
 
@@ -53,12 +49,31 @@ const Milestones = () => {
     ({ amount }: any) => end >= amount && amount >= start
   );
 
+  const showProgress = useCallback(() => {
+    setVisibility(true);
+    setTimeout(() => {
+      setVisibility(false);
+    }, hideAfter);
+  }, [setVisibility, hideAfter]);
+
+  // TODO: Animate movement.
+  // For now, just show the current
+  useListenFor("donation", (event: DonationEvent) => {
+    showProgress();
+  });
+
+  useListenFor("donation.show", () => {
+    showProgress();
+  });
+
   const width = "3em";
   const epochWidth = "32px";
   const epochHeight = "44px";
   return (
     <Panel
-      className={`progress ${theme}`}
+      className={`progress slide-open vertical ${
+        visibility ? "show" : "hide"
+      } ${theme}`}
       style={{
         position: "absolute",
         width: "100%",

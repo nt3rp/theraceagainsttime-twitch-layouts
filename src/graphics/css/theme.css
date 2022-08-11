@@ -126,6 +126,10 @@ body {
   transform-origin: bottom;
 }
 
+.panel.progress.slide-open.vertical {
+  transform-origin: top;
+}
+
 .panel.slide-open.vertical.hide {
   border-top-width: 0;
   border-bottom-width: 0;
