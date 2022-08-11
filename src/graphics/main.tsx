@@ -10,11 +10,11 @@ import "./components/css/icons.css";
 import "./css/event.css";
 
 const STAGES = [
-  [0, 600],
-  [600, 1000],
-  [1000, 1999],
-  [2000, 2300],
-  [2300, 2300],
+  { theme: "600-ad", range: [0, 600] },
+  { theme: "1000-ad", range: [600, 1000] },
+  { theme: "1999-ad", range: [1000, 1999] },
+  { theme: "2300-ad", range: [2000, 2300] },
+  { theme: "12000-bc", range: [2300, 2300] },
 ];
 
 const percentClamp = (numerator: number, denominator: number) =>
@@ -40,8 +40,9 @@ const Milestones = () => {
   if (!campaign || milestones.length === 0) return <Fragment />;
 
   const { amountRaised } = campaign;
-  const stageId = STAGES.findIndex(([start]) => amountRaised >= start);
-  const [start, end] = STAGES[stageId];
+  const stageId = STAGES.findIndex(({ range }) => amountRaised >= range[0]);
+  const { theme, range } = STAGES[stageId];
+  const [start, end] = range;
   const nextStage = STAGES[stageId + 1] || STAGES.at(-1);
 
   const scale = end - start;
@@ -52,12 +53,12 @@ const Milestones = () => {
     ({ amount }: any) => end >= amount && amount >= start
   );
 
-  // TODO: Pass in height / width; then, you can do calcs here.
   const width = "3em";
-  const height = "1em";
+  const epochWidth = "32px";
+  const epochHeight = "44px";
   return (
     <Panel
-      className="progress"
+      className={`progress ${theme}`}
       style={{
         position: "absolute",
         width: "100%",
@@ -66,42 +67,82 @@ const Milestones = () => {
       }}
     >
       <div className="path">
-        <div
-          className="current"
-          style={{
-            top: `calc(50% - ${height}/2)`,
-            left: `calc(${position}% - ${width}/2)`,
-            width,
-            height,
-          }}
-        ></div>
-        <div
-          className="marker"
-          style={{
-            top: `calc(90% - ${height}/2)`,
-            left: `calc(0% - ${width}/2)`,
-            width,
-            height,
-          }}
-        >
-          ${start}
+        <div className="trail">
+          <div
+            className="trail-start"
+            style={{
+              width: `${position}%`,
+              top: `calc(50% - 3px)`,
+              height: "6px",
+              borderBottom: "6px dashed var(--ct-white)",
+            }}
+          ></div>
+          <div
+            className="current"
+            style={{
+              top: `calc(50% - 37px)`,
+              left: `calc(${position}% - ${epochWidth}/2)`,
+              width: epochWidth,
+              height: epochHeight,
+            }}
+          ></div>
+          <div
+            className="trail-end"
+            style={{
+              width: `${100 - position}%`,
+              right: "0px",
+              top: `calc(50% - 3px)`,
+              height: "6px",
+              borderBottom: "6px dashed var(--ct-gray)",
+            }}
+          ></div>
         </div>
-        {currentMarkers.map(({ amount }: any) => (
+        <div className="map-icons">
+          <div
+            className={`marker amt-${start}`}
+            style={{
+              left: `calc(0% - var(--marker-width)/2)`,
+              top: `calc(50% + var(--marker-height)/3)`,
+            }}
+          ></div>
+          {currentMarkers.map(({ amount }: any) => (
+            <div
+              className={`marker amt-${amount}`}
+              style={{
+                left: `calc(${percentClamp(
+                  amount - start,
+                  scale
+                )}% - var(--marker-height)/2)`,
+                top: `calc(50% + var(--marker-height)/3)`,
+              }}
+            ></div>
+          ))}
+        </div>
+        <div className="labels">
           <div
             className="marker"
             style={{
-              top: `calc(90% - ${height}/2)`,
-              left: `calc(${percentClamp(
-                amount - start,
-                scale
-              )}% - ${width}/2)`,
+              left: `calc(0% - ${width}/2)`,
               width,
-              height,
             }}
           >
-            ${amount}
+            ${start}
           </div>
-        ))}
+          {currentMarkers.map(({ amount }: any) => (
+            <div
+              className="marker"
+              style={{
+                left: `calc(${percentClamp(
+                  amount - start,
+                  scale
+                )}% - ${width}/2)`,
+                width,
+              }}
+            >
+              ${amount}
+            </div>
+          ))}
+        </div>
       </div>
     </Panel>
   );

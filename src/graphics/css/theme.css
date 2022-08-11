@@ -176,14 +176,97 @@ body {
 }
 
 .progress .path .current,
-.progress .path .marker {
+.progress .path .marker,
+.progress .path .marker .label,
+.progress .path .trail-start,
+.progress .path .trail-end {
   position: absolute;
 }
 
 .progress .path .current {
-  background-color: #fff;
+  background-image: url("../img/epoch.png");
+  background-position: 0 0;
+  z-index: 10;
+  animation: epoch 0.5s steps(2) infinite;
+}
+
+@keyframes epoch {
+  to {
+    background-position: 64px 0px;
+  }
 }
 
 .progress .path .marker {
   text-align: center;
+  bottom: 0;
+}
+
+.progress .path .map-icons {
+  position: relative;
+}
+
+.progress .path .map-icons .marker {
+  background-image: url("../img/map-tiles.png");
+  height: var(--marker-height);
+  width: var(--marker-width);
+}
+
+.map-icons .marker.amt-0 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-150 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-300 {
+  background-position: 79px -16px;
+  --marker-height: 14px;
+  --marker-width: 14px;
+}
+
+.map-icons .marker.amt-450 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-600 {
+  background-position: 64px -128px;
+  --marker-height: 34px;
+  --marker-width: 48px;
+}
+
+.map-icons .marker.amt-700 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-800 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-900 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-1000 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.progress .path .marker .label {
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
