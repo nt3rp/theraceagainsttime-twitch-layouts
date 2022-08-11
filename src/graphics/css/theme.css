@@ -29,6 +29,7 @@ body {
   height: 100%;
   animation: background 60s linear infinite;
   z-index: 1;
+  transition: 1s filter linear;
 }
 
 /* TODO: Animate this */
@@ -127,6 +128,10 @@ body {
 }
 
 .panel.progress.slide-open.vertical {
+  transform-origin: top;
+}
+
+.panel.giveaway-alert.slide-open.vertical {
   transform-origin: top;
 }
 
@@ -273,4 +278,20 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.panel.giveaway-alert {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  top: -105px;
+  height: 50px;
+  background: rgb(24, 32, 40);
+  background: linear-gradient(
+    180deg,
+    rgba(24, 32, 40, 1) 0%,
+    rgba(24, 32, 40, 1) 50%,
+    rgba(24, 32, 40, 0) 100%
+  );
 }

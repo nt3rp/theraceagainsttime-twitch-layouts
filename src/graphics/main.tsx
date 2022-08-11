@@ -13,6 +13,7 @@ import type {
 
 import "./components/css/icons.css";
 import "./css/event.css";
+import { Giveaway } from "../extension/giveaways";
 
 const STAGES = [
   { theme: "600-ad", range: [0, 600] },
@@ -327,6 +328,35 @@ const Guest = () => {
   );
 };
 
+const GiveawayAlert = () => {
+  const [giveaways, _changeGiveaways]: [Array<Giveaway>, any] = useReplicant(
+    "giveaways",
+    []
+  );
+  const [alert, setAlert] = useState(false);
+
+  const currentGiveaway = giveaways.find(({ active }: Giveaway) => active);
+
+  useEffect(() => {
+    if (currentGiveaway) {
+      setAlert(true);
+      document.getElementById("app")?.classList.add("giveaway");
+    } else {
+      setAlert(false);
+      document.getElementById("app")?.classList.remove("giveaway");
+    }
+  }, [currentGiveaway, setAlert]);
+
+  const visibility = alert ? "show" : "hide";
+  return (
+    <Panel className={`giveaway-alert slide-open vertical ${visibility}`}>
+      Giveaway in progress:{" "}
+      {currentGiveaway?.title || "My super awesome giveaway"} (!giveaway to
+      enter)
+    </Panel>
+  );
+};
+
 // TODO: console.log panel positions to help with OBS settings.
 const MainPage = [
   <div className="infoNav transparent">
@@ -384,6 +414,7 @@ const MainPage = [
     <FundsRaised />
   </div>,
   <div className="display">
+    <GiveawayAlert />
     <div className="primaryVideo transparent standard">
       <EventToaster duration={5000} />
     </div>
