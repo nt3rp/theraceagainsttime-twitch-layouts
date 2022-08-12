@@ -158,6 +158,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           giveaway.winner = winner;
           giveaway.active = false;
           currentGiveaway.value = undefined;
+          nodecg.sendMessage("giveaway.completed", giveaway);
           break;
         }
         default:

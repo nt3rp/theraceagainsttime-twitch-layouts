@@ -80,6 +80,11 @@ body {
   z-index: 2;
 }
 
+#video,
+#guest {
+  flex-shrink: 0;
+}
+
 .display {
   flex: 1;
   position: relative;

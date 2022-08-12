@@ -16,6 +16,7 @@ import type {
   SubscriptionEvent,
   SubscriptionExtendedEvent,
 } from "../types/events";
+import { Giveaway } from "./giveaways";
 
 // TODO: Secret
 // TODO: GIVEAWAY
@@ -23,6 +24,7 @@ type ToEventStreamArgs =
   | { type: "checkpoint"; event: Checkpoint }
   | { type: "donation"; event: DonationEvent }
   | { type: "follow"; event: FollowEvent }
+  | { type: "giveaway.completed"; event: Giveaway }
   | { type: "guest.change"; event: [string | undefined, string?] }
   | { type: "host"; event: HostEvent }
   | { type: "hypetrain.end"; event: HypetrainEndEvent }
@@ -57,6 +59,11 @@ const toStreamEvent = ({
     case "follow":
       title = `${event.user} followed ${event.channel}`;
       break;
+    case "giveaway.completed": {
+      title = `Giveaway completed: ${event.title}`;
+      description = `Winner: ${event.winner}`;
+      break;
+    }
     case "guest.change": {
       const [current, old] = event;
       title = `${old || current} ${old ? "left" : "joined"} the stream`;

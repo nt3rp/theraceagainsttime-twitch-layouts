@@ -44,7 +44,6 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
 
   const scale = end - start;
   const position = percentClamp(amountRaised - start, scale);
-  console.log(position);
 
   const currentMarkers = milestones.filter(
     ({ amount }: any) => end >= amount && amount >= start
@@ -161,6 +160,32 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
         </div>
       </div>
     </Panel>
+  );
+};
+
+const EventList = () => {
+  const [events, _setEvents]: [Array<StreamEvent>, any] = useReplicant(
+    "events",
+    []
+  );
+
+  const visibility = "show";
+
+  return (
+    <Fragment>
+      {events.map(({ type, title, icon, description }: StreamEvent) => (
+        <Panel
+          className={`event slide-open vertical ${visibility}`}
+          key={`${type}-${title}`}
+        >
+          <div className={`icon ${icon}`}></div>
+          <div className="text">
+            <div className="title">{title}</div>
+            <div className="description">{description}</div>
+          </div>
+        </Panel>
+      ))}
+    </Fragment>
   );
 };
 
@@ -306,7 +331,7 @@ const FundsRaised = () => {
   );
 };
 
-const Guest = () => {
+const Guest = ({ id: domId }: any) => {
   const [guest, _setGuest]: [any, any] = useReplicant(
     "guests.current",
     undefined
@@ -322,7 +347,10 @@ const Guest = () => {
   const url = `https://vdo.ninja/?view=${id.toLowerCase()}&scene&room=the_race_against_time_viii&noaudio`;
 
   return (
-    <div className={`widescreen border guest slide-open vertical show`}>
+    <div
+      id={domId}
+      className={`widescreen border guest slide-open vertical show`}
+    >
       <iframe src={url} />
     </div>
   );
@@ -360,8 +388,10 @@ const GiveawayAlert = () => {
 // TODO: console.log panel positions to help with OBS settings.
 const MainPage = [
   <div className="infoNav transparent">
-    <div className="widescreen border">Video</div>
-    <Guest />
+    <div className="widescreen border" id="video">
+      Video
+    </div>
+    <Guest id="guest" />
     <div
       className="spacer"
       style={{
@@ -370,46 +400,8 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
+      <EventList />
       <Goals />
-      {/* <Panel className="event slide-open vertical show">
-        <div className="icon yakra failure"></div>
-        <div className="text">
-          <div className="title">
-            C donated $Y and this is a really long message to see what happens
-            when it is too long
-          </div>
-          <div className="description">
-            This is a really long message that the person wrote and it's unclear
-            what is going to happen but we're going to show the whole thing here
-            and see what happens in the HTML and maybe we'll need to fix it?
-            Yeah I think we will.
-          </div>
-        </div>
-      </Panel>
-      <Panel className="event slide-open vertical show">
-        <div className="icon guardian success"></div>
-        <div className="text">
-          <div className="title">C donated $Y</div>
-          <div className="description">
-            This is a really long message that the person wrote and it's unclear
-            what is going to happen but we're going to show the whole thing here
-            and see what happens in the HTML and maybe we'll need to fix it?
-            Yeah I think we will.
-          </div>
-        </div>
-      </Panel>
-      <Panel className="event slide-open vertical show">
-        <div className="icon"></div>
-        <div className="text">
-          <div className="title">C donated $Y</div>
-          <div className="description">
-            This is a really long message that the person wrote and it's unclear
-            what is going to happen but we're going to show the whole thing here
-            and see what happens in the HTML and maybe we'll need to fix it?
-            Yeah I think we will.
-          </div>
-        </div>
-      </Panel> */}
     </div>
     <FundsRaised />
   </div>,
