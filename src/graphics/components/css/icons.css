@@ -44,6 +44,26 @@
   right: 0;
 }
 
+.icon.paused:after {
+  content: "⏸";
+  font-size: 1.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: #fff;
+  right: 0;
+  font-family: "Segoe UI Symbol";
+  line-height: 1.25em;
+  animation: blink-animation 3s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
 /* Achievement mappings */
 .icon.start {
   background-position: calc(0 * 72px) calc(0 * 72px);

@@ -225,13 +225,15 @@ const Goals = () => {
 
   const { id, title } = currentCheckpoint;
 
+  const paused = timer.state === "paused" ? "paused" : "";
+
   return (
     <Panel className="event goal">
       <div className="label">Current checkpoint:</div>
       <div className="text">
         <div className="title">{title}</div>
       </div>
-      <div className={`icon ${id}`}></div>
+      <div className={`icon ${id} ${paused}`}></div>
     </Panel>
   );
 };
