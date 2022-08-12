@@ -169,22 +169,31 @@ const EventList = () => {
     []
   );
 
-  const visibility = "show";
+  const [selection, _setSelection]: [string | undefined, any] = useReplicant(
+    "menu.selection",
+    undefined
+  );
+
+  const visibility = selection === "event-log" ? "show" : "hide";
+
+  // Can only show so many, so trim to last 8
 
   return (
     <Fragment>
-      {events.map(({ type, title, icon, description }: StreamEvent) => (
-        <Panel
-          className={`event slide-open vertical ${visibility}`}
-          key={`${type}-${title}`}
-        >
-          <div className={`icon ${icon}`}></div>
-          <div className="text">
-            <div className="title">{title}</div>
-            <div className="description">{description}</div>
-          </div>
-        </Panel>
-      ))}
+      {events
+        .slice(-6)
+        .map(({ type, title, icon, description }: StreamEvent) => (
+          <Panel
+            className={`event slide-open vertical ${visibility}`}
+            key={`${type}-${title}`}
+          >
+            <div className={`icon ${icon}`}></div>
+            <div className="text">
+              <div className="title">{title}</div>
+              <div className="description">{description}</div>
+            </div>
+          </Panel>
+        ))}
     </Fragment>
   );
 };
