@@ -11,6 +11,7 @@ import donations from "./donations";
 import clip from "./clip";
 import checkpoints from "./checkpoints";
 import menu from "./menu";
+import web from "./web";
 
 import type { NodeCG } from "nodecg-types/types/server";
 
@@ -35,4 +36,5 @@ export default async (nodecg: NodeCG) => {
   donations(nodecg, twitchClient);
   clip(nodecg, twitchClient);
   menu(nodecg, twitchClient);
+  web(nodecg);
 };

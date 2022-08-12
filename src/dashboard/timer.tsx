@@ -12,10 +12,11 @@ const DEFAULT_TIMER: Timer = {
   state: "paused",
 };
 
+// Can we move the timer logic into extension?
 const TimerPanel = () => {
   const [duration, setDuration] = useState(0);
-  const [timerReplicant, setTimer] = useReplicant("timer", DEFAULT_TIMER);
-  const [checkpointsReplicant, setCheckpoints] = useReplicant(
+  const [timerReplicant, _setTimer] = useReplicant("timer", DEFAULT_TIMER);
+  const [checkpointsReplicant, _setCheckpoints] = useReplicant(
     "checkpoints",
     []
   );
@@ -33,38 +34,6 @@ const TimerPanel = () => {
     currentIndex + 1 <= checkpoints.length - 1
       ? checkpoints[currentIndex + 1]
       : undefined;
-
-  // TODO: Find a way to clean up these methods.
-  const onPlayPause = useCallback(() => {
-    const now = Date.now();
-    setTimer({
-      ...timer,
-      splits: [...timer.splits, now],
-      state: timer.state === "paused" ? "playing" : "paused",
-    });
-    checkpoints[currentIndex].splits.push(now);
-    setCheckpoints(checkpoints);
-  }, [currentIndex, timer, checkpoints]);
-
-  const onAdvance = useCallback(() => {
-    const now = Date.now();
-    const splits = currentIndex === -1 ? [now] : [now, now];
-    setTimer({
-      ...timer,
-      splits: [...timer.splits, ...splits],
-      state: "playing",
-      checkpoint: nextCheckpoint?.id,
-    });
-    if (currentIndex <= -1) {
-      checkpoints[0].splits.push(now);
-    } else {
-      checkpoints[currentIndex].splits.push(now);
-      if (nextCheckpoint !== undefined)
-        checkpoints[currentIndex + 1].splits.push(now);
-      checkpoints[currentIndex].completed = true;
-    }
-    setCheckpoints(checkpoints);
-  }, [currentIndex, nextCheckpoint, timer, checkpoints]);
 
   // Is this overkill to calculate the time? Yes, but it works...
   // TODO: Make this into a function.
@@ -104,7 +73,7 @@ const TimerPanel = () => {
         <span
           className={classNames({ button: true, disabled: !canPlayPause })}
           onClick={() => {
-            canPlayPause && onPlayPause();
+            canPlayPause && nodecg.sendMessage("timer.pause");
           }}
         >
           {timer.state === "paused" ? "▶️" : "⏸"}
@@ -112,7 +81,7 @@ const TimerPanel = () => {
         <span
           className={classNames({ button: true, disabled: !canAdvance })}
           onClick={() => {
-            canAdvance && onAdvance();
+            canAdvance && nodecg.sendMessage("timer.advance");
           }}
         >
           ⏭
