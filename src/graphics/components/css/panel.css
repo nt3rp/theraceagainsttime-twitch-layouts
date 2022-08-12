@@ -7,8 +7,36 @@
   border-image-slice: 8 fill;
   border-image-repeat: repeat;
   border-image-outset: 0;
-  border-image-source: url("../img/tile-slate.png");
+  border-image-source: url("../img/tiles/default.png");
   position: relative;
+}
+
+.panel.carpet {
+  border-image-source: url("../img/tiles/carpet.png");
+}
+
+.panel.felt {
+  border-image-source: url("../img/tiles/felt.png");
+}
+
+.panel.marble {
+  border-image-source: url("../img/tiles/marble.png");
+}
+
+.panel.metal {
+  border-image-source: url("../img/tiles/metal.png");
+}
+
+.panel.stone {
+  border-image-source: url("../img/tiles/stone.png");
+}
+
+.panel.traditional {
+  border-image-source: url("../img/tiles/traditional.png");
+}
+
+.panel.wood {
+  border-image-source: url("../img/tiles/wood.png");
 }
 
 /* Adds a gradient to panels; this is really close, minus the step function in the SNES version */

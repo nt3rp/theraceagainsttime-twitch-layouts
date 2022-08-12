@@ -73,7 +73,7 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
   const epochHeight = "44px";
   return (
     <Panel
-      className={`progress slide-open vertical ${
+      className={`progress slide-open vertical traditional ${
         visibility ? "show" : "hide"
       } ${theme}`}
       style={{
@@ -228,7 +228,7 @@ const Goals = () => {
   const paused = timer.state === "paused" ? "paused" : "";
 
   return (
-    <Panel className="event goal">
+    <Panel className="event goal metal">
       <div className="label">Current checkpoint:</div>
       <div className="text">
         <div className="title">{title}</div>
@@ -325,7 +325,7 @@ const FundsRaised = () => {
   const [campaign, _setCampaign]: [any, any] = useReplicant("campaign", {});
 
   return (
-    <Panel>
+    <Panel className="traditional">
       <div className="label" style={{ paddingBottom: "8px" }}>
         Raised for Trans Lifeline:
       </div>
@@ -408,7 +408,9 @@ const GiveawayAlert = () => {
 
   const visibility = alert ? "show" : "hide";
   return (
-    <Panel className={`giveaway-alert slide-open vertical ${visibility}`}>
+    <Panel
+      className={`giveaway-alert slide-open vertical carpet ${visibility}`}
+    >
       Giveaway in progress:{" "}
       {currentGiveaway?.title || "My super awesome giveaway"} (!giveaway to
       enter)
