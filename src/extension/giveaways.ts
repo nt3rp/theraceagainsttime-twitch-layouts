@@ -3,7 +3,7 @@ import type { TwitchClient } from "./clients/twitch-client";
 
 import * as UNLOCKS from "../../config/unlocks.json";
 import { ChatMessageEvent } from "../types/events";
-import { compare, sample } from "./utils";
+import { compare, sample, slugify } from "./utils";
 
 const GIVEAWAYS = UNLOCKS.filter(({ type }) => type === "giveaway");
 
@@ -23,17 +23,12 @@ export interface Giveaway {
   };
 }
 
-export interface Unlockable {
-  id: string;
-  type: string;
-  title: string;
-  unlocked?: boolean;
-  subject: string;
-  criteria: {
-    comparator: string;
-    value: number;
-  };
-}
+// interface Unlock {
+//   name: string;
+//   visible?: boolean;
+//   giveaway?: boolean;
+//   resolved?: boolean;
+// }
 
 // TODO: Consider making this even more generic
 // Could dig / pluck the subject from the criteria.
@@ -72,6 +67,10 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
   // TODO: Make an announcement when milestone surpased; might need to emit from tiltify
   const giveaways: Replicant<Array<Giveaway>> = nodecg.Replicant("giveaways", {
     defaultValue: GIVEAWAYS as Array<Giveaway>,
+  });
+
+  const unlocks: Replicant<any> = nodecg.Replicant("unlocks", {
+    defaultValue: {},
   });
 
   const currentGiveaway: Replicant<string | undefined> = nodecg.Replicant(
@@ -178,5 +177,30 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   nodecg.listenFor("donation.total", (total: number) => {
     maybeMeetCriteria("donation.total", total, giveaways, nodecg);
+  });
+
+  unlocks.on("change", (newObj) => {
+    if (!newObj) return;
+
+    Object.entries(newObj).forEach(([key, value]) => {
+      const { name, giveaway, resolved }: any = value;
+      if (!giveaway || resolved) return;
+
+      const slug = slugify(key);
+      const found = giveaways.value.find(({ id }) => id === slug);
+      if (found) return;
+
+      giveaways.value.push({
+        id: slug,
+        type: "giveaway",
+        title: name,
+        unlocked: true,
+        subject: "donation.total",
+        criteria: {
+          comparator: ">",
+          value: 0,
+        },
+      });
+    });
   });
 };

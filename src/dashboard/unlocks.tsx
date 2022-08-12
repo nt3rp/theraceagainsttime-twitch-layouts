@@ -1,18 +1,7 @@
 import { h, render, FunctionComponent } from "preact";
 import { useCallback, useState } from "preact/hooks";
 import { useReplicant } from "use-nodecg";
-import type { Secret } from "../extension/secrets";
 
-// OH SHIT; how do we handle giveaways like this?
-// Just shunt into giveaways list
-interface Unlock {
-  name: string;
-  visible?: boolean;
-  giveaway?: boolean;
-  resolved?: boolean;
-}
-
-// If not visible, name will appear as "???"
 const UnlocksRow: FunctionComponent<any> = ({
   unlock,
   unlocks,
