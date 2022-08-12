@@ -91,6 +91,13 @@
         "file": "secrets.html",
         "width": 3,
         "workspace": "The Race Against Time 8"
+      },
+      {
+        "name": "unlocks",
+        "title": "Unlocks",
+        "file": "unlocks.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
       }
     ],
     "graphics": [
