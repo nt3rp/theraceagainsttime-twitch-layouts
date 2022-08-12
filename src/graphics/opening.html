@@ -15,8 +15,9 @@
       }
 
       img {
-        display: inline-block;
+        display: none;
         position: relative;
+        animation-fill-mode: forwards !important;
       }
 
       #canvas {
@@ -27,15 +28,9 @@
         position: relative;
       }
 
-      .hidden {
-        visibility: hidden;
-      }
-
-      .the.appear,
-      .a.appear,
-      .c.appear,
-      .e.appear {
-        animation-delay: 1s !important;
+      .active,
+      .active > img {
+        display: inline-block;
       }
 
       .the {
@@ -52,13 +47,13 @@
         }
       }
 
-      .the.appear {
+      .the.active {
         left: 233px;
         top: 138px;
         animation: moveThe 1s linear;
       }
 
-      .the.hidden {
+      .the {
         left: 233px;
         top: 138px;
       }
@@ -77,12 +72,12 @@
         }
       }
 
-      .hands.appear {
+      .hands.active {
         opacity: 0;
         animation: fadeIn 1s linear;
       }
 
-      .hands.hidden {
+      .hands {
         visibility: visible;
         opacity: 0;
       }
@@ -94,25 +89,19 @@
         z-index: 10;
       }
 
-      @keyframes moveR {
-        to {
-          left: 190px;
-          top: 80px;
-          transform: scale(1);
-        }
-      }
-
-      .r.appear {
+      .r.active {
         left: 754px;
         top: 239px;
         transform: scale(0.7);
         animation: moveR 2s ease-in;
       }
 
-      .r.hidden {
-        left: 754px;
-        top: 239px;
-        transform: scale(0.7);
+      @keyframes moveR {
+        to {
+          left: 190px;
+          top: 80px;
+          transform: scale(1);
+        }
       }
 
       .a {
@@ -122,22 +111,17 @@
         z-index: 9;
       }
 
-      @keyframes moveA {
-        to {
-          left: 380px;
-          top: 135px;
-        }
-      }
-
-      .a.appear {
+      .a.active {
         left: 337px;
         top: 135px;
         animation: moveA 1s linear;
       }
 
-      .a.hidden {
-        left: 337px;
-        top: 135px;
+      @keyframes moveA {
+        to {
+          left: 380px;
+          top: 135px;
+        }
       }
 
       .c {
@@ -147,22 +131,17 @@
         z-index: 8;
       }
 
-      @keyframes moveC {
-        to {
-          left: 440px;
-          top: 136px;
-        }
-      }
-
-      .c.appear {
+      .c.active {
         left: 339px;
         top: 136px;
         animation: moveC 1s linear;
       }
 
-      .c.hidden {
-        left: 339px;
-        top: 136px;
+      @keyframes moveC {
+        to {
+          left: 440px;
+          top: 136px;
+        }
       }
 
       .e {
@@ -172,22 +151,17 @@
         z-index: 7;
       }
 
-      @keyframes moveE {
-        to {
-          left: 497px;
-          top: 138px;
-        }
-      }
-
-      .e.appear {
+      .e.active {
         left: 350px;
         top: 138px;
         animation: moveE 1s linear;
       }
 
-      .e.hidden {
-        left: 350px;
-        top: 138px;
+      @keyframes moveE {
+        to {
+          left: 497px;
+          top: 138px;
+        }
       }
 
       .againsttime {
@@ -200,6 +174,12 @@
         width: 500px;
       }
 
+      .againsttime.active {
+        left: 1100px;
+        top: 174px;
+        animation: moveLeft 2.5s linear forwards;
+      }
+
       @keyframes moveLeft {
         to {
           left: 430px;
@@ -207,26 +187,21 @@
         }
       }
 
-      .againsttime.appear {
-        left: 1100px;
-        top: 174px;
-        animation: moveLeft 2s linear;
-        animation-delay: 5s !important;
-      }
-
-      .againsttime.hidden {
-        left: 1100px;
-        top: 174px;
-      }
-
       .againsttime > img {
         animation: upDown 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes upDown {
+        to {
+          transform: translatey(20px);
+        }
       }
 
       .ainst {
         top: 18px;
         animation-delay: 100ms !important;
       }
+
       .time {
         top: 20px;
         animation-delay: 200ms !important;
@@ -236,14 +211,11 @@
         transform-origin: top center;
         left: 800px;
         z-index: 0;
+        animation: stopTick 7.5s ease-in-out;
       }
 
       .pendulum.ticking {
         animation: tick 2s ease-in-out alternate infinite;
-      }
-
-      .pendulum {
-        animation: stopTick 7.5s ease-in-out;
       }
 
       @keyframes stopTick {
@@ -275,41 +247,37 @@
           transform: rotateZ(-20deg);
         }
       }
-
-      @keyframes upDown {
-        to {
-          transform: translatey(20px);
-        }
-      }
     </style>
   </head>
   <body>
     <div id="canvas">
-      <img class="hands hidden" src="./img/opening-hands.png" />
-      <img class="the hidden" src="./img/opening-the.png" />
-      <img class="r hidden" src="./img/opening-r.png" />
-      <img class="a hidden" src="./img/opening-a.png" />
-      <img class="c hidden" src="./img/opening-c.png" />
-      <img class="e hidden" src="./img/opening-e.png" />
-      <span class="againsttime hidden">
+      <img class="hands" src="./img/opening-hands.png" />
+      <img class="the" src="./img/opening-the.png" />
+      <img class="r" src="./img/opening-r.png" />
+      <img class="a" src="./img/opening-a.png" />
+      <img class="c" src="./img/opening-c.png" />
+      <img class="e" src="./img/opening-e.png" />
+      <span class="againsttime">
         <img class="ag" src="./img/opening-ag.png" /><img
           class="ainst"
           src="./img/opening-ainst.png"
         /><img class="time" src="./img/opening-time.png" />
       </span>
-      <img class="pendulum ticking" src="./img/opening-pendulum.png" />
+      <img class="pendulum active ticking" src="./img/opening-pendulum.png" />
     </div>
+    <audio class="opening" preload src="./audio/opening.mp3" />
     <script type="text/javascript">
-      const start = nodecg.Replicant("start");
+      const audio = document.querySelector(".opening");
       let stopTicking = false;
 
-      NodeCG.waitForReplicants(start).then(() => {
-        stopTicking = start.value;
-        start.on("change", (oldValue, newValue) => {
-          if (oldValue || newValue) {
-            stopTicking = true;
-          }
-        });
+      (window.nodecg || { listenFor: () => {} }).listenFor("start", () => {
+        audio.play();
+        stopTicking = true;
+      });
+
+      window.addEventListener("banana", () => {
+        audio.play();
+        stopTicking = true;
       });
 
       const pendulum = document.querySelector(".pendulum");
@@ -321,57 +289,50 @@
       const E = document.querySelector(".e");
       const AGAINSTTIME = document.querySelector(".againsttime");
 
+      // Each TOCK is 1.25s
+      // C should be slightly transparent, curve up
+      let movedR = false;
+      let movedLetters = false;
+      let movedWavingLetters = false;
+      let showHands = false;
+      let waveEnd = false;
+      audio.addEventListener("timeupdate", () => {
+        // JUST before R moves, pendulum stops
+        // ticks one last time after
+        // pendulum zooms in
+        if (!movedR && audio.currentTime >= 10.5) {
+          R.classList.add("active");
+          movedR = true;
+        }
+        if (!movedLetters && audio.currentTime >= 13) {
+          THE.classList.add("active");
+          A.classList.add("active");
+          C.classList.add("active");
+          E.classList.add("active");
+          movedLetters = true;
+        }
+        if (!movedWavingLetters && audio.currentTime >= 15) {
+          AGAINSTTIME.classList.add("active");
+          movedWavingLetters = true;
+        }
+        if (audio.currentTime >= 17.5) {
+          console.log("Wave ends");
+        }
+        if (!showHands && audio.currentTime >= 18) {
+          hands.classList.add("active");
+          showHands = true;
+        }
+        if (audio.currentTime >= 23) {
+          console.log("Wave stops waving");
+        }
+      });
+
       let count = 0;
       pendulum.addEventListener("animationiteration", (elem) => {
         count++;
         if (count % 2 == 1 && stopTicking) {
           elem.target.classList.toggle("ticking");
         }
-      });
-
-      pendulum.addEventListener("animationend", () => {
-        R.classList.toggle("hidden");
-        R.classList.toggle("appear");
-      });
-
-      R.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-        THE.classList.toggle("hidden");
-        THE.classList.toggle("appear");
-        A.classList.toggle("hidden");
-        A.classList.toggle("appear");
-        C.classList.toggle("hidden");
-        C.classList.toggle("appear");
-        E.classList.toggle("hidden");
-        E.classList.toggle("appear");
-        AGAINSTTIME.classList.toggle("hidden");
-        AGAINSTTIME.classList.toggle("appear");
-      });
-
-      THE.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      A.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      C.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      E.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      AGAINSTTIME.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-        hands.classList.toggle("hidden");
-        hands.classList.toggle("appear");
-      });
-
-      hands.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
       });
     </script>
   </body>

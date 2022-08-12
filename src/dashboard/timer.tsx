@@ -1,6 +1,6 @@
 import { h, render, Fragment } from "preact";
 import { useReplicant } from "use-nodecg";
-import { useCallback, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import classNames from "classnames";
 import { copy, toHms, calculateSplits } from "../utils";
 import { useInterval } from "../hooks";
