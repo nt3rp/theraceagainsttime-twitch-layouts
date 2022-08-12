@@ -49,7 +49,7 @@ const toStreamEvent = ({
     case "checkpoint":
       title = event.title;
       description = "Checkpoint Completed!";
-      icon = title;
+      icon = event.id;
       break;
     case "donation":
       when = new Date(event.completedAt);
