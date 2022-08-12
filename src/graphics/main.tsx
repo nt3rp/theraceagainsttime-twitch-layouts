@@ -16,11 +16,11 @@ import "./css/event.css";
 import { Giveaway } from "../extension/giveaways";
 
 const STAGES = [
-  { theme: "600-ad", range: [0, 600] },
-  { theme: "1000-ad", range: [600, 1000] },
-  { theme: "1999-ad", range: [1000, 1999] },
-  { theme: "2300-ad", range: [2000, 2300] },
-  { theme: "12000-bc", range: [2300, 2300] },
+  { theme: "middle-ages", range: [0, 600] },
+  { theme: "present", range: [600, 1000] },
+  { theme: "apocalypse", range: [1000, 1999] },
+  { theme: "future", range: [1999, 2300] },
+  { theme: "antiquity", range: [2300, 2300] },
 ];
 
 const percentClamp = (numerator: number, denominator: number) =>
@@ -37,8 +37,9 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
   if (!campaign || milestones.length === 0) return <Fragment />;
 
   const { amountRaised } = campaign;
-  const stageId = STAGES.findIndex(({ range }) => amountRaised >= range[0]);
-  const { theme, range } = STAGES[stageId] || STAGES.at(-1);
+  const stageId = STAGES.findIndex(({ range }) => range[1] > amountRaised);
+  const currentStage = STAGES[stageId] || STAGES.at(-1);
+  const { theme, range } = currentStage;
   const [start, end] = range;
   const nextStage = STAGES[stageId + 1] || STAGES.at(-1);
 
@@ -117,7 +118,7 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
             className={`marker amt-${start}`}
             style={{
               left: `calc(0% - var(--marker-width)/2)`,
-              top: `calc(50% + var(--marker-height)/3)`,
+              top: `calc(50% - var(--marker-height)*0.75)`,
             }}
           ></div>
           {currentMarkers.map(({ amount }: any) => (
@@ -127,8 +128,8 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
                 left: `calc(${percentClamp(
                   amount - start,
                   scale
-                )}% - var(--marker-height)/2)`,
-                top: `calc(50% + var(--marker-height)/3)`,
+                )}% - var(--marker-width)/2)`,
+                top: `calc(50% - var(--marker-height)*0.75)`,
               }}
             ></div>
           ))}
@@ -141,7 +142,7 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
               width,
             }}
           >
-            ${start}
+            ${currentStage.theme === nextStage.theme ? "???" : start}
           </div>
           {currentMarkers.map(({ amount }: any) => (
             <div
@@ -154,7 +155,7 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
                 width,
               }}
             >
-              ${amount}
+              ${currentStage.theme === nextStage.theme ? "???" : amount}
             </div>
           ))}
         </div>

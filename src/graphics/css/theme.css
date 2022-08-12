@@ -220,6 +220,10 @@ body {
   margin: 0 40px;
 }
 
+.progress.antiquity .path {
+  margin: 0 50%;
+}
+
 .progress .path .current,
 .progress .path .marker,
 .progress .path .marker .label,
@@ -248,6 +252,7 @@ body {
 
 .progress .path .map-icons {
   position: relative;
+  height: 100%;
 }
 
 .progress .path .map-icons .marker {
@@ -263,9 +268,9 @@ body {
 }
 
 .map-icons .marker.amt-150 {
-  background-position: 162px -82px;
-  --marker-height: 30px;
-  --marker-width: 36px;
+  background-position: 32px -66px;
+  --marker-height: 14px;
+  --marker-width: 14px;
 }
 
 .map-icons .marker.amt-300 {
@@ -275,9 +280,9 @@ body {
 }
 
 .map-icons .marker.amt-450 {
-  background-position: 162px -82px;
+  background-position: 208px -82px;
   --marker-height: 30px;
-  --marker-width: 36px;
+  --marker-width: 40px;
 }
 
 .map-icons .marker.amt-600 {
@@ -287,27 +292,79 @@ body {
 }
 
 .map-icons .marker.amt-700 {
-  background-position: 162px -82px;
-  --marker-height: 30px;
-  --marker-width: 36px;
+  background-position: -128px -640px;
+  --marker-height: 32px;
+  --marker-width: 48px;
 }
 
 .map-icons .marker.amt-800 {
-  background-position: 162px -82px;
+  background-position: -121px -690px;
   --marker-height: 30px;
-  --marker-width: 36px;
+  --marker-width: 32px;
 }
 
 .map-icons .marker.amt-900 {
-  background-position: 162px -82px;
-  --marker-height: 30px;
-  --marker-width: 36px;
+  background-position: -284px -556px;
+  --marker-height: 52px;
+  --marker-width: 52px;
 }
 
 .map-icons .marker.amt-1000 {
-  background-position: 162px -82px;
-  --marker-height: 30px;
-  --marker-width: 36px;
+  background-position: -295px -704px;
+  --marker-height: 50px;
+  --marker-width: 72px;
+}
+
+.map-icons .marker.amt-1250 {
+  background-position: -450px -608px;
+  --marker-height: 32px;
+  --marker-width: 32px;
+}
+
+.map-icons .marker.amt-1500 {
+  background-position: -418px -544px;
+  --marker-height: 64px;
+  --marker-width: 72px;
+}
+
+.map-icons .marker.amt-1750 {
+  background-position: -377px -610px;
+  --marker-height: 54px;
+  --marker-width: 64px;
+}
+
+.map-icons .marker.amt-1999 {
+  background-position: -477px -700px;
+  --marker-height: 48px;
+  --marker-width: 64px;
+}
+
+.map-icons .marker.amt-2150 {
+  background-position: -560px -608px;
+  --marker-height: 48px;
+  --marker-width: 48px;
+}
+
+.map-icons .marker.amt-2300 {
+  background-position: -560px -696px;
+  --marker-height: 72px;
+  --marker-width: 78px;
+}
+
+.map-icons .marker.amt-2300 {
+  background-position: -560px -696px;
+  --marker-height: 72px;
+  --marker-width: 78px;
+}
+
+.progress.antiquity .map-icons .marker {
+  background-position: -288px -128px;
+  --marker-height: 108px;
+  --marker-width: 128px;
+}
+
+.progress.antiquity .path .current {
+  display: none;
 }
 
 .progress .path .marker .label {
