@@ -2,11 +2,12 @@ import { h, render, Fragment } from "preact";
 import { useCallback, useState, useEffect } from "preact/hooks";
 import { Panel } from "./components/panel";
 import { useReplicant, useListenFor } from "use-nodecg";
-import { clamp, percent } from "../utils";
+import { clamp, copy, percent } from "../utils";
 
 import type {
   Checkpoint,
   DonationEvent,
+  Guest,
   StreamEvent,
   Timer,
 } from "../types/events";
@@ -350,26 +351,36 @@ const FundsRaised = () => {
 };
 
 const Guest = ({ id: domId }: any) => {
-  const [guest, _setGuest]: [any, any] = useReplicant(
+  const [newGuest, _setGuest]: [Guest | undefined, unknown] = useReplicant(
     "guests.current",
     undefined
   );
+  const [prevGuest, setPrevious] = useState(newGuest);
 
-  if (!guest) {
+  useEffect(() => {
+    // Save the last guest.
+    if (!newGuest) return;
+    setPrevious(copy(newGuest));
+  });
+
+  if (!prevGuest) {
     return (
       <div className={`widescreen border guest slide-open vertical hide`}></div>
     );
   }
 
-  const { id } = guest;
-  const url = `https://vdo.ninja/?view=${id.toLowerCase()}&scene&room=the_race_against_time_viii&noaudio`;
+  const { id, display } = prevGuest;
+  const url = `https://vdo.ninja/?view=${id.toLowerCase()}&scene&room=the_race_against_time_viii&noaudio&fadein=1000`;
+
+  const visibility = !newGuest ? "hide" : "show";
 
   return (
     <div
       id={domId}
-      className={`widescreen border guest slide-open vertical show`}
+      className={`widescreen border guest slide-open vertical ${visibility}`}
     >
       <iframe src={url} />
+      <span className="id">{display || id}</span>
     </div>
   );
 };
@@ -407,7 +418,7 @@ const GiveawayAlert = () => {
 const MainPage = [
   <div className="infoNav transparent">
     <div className="widescreen border" id="video">
-      Video
+      <span className="id">The Nickscast</span>
     </div>
     <Guest id="guest" />
     <div
@@ -425,7 +436,7 @@ const MainPage = [
   </div>,
   <div className="display">
     <GiveawayAlert />
-    <div className="primaryVideo transparent standard">
+    <div className="primaryVideo transparent standard border">
       <EventToaster duration={5000} />
     </div>
     <Milestones />

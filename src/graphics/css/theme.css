@@ -83,12 +83,25 @@ body {
 
 #video {
   flex-shrink: 0;
+  position: relative;
+  width: calc(100% - 3px);
 }
 
 #guest {
   position: absolute;
-  top: 327px;
+  top: 325px;
   z-index: 5;
+  width: calc(100% - 3px);
+  border-top: 0;
+  background-color: var(--ct-shadow) !important;
+}
+
+#video .id,
+#guest .id {
+  position: absolute;
+  bottom: 5px;
+  left: 9px;
+  font-size: 48px;
 }
 
 .display {
@@ -117,8 +130,8 @@ body {
 }
 
 .border {
-  border: 1px solid var(--ct-white);
-  box-shadow: 1px 1px var(--ct-shadow);
+  border: 3px solid #fff;
+  box-shadow: 3px 3px var(--ct-shadow);
 }
 
 .spacer .slide-open:nth-last-child(6) {
