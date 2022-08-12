@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <title>Chrono Trigger Opening</title>
     <style type="text/css">
+      :root {
+        --gap: 60px;
+        --zoom: 1; /* Developing on small monitor */
+        --panel-border-width: 16px;
+        --ct-shadow: #182028;
+        --ct-gray: #889090;
+        --ct-white: #f8f8f8;
+        --ct-yellow: #f8f800;
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -50,6 +60,55 @@
 
       #chat.active {
         opacity: 1;
+      }
+
+      #credits {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+        margin: 150px 100px;
+        opacity: 0;
+        color: #fff;
+        font-size: 2em;
+        font-family: "MrsEavesPetiteCaps";
+        text-shadow: 0px 2px var(--ct-shadow), 2px 0px var(--ct-shadow);
+        color: var(--ct-white);
+        z-index: 100;
+      }
+
+      #credits.active {
+        opacity: 1;
+      }
+
+      #credits .title {
+        text-transform: uppercase;
+
+        letter-spacing: 10px;
+        font-size: 36px;
+      }
+
+      #credits .name {
+        letter-spacing: 6px;
+        font-size: 72px;
+        font-weight: bold;
+        margin-top: 0.1em;
+        line-height: 1em;
+      }
+
+      #credits.fade-in-and-out {
+        animation: textFade 8s forwards;
+      }
+
+      @keyframes textFade {
+        20%,
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
       }
 
       .active,
@@ -305,8 +364,13 @@
       </defs>
     </svg>
     <div id="canvas">
-      <div id="chat" class="active"></div>
-      <div id="credits"></div>
+      <div id="chat"></div>
+      <div id="credits">
+        <div class="title"></div>
+        <div class="name first"></div>
+        <div class="name second"></div>
+        <div class="name third"></div>
+      </div>
       <img class="hands" src="./img/opening-hands.png" />
       <img class="the" src="./img/opening-the.png" />
       <img class="r" src="./img/opening-r.png" />
@@ -326,7 +390,85 @@
       const audio = document.querySelector(".opening");
       const chat = document.getElementById("chat");
       const credits = document.getElementById("credits");
+      const title = document.querySelector("#credits .title");
+      const names = document.querySelectorAll("#credits .name");
       let stopTicking = false;
+
+      const credit = nodecg.Replicant("credits", {});
+
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+
+      const keyToTitle = {
+        chat: "For joining us",
+        "subscription.community": "For the gift subs",
+        subscription: "For subscribing to us",
+        donation: "For the generous donations",
+        host: "For sharing the stream",
+        follow: "For following us",
+      };
+
+      let lines = [];
+
+      const delayedCreditChange = () => {
+        const next = lines.shift();
+        if (!next) {
+          credits.classList.remove("active");
+        } else {
+          fadeInNextText(next);
+        }
+      };
+
+      const fadeInNextText = ([titleText, ...text]) => {
+        title.innerText = titleText;
+        names.forEach((f, i) => (f.innerText = text[i] ? text[i] : ""));
+        credits.classList.add("fade-in-and-out");
+      };
+
+      const rollCredits = () => {
+        credits.addEventListener("animationend", (event) => {
+          credits.classList.remove("fade-in-and-out");
+          setTimeout(delayedCreditChange, 200);
+        });
+        // Need to group by type, the interate
+        // lazy copy
+        const dict = JSON.parse(JSON.stringify(credit.value));
+
+        const inverted = Object.entries(dict).reduce((acc, [name, attrs]) => {
+          Object.keys(attrs).forEach((attr) => {
+            if (!acc[attr]) {
+              acc[attr] = [];
+            }
+            acc[attr].push(name);
+          });
+          return acc;
+        }, {});
+
+        lines = Object.entries(inverted)
+          .map(([key, people]) => {
+            const newTitle = keyToTitle[key];
+            const chunked = chunk(people.sort(), 3);
+            const result = chunked.map((p) => [newTitle, ...p]);
+            return result;
+          })
+          .flat();
+
+        // Not showing all lines; why?
+        fadeInNextText(lines.shift());
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      switch (params.get("type")) {
+        case "credits":
+          NodeCG.waitForReplicants(credit);
+          break;
+        case "chat":
+        default:
+          chat.classList.add("active");
+          break;
+      }
 
       const start = () => {
         audio.play();
@@ -335,8 +477,13 @@
       };
 
       (window.nodecg || { listenFor: () => {} }).listenFor("start", start);
-
       window.addEventListener("test.start", start);
+
+      (window.nodecg || { listenFor: () => {} }).listenFor(
+        "credits",
+        rollCredits
+      );
+      window.addEventListener("credits", rollCredits);
 
       const pendulum = document.querySelector(".pendulum");
       const hands = document.querySelector(".hands");
