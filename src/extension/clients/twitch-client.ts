@@ -343,37 +343,43 @@ const setupEvents = (nodecg: NodeCG, twitch: TwitchClient) => {
       return;
     }
 
-    await twitch.eventSub.subscribeToChannelFollowEvents(user, (event) => {
-      const { userDisplayName } = event;
-      nodecg.log.debug(
-        `[Twitch] [Follow]: #${channel} @${userDisplayName} followed`
-      );
-      follows.value.push({ channel, user: userDisplayName });
-    });
-
-    await twitch.eventSub.subscribeToChannelHypeTrainBeginEvents(
-      user,
-      (event) => {
-        const { startDate, lastContribution } = event;
+    const followSubscriber =
+      await twitch.eventSub.subscribeToChannelFollowEvents(user, (event) => {
+        const { userDisplayName } = event;
         nodecg.log.debug(
-          `[Twitch] [Hypetrain]: #${channel} @${lastContribution.userDisplayName} started the hypetrain: ${event}`
+          `[Twitch] [Follow]: #${channel} @${userDisplayName} followed`
         );
-        nodecg.sendMessage("hypetrain.start", {
-          channel,
-          startDate,
-          conductor: lastContribution.userDisplayName,
-        });
-      }
-    );
+        follows.value.push({ channel, user: userDisplayName });
+      });
+    nodecg.log.debug(await followSubscriber.getCliTestCommand());
 
-    await twitch.eventSub.subscribeToChannelHypeTrainEndEvents(
-      user,
-      (event) => {
-        const { endDate, level } = event;
-        nodecg.log.debug(`[Twitch] [Hypetrain]: #${channel} ended: ${event}`);
-        nodecg.sendMessage("hypetrain.end", { channel, endDate, level });
-      }
-    );
+    const hypetrainStartubscriber =
+      await twitch.eventSub.subscribeToChannelHypeTrainBeginEvents(
+        user,
+        (event) => {
+          const { startDate, lastContribution } = event;
+          nodecg.log.debug(
+            `[Twitch] [Hypetrain]: #${channel} @${lastContribution.userDisplayName} started the hypetrain: ${event}`
+          );
+          nodecg.sendMessage("hypetrain.start", {
+            channel,
+            startDate,
+            conductor: lastContribution.userDisplayName,
+          });
+        }
+      );
+    nodecg.log.debug(await hypetrainStartubscriber.getCliTestCommand());
+
+    const hypetrainEndSubscriber =
+      await twitch.eventSub.subscribeToChannelHypeTrainEndEvents(
+        user,
+        (event) => {
+          const { endDate, level } = event;
+          nodecg.log.debug(`[Twitch] [Hypetrain]: #${channel} ended: ${event}`);
+          nodecg.sendMessage("hypetrain.end", { channel, endDate, level });
+        }
+      );
+    nodecg.log.debug(await hypetrainEndSubscriber.getCliTestCommand());
   });
 };
 
