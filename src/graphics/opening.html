@@ -5,13 +5,16 @@
     <title>Chrono Trigger Opening</title>
     <style type="text/css">
       * {
-        image-rendering: pixelated;
-        -webkit-font-smoothing: none;
         box-sizing: border-box;
       }
 
       body {
         margin: 0;
+        filter: url(#pixelate);
+      }
+
+      svg {
+        position: absolute;
       }
 
       img {
@@ -26,6 +29,8 @@
         height: 602px;
         overflow: hidden;
         position: relative;
+        z-index: 1;
+        zoom: 1.79;
       }
 
       .active,
@@ -93,6 +98,7 @@
         left: 754px;
         top: 239px;
         transform: scale(0.7);
+        opacity: 0;
         animation: moveR 2s ease-in;
       }
 
@@ -101,6 +107,7 @@
           left: 190px;
           top: 80px;
           transform: scale(1);
+          opacity: 1;
         }
       }
 
@@ -250,6 +257,34 @@
     </style>
   </head>
   <body>
+    <svg x="0px" y="0px" color-interpolation-filters="sRGB">
+      <defs>
+        <filter id="pixelate" x="0%" y="0%" width="100%" height="100%">
+          <!--Thanks to Zoltan Fegyver for figuring out pixelation and producing the awesome pixelation map. -->
+          <feGaussianBlur
+            stdDeviation="0.1"
+            in="SourceGraphic"
+            result="smoothed"
+          />
+          <feImage
+            width="3"
+            height="3"
+            xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVAgdY1ywgOEDAwKxgJhIgFQ+AP/vCNK2s+8LAAAAAElFTkSuQmCC"
+            result="displacement-map"
+          />
+          <feTile in="displacement-map" result="pixelate-map" />
+          <feDisplacementMap
+            in="smoothed"
+            in2="pixelate-map"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="5"
+            result="pre-final"
+          />
+          <feComposite operator="in" in2="SourceGraphic" />
+        </filter>
+      </defs>
+    </svg>
     <div id="canvas">
       <img class="hands" src="./img/opening-hands.png" />
       <img class="the" src="./img/opening-the.png" />
