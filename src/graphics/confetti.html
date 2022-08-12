@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      const startCelebrate = () => {
+        const end = Date.now() + 10 * 1000;
+        const celebrate = () => {
+          confetti({
+            particleCount: 4,
+            angle: 60,
+            spread: 55,
+            startVelocity: 100,
+            origin: { x: 0, y: 1 },
+          });
+          confetti({
+            particleCount: 4,
+            angle: 120,
+            spread: 55,
+            startVelocity: 100,
+            origin: { x: 1, y: 1 },
+          });
+
+          if (Date.now() < end) {
+            requestAnimationFrame(celebrate);
+          }
+        };
+        celebrate();
+      };
+
+      nodecg.listenFor("confetti", () => {
+        startCelebrate();
+      });
+    </script>
+  </body>
+</html>
