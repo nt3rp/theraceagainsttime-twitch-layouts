@@ -15,6 +15,7 @@ import type {
 import "./components/css/icons.css";
 import "./css/event.css";
 import { Giveaway } from "../extension/giveaways";
+import { Slots } from "./components/slots";
 
 const STAGES = [
   { theme: "middle-ages", range: [0, 600] },
@@ -420,6 +421,7 @@ const GiveawayAlert = () => {
 
 // TODO: console.log panel positions to help with OBS settings.
 const MainPage = [
+  <Slots />,
   <div className="infoNav transparent">
     <div className="widescreen border" id="video">
       <span className="id">The Nickscast</span>

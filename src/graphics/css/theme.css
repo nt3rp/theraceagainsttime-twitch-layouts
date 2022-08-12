@@ -104,6 +104,16 @@ body {
   font-size: 48px;
 }
 
+#slots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  margin: 20%;
+}
+
 .display {
   flex: 1;
   position: relative;
@@ -400,4 +410,35 @@ body {
     rgba(24, 32, 40, 1) 50%,
     rgba(24, 32, 40, 0) 100%
   );
+}
+
+#slots {
+  color: var(--ct-yellow);
+  display: flex;
+}
+
+#slots .door {
+  background: #fafafa;
+  box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.4) inset;
+
+  height: 150px;
+  overflow: hidden;
+
+  border-radius: 1ex;
+  margin: 0 3em;
+
+  align-self: center;
+}
+
+#slots .boxes {
+  /* transform: translateY(0); */
+  transition: transform 1s ease-in-out;
+}
+
+#slots .box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 3rem;
 }

@@ -5,7 +5,7 @@ import type { Secret } from "../extension/secrets";
 
 // OH SHIT; how do we handle giveaways like this?
 // Just shunt into giveaways list
-interface Unlock {
+export interface Unlock {
   name: string;
   visible?: boolean;
   giveaway?: boolean;
