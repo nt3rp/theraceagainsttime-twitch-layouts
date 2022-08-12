@@ -33,6 +33,25 @@
         zoom: 1.79;
       }
 
+      #chat,
+      #chat.active {
+        transition: opacity 1s;
+      }
+
+      #chat {
+        position: absolute;
+        width: 300px;
+        background-color: #f0f;
+        top: 0px;
+        bottom: 0px;
+        margin: 50px 100px;
+        opacity: 0;
+      }
+
+      #chat.active {
+        opacity: 1;
+      }
+
       .active,
       .active > img {
         display: inline-block;
@@ -286,6 +305,8 @@
       </defs>
     </svg>
     <div id="canvas">
+      <div id="chat" class="active"></div>
+      <div id="credits"></div>
       <img class="hands" src="./img/opening-hands.png" />
       <img class="the" src="./img/opening-the.png" />
       <img class="r" src="./img/opening-r.png" />
@@ -303,17 +324,19 @@
     <audio class="opening" preload src="./audio/opening.mp3" />
     <script type="text/javascript">
       const audio = document.querySelector(".opening");
+      const chat = document.getElementById("chat");
+      const credits = document.getElementById("credits");
       let stopTicking = false;
 
-      (window.nodecg || { listenFor: () => {} }).listenFor("start", () => {
+      const start = () => {
         audio.play();
         stopTicking = true;
-      });
+        chat.classList.remove("active");
+      };
 
-      window.addEventListener("banana", () => {
-        audio.play();
-        stopTicking = true;
-      });
+      (window.nodecg || { listenFor: () => {} }).listenFor("start", start);
+
+      window.addEventListener("test.start", start);
 
       const pendulum = document.querySelector(".pendulum");
       const hands = document.querySelector(".hands");
