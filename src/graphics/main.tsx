@@ -247,6 +247,8 @@ const EventToast = ({ icon, title, description }: any) => {
   );
 };
 
+// From package.json
+const ALERT_SOUND_TYPES = ["donation", "follow", "host", "secret"];
 const EventToaster = ({ duration }: any) => {
   const [state, setState]: [any, any] = useState({
     event: undefined,
@@ -283,12 +285,13 @@ const EventToaster = ({ duration }: any) => {
   const fireEvent = useCallback(() => {
     const [earliest, ...remaining] = events;
     if (!earliest) return;
-    const eventSound: any = undefined;
-    const sfx = earliest.sound || "generic";
-    // TODO: SFX
-    // if (sfx && nodecg.findCue(sfx)) {
-    //   eventSound = nodecg.playSound(sfx);
-    // }
+    let eventSound: any;
+    const sfx = ALERT_SOUND_TYPES.includes(earliest.type)
+      ? earliest.type
+      : "generic";
+    if (sfx && nodecg.findCue(sfx)) {
+      eventSound = nodecg.playSound(sfx);
+    }
 
     setState((current: any) => ({
       ...current,

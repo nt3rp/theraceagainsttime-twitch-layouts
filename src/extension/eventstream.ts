@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import * as path from "path";
-import { toCsv } from "./utils";
+import { sample, toCsv } from "./utils";
 
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
@@ -17,9 +17,8 @@ import type {
   SubscriptionExtendedEvent,
 } from "../types/events";
 import { Giveaway } from "./giveaways";
+import { Secret } from "./secrets";
 
-// TODO: Secret
-// TODO: GIVEAWAY
 type ToEventStreamArgs =
   | { type: "checkpoint"; event: Checkpoint }
   | { type: "donation"; event: DonationEvent }
@@ -29,7 +28,7 @@ type ToEventStreamArgs =
   | { type: "host"; event: HostEvent }
   | { type: "hypetrain.end"; event: HypetrainEndEvent }
   | { type: "hypetrain.start"; event: HypetrainStartEvent }
-  | { type: "secret"; event: unknown }
+  | { type: "secret"; event: Secret }
   | {
       type: "subscription";
       event: SubscriptionEvent | SubscriptionExtendedEvent;
@@ -82,8 +81,9 @@ const toStreamEvent = ({
       title = `Level ${event.level} Hypetrain Ended`;
       break;
     case "secret":
-      title = `Secret revealed!`;
-      description = `???`;
+      title = `Secret Uncovered: ${event.name}`;
+      description = event.description || "No description";
+      icon = "robo";
       break;
     case "subscription":
       title = `${event.subscriber} subscribed to ${event.channel}`;
@@ -108,6 +108,18 @@ const toStreamEvent = ({
     icon,
   };
 };
+
+const SECRET_MESSAGES = [
+  "A body has been discovered! Err, a secret.",
+  "Did you want to know...a seecret? Cause I know one, and it is sooooo good to hear it",
+  "👀",
+  "Sealed by a mysterious force...",
+  "The black wind howls... whatever that means",
+  "I am not malfunctioning",
+  "Secret secret. I've got a secret.",
+  "I've got a secret, I've been hiding...",
+];
+const generateSecretMessage = () => sample(SECRET_MESSAGES);
 
 // eslint-disable-next-line no-unused-vars
 export default (nodecg: NodeCG, twitch: TwitchClient) => {
@@ -138,15 +150,27 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
         type: type as ToEventStreamArgs["type"],
         event,
       });
-      nodecg.sendMessage("stream-event", streamEvent);
-    })
-  );
+      if (!streamEvent) return;
 
-  nodecg.listenFor(
-    "stream-event",
-    ({ when, type, title, description }: StreamEvent) => {
+      const { when, title, description } = streamEvent;
       fs.appendFile(eventLog, toCsv(when, type, title, description));
-      events.value.push({ when, type, title, description });
-    }
+
+      let revisedStreamEvent = streamEvent;
+      if (type === "secret") {
+        const message = generateSecretMessage();
+        revisedStreamEvent = {
+          ...streamEvent,
+          title: "@prometheus_circuit says:",
+          description: message,
+          icon: "robo",
+        };
+        twitch.channels.forEach((channel) => {
+          twitch.chat.say(channel, message);
+        });
+      }
+
+      events.value.push(revisedStreamEvent);
+      nodecg.sendMessage("stream-event", revisedStreamEvent);
+    })
   );
 };

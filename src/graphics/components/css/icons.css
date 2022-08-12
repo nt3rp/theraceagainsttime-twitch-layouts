@@ -260,3 +260,13 @@
 .icon.radical-dreamers {
   background-position: calc(-5 * 72px) calc(-10 * 72px);
 }
+.icon.robo {
+  background-position: -948px -732px;
+  height: 48px;
+  width: 48px;
+  margin: 12px 26px 12px 18px !important;
+}
+
+.icon.robo:before {
+  display: none;
+}
