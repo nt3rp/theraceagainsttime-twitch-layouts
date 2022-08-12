@@ -8,19 +8,54 @@ import type { Secret } from "../extension/secrets";
 interface Unlock {
   name: string;
   visible?: boolean;
+  giveaway?: boolean;
   resolved?: boolean;
 }
 
 // If not visible, name will appear as "???"
-const UnlocksRow: FunctionComponent<Unlock> = ({ name, visible, resolved }) => {
+const UnlocksRow: FunctionComponent<any> = ({
+  unlock,
+  unlocks,
+  setUnlocks,
+}) => {
+  const { name, visible, resolved, giveaway } = unlock;
+  const onChange = ({ target }: any) => {
+    const { checked, name: attr } = target;
+    setUnlocks({
+      ...unlocks,
+      [name]: {
+        ...unlocks[name],
+        [attr]: checked,
+      },
+    });
+  };
+
   return (
     <tr>
       <td>{name}</td>
       <td>
-        <input type="checkbox" checked={!!visible}></input>
+        <input
+          type="checkbox"
+          name="visible"
+          checked={!!visible}
+          onChange={onChange}
+        ></input>
       </td>
       <td>
-        <input type="checkbox" checked={!!resolved}></input>
+        <input
+          type="checkbox"
+          name="giveaway"
+          checked={!!giveaway}
+          onChange={onChange}
+        ></input>
+      </td>
+      <td>
+        <input
+          type="checkbox"
+          name="resolved"
+          checked={!!resolved}
+          onChange={onChange}
+        ></input>
       </td>
     </tr>
   );
@@ -28,36 +63,53 @@ const UnlocksRow: FunctionComponent<Unlock> = ({ name, visible, resolved }) => {
 
 // List of text fields
 const UnlocksPanel: FunctionComponent<any> = () => {
-  const [unlocks, setUnlocks]: [Array<Unlock>, any] = useReplicant(
-    "unlocks",
-    []
-  );
+  const [unlocks, setUnlocks]: [any, any] = useReplicant("unlocks", {});
   const [name, setName] = useState("");
+  const [giveaway, setGiveaway] = useState(false);
   const addUnlock = useCallback(() => {
-    setUnlocks([
-      ...(unlocks || []),
-      {
+    setUnlocks({
+      ...(unlocks || {}),
+      [name]: {
         name,
+        giveaway,
         visible: false,
         resolved: false,
       },
-    ]);
-  }, [unlocks, name, setName]);
+    });
+    setName("");
+    setGiveaway(false);
+  }, [unlocks, name, setName, giveaway, setGiveaway]);
 
   return (
     <div>
       <div className="new-unlock">
-        <label for="unlock"></label>
-        <input
-          id="unlock"
-          type="text"
-          value={name}
-          onChange={(event) => {
-            const target = event?.target as HTMLInputElement;
-            setName(target.value);
-          }}
-        ></input>
-        <button onClick={addUnlock}>Add Unlockable</button>
+        <div className="field">
+          <label for="unlock">Name: </label>
+          <input
+            id="unlock"
+            type="text"
+            value={name}
+            onChange={(event) => {
+              const target = event?.target as HTMLInputElement;
+              setName(target.value);
+            }}
+          ></input>
+        </div>
+        <div className="field">
+          <label for="giveaway">Is Giveaway: </label>
+          <input
+            id="giveaway"
+            type="checkbox"
+            value={name}
+            onChange={(event) => {
+              const target = event?.target as HTMLInputElement;
+              setGiveaway(target.checked);
+            }}
+          ></input>
+        </div>
+        <div className="field">
+          <button onClick={addUnlock}>Add Unlockable</button>
+        </div>
       </div>
       <hr />
       <table className="unlocks" style={{ width: "100%" }}>
@@ -65,12 +117,18 @@ const UnlocksPanel: FunctionComponent<any> = () => {
           <tr>
             <th>Name</th>
             <th>Visible</th>
+            <th>Giveaway</th>
             <th>Resolved</th>
           </tr>
         </thead>
         <tbody>
-          {(unlocks || []).map((s) => (
-            <UnlocksRow key={s.name} {...s} />
+          {Object.entries(unlocks || {}).map(([_, s]: [any, any]) => (
+            <UnlocksRow
+              key={s.name}
+              unlock={s}
+              unlocks={unlocks}
+              setUnlocks={setUnlocks}
+            />
           ))}
         </tbody>
       </table>
