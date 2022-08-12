@@ -84,6 +84,13 @@
         "file": "timer.html",
         "width": 3,
         "workspace": "The Race Against Time 8"
+      },
+      {
+        "name": "secrets",
+        "title": "Secrets",
+        "file": "secrets.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
       }
     ],
     "graphics": [
