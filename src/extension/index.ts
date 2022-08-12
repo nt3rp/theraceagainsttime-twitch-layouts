@@ -4,7 +4,7 @@ import setupTwitch from "./clients/twitch-client";
 import secrets from "./secrets";
 import credits from "./credits";
 import giveaways from "./giveaways";
-import ladder from "./ladder";
+// import ladder from "./ladder";
 import guests from "./guests";
 import eventstream from "./eventstream";
 import donations from "./donations";
@@ -31,7 +31,7 @@ export default async (nodecg: NodeCG) => {
   credits(nodecg, twitchClient);
   eventstream(nodecg, twitchClient);
   giveaways(nodecg, twitchClient);
-  ladder(nodecg, twitchClient);
+  // ladder(nodecg, twitchClient);
   guests(nodecg, twitchClient);
   donations(nodecg, twitchClient);
   clip(nodecg, twitchClient);
