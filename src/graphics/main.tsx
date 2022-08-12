@@ -163,6 +163,7 @@ const Milestones = ({ hideAfter = 10000 }: any) => {
   );
 };
 
+const EVENT_LIST_OPTIONS = ["donations", "challenges"];
 const EventList = () => {
   const [events, _setEvents]: [Array<StreamEvent>, any] = useReplicant(
     "events",
@@ -174,13 +175,17 @@ const EventList = () => {
     undefined
   );
 
-  const visibility = selection === "event-log" ? "show" : "hide";
+  const filterFn = (event: StreamEvent) =>
+    selection && EVENT_LIST_OPTIONS.includes(selection)
+      ? event.type === selection
+      : true;
 
-  // Can only show so many, so trim to last 8
+  const visibility = selection === undefined ? "hide" : "show";
 
   return (
     <Fragment>
       {events
+        .filter(filterFn)
         .slice(-6)
         .map(({ type, title, icon, description }: StreamEvent) => (
           <Panel

@@ -123,6 +123,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
     "checkpoint",
     "donation",
     "follow",
+    "giveaway.completed",
     "guest.change",
     "host",
     "hypetrain.end",
