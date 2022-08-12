@@ -433,7 +433,6 @@ const MainPage = [
         placeContent: "flex-end",
       }}
     >
-      <EventList />
       <Goals />
     </div>
     <FundsRaised />
