@@ -1,4 +1,4 @@
-import { h, render, FunctionComponent } from "preact";
+import { h, render, FunctionComponent, Fragment } from "preact";
 import { useReplicant } from "use-nodecg";
 import type { Secret } from "../extension/secrets";
 
@@ -33,14 +33,21 @@ const SecretsPanel: FunctionComponent<any> = () => {
     []
   );
 
+  // TODO :Show count
+  const triggeredSecrets = secrets.filter(
+    ({ completedAt }) => completedAt !== undefined
+  );
+
   return (
-    <table className="checkpoints" style={{ width: "100%" }}>
-      {secrets
-        .filter(({ completedAt }) => completedAt !== undefined)
-        .map((s) => (
+    <Fragment>
+      <div>Total secrets triggered: {(triggeredSecrets || []).length}</div>{" "}
+      <hr />
+      <table className="checkpoints" style={{ width: "100%" }}>
+        {triggeredSecrets.map((s) => (
           <SecretRow key={s.name} {...s} />
         ))}
-    </table>
+      </table>
+    </Fragment>
   );
 };
 
