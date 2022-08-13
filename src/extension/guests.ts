@@ -11,6 +11,7 @@ const PLATFORM_URLS: Record<string, string> = {
   facebook: "https://facebook.com/",
   twitter: "https://twitter.com/",
   instagram: "https://instagram.com/",
+  youtube: "https://youtube.com/",
   web: "",
 };
 

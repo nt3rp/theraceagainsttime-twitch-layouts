@@ -10,7 +10,7 @@ import eventstream from "./eventstream";
 import donations from "./donations";
 import clip from "./clip";
 import checkpoints from "./checkpoints";
-import menu from "./menu";
+// import menu from "./menu";
 import web from "./web";
 
 import type { NodeCG } from "nodecg-types/types/server";
@@ -35,6 +35,6 @@ export default async (nodecg: NodeCG) => {
   guests(nodecg, twitchClient);
   donations(nodecg, twitchClient);
   clip(nodecg, twitchClient);
-  menu(nodecg, twitchClient);
+  // menu(nodecg, twitchClient);
   web(nodecg);
 };
