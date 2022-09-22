@@ -20,12 +20,27 @@ import type {
 /*
 In the event of non-connection / needing to sign-in from scratch.
 You'll need to complete step 1 for the account that you want to grant access to, since it will give the necessary permissions.
-1. Visit https://id.twitch.tv/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=bits:read+channel:manage:broadcast+channel:read:hype_train+channel:read:subscriptions+chat:edit+chat:read+moderator:manage:announcements+user:read:follows+user:read:subscriptions
+1. Visit https://id.twitch.tv/oauth2/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=bits:read+channel:manage:broadcast+channel:read:hype_train+channel:read:subscriptions+chat:edit+chat:read+moderator:manage:announcements+user:read:follows+user:read:subscriptions+channel:read:redemptions+channel:manage:redemptions
 2. From the Chrome developer console, execute the following:
   ```
   await fetch('https://id.twitch.tv/oauth2/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=CODE_FROM_LAST_REQUEST&grant_type=authorization_code&redirect_uri=http://localhost', { method: 'POST' });
   ```
 3. In the `Network` tab, retrieve the `access_token` and `refresh_token`
+
+ADDING SCOPES:
+If you receive an error like this:
+    ```
+    Scope channel:read:redemptions requested but the client credentials flow does not support scopes
+    ```
+... then be prepared to suffer.
+
+1. Get requested scope; should be easy, listed in the error.
+2. Append the scope to the URL in step 1.
+3. Use the authorization code to get a token -> https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow
+  -
+
+(In general, you need a user token, not an app token)
+More details here: https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#authorization-code-grant-flow
 
 To get the EventSub permissions working, refer to:
 - https://twurple.js.org/docs/faq/
@@ -81,6 +96,7 @@ export class TwitchClient {
     const appTokenAuthProvider = new ClientCredentialsAuthProvider(
       clientId,
       clientSecret
+      // config.scope
     );
     const api = new ApiClient({ authProvider: appTokenAuthProvider });
     instance._api = api;
@@ -92,6 +108,7 @@ export class TwitchClient {
       apiClient: api,
       adapter: new NgrokAdapter(),
       secret: eventSubSecret,
+      strictHostCheck: true,
     });
     await listener.listen();
     instance._eventSub = listener;
