@@ -65,11 +65,11 @@
     "preact": "^10.0.0",
     "prettier": "^2.2.1",
     "tiltify-api-client": "^1.1.2",
-    "typescript": "^4.2.0",
-    "use-nodecg": "^0.4.1-1"
+    "typescript": "^5.1.0",
+    "use-nodecg": "^0.4.1-2"
   },
   "nodecg": {
-    "compatibleRange": "^1.1.1",
+    "compatibleRange": "^2.1.0",
     "dashboardPanels": [
       {
         "name": "checkpoints",
