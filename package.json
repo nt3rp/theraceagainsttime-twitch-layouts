@@ -69,7 +69,7 @@
     "use-nodecg": "^0.4.1-1"
   },
   "nodecg": {
-    "compatibleRange": "^1.1.1",
+    "compatibleRange": "^2.1.0",
     "dashboardPanels": [
       {
         "name": "checkpoints",
