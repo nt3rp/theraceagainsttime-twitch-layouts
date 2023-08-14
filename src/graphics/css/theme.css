@@ -1,3 +1,13 @@
+:root {
+  --gap: 60px;
+  --zoom: 1; /* Developing on small monitor */
+  --panel-border-width: 16px;
+  --ct-shadow: #182028;
+  --ct-gray: #889090;
+  --ct-white: #f8f8f8;
+  --ct-yellow: #f8f800;
+}
+
 * {
   image-rendering: pixelated;
   -webkit-font-smoothing: none;
@@ -8,27 +18,41 @@ body {
   margin: 0;
 }
 
-#container {
+#app:before {
+  content: "";
+  position: absolute;
   background: url("../img/bg.png");
   background-size: 200px;
-  /* background: url("../img/example-bg.jpg");
-  background-size: cover;
-  background-repeat: no-repeat; */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: background 60s linear infinite;
+  z-index: 1;
+  transition: 1s filter linear;
+}
+
+/* TODO: Animate this */
+#app.giveaway:before {
+  filter: saturate(3) hue-rotate(135deg);
+}
+
+#app {
+  position: relative;
   font-family: "Chrono Trigger Proportional Regular";
   font-size: 2em;
-  --panel-border-width: 16px;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
   position: relative;
-  animation: background 60s linear infinite;
   image-rendering: auto;
-  --ct-shadow: #182028;
-  --ct-gray: #889090;
-  --ct-white: #f8f8f8;
-  --ct-yellow: #f8f800;
   text-shadow: 0px 2px var(--ct-shadow), 2px 0px var(--ct-shadow);
   color: var(--ct-white);
+  display: flex;
+  padding: 0 var(--gap);
+  gap: var(--gap);
+  zoom: var(--zoom);
+  align-items: center;
 }
 
 @keyframes background {
@@ -44,4 +68,336 @@ body {
   100% {
     background-position: 0 0;
   }
+}
+
+/* TODO: If too narrow, adjust */
+.infoNav {
+  width: 580px;
+  height: 100%;
+  margin: var(--gap) 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  position: relative;
+}
+
+#video {
+  flex-shrink: 0;
+  position: relative;
+  width: calc(100% - 3px);
+}
+
+#guest {
+  position: absolute;
+  top: 325px;
+  z-index: 5;
+  width: calc(100% - 3px);
+  border-top: 0;
+  background-color: var(--ct-shadow) !important;
+}
+
+#video .id,
+#guest .id {
+  position: absolute;
+  bottom: 5px;
+  left: 9px;
+  font-size: 48px;
+}
+
+.display {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.widescreen {
+  width: 100%;
+  aspect-ratio: 16/9; /* TODO: Check if aspect-ratio in new versions of Chromium */
+}
+
+.standard {
+  width: 100%;
+  aspect-ratio: 4/3; /* TODO: Check if aspect-ratio in new versions of Chromium */
+}
+
+.transparent {
+  background-color: #f0f;
+}
+
+.spacer {
+  flex: 1;
+  overflow: hidden;
+}
+
+.border {
+  border: 3px solid #fff;
+  box-shadow: 3px 3px var(--ct-shadow);
+}
+
+.spacer .slide-open:nth-last-child(6) {
+  transition-delay: 3s !important;
+}
+
+.spacer .slide-open:nth-last-child(5) {
+  transition-delay: 2.5s !important;
+}
+
+.spacer .slide-open:nth-last-child(4) {
+  transition-delay: 2s !important;
+}
+
+.spacer .slide-open:nth-last-child(3) {
+  transition-delay: 1.5s !important;
+}
+
+.spacer .slide-open:nth-last-child(2) {
+  transition-delay: 1s !important;
+}
+
+.spacer .slide-open:nth-last-child(1) {
+  transition-delay: 0.5s !important;
+}
+
+/* Need to do shenanigans to make panels work correctly  */
+.slide-open.vertical.hide,
+.slide-open.vertical.show {
+  transform: scaleY(0);
+  max-height: 0;
+  transform-origin: top;
+  transition: all 1s;
+}
+
+.slide-open.vertical.show {
+  transform: scaleY(1);
+  max-height: 100%;
+}
+
+.panel.slide-open.vertical {
+  transform-origin: bottom;
+}
+
+.panel.progress.slide-open.vertical {
+  transform-origin: top;
+}
+
+.panel.giveaway-alert.slide-open.vertical {
+  transform-origin: top;
+}
+
+.panel.slide-open.vertical.hide {
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+
+.panel.slide-open.vertical.hide:before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.guest iframe {
+  border: 0px solid #000;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* TODO: Use different style. */
+.alert {
+  position: absolute !important;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.goal .label {
+  width: 150px;
+}
+
+.goal .text {
+  flex: 1;
+  text-align: right;
+  font-size: 1.25em;
+  margin-top: 6px;
+}
+
+.goal.event .icon {
+  margin-right: 0px;
+  margin-left: 14px;
+}
+
+.progress .path {
+  height: 100%;
+  position: relative;
+  margin: 0 40px;
+}
+
+.progress.antiquity .path {
+  margin: 0 50%;
+}
+
+.progress .path .current,
+.progress .path .marker,
+.progress .path .marker .label,
+.progress .path .trail-start,
+.progress .path .trail-end {
+  position: absolute;
+}
+
+.progress .path .current {
+  background-image: url("../img/epoch.png");
+  background-position: 0 0;
+  z-index: 10;
+  animation: epoch 0.5s steps(2) infinite;
+}
+
+@keyframes epoch {
+  to {
+    background-position: 64px 0px;
+  }
+}
+
+.progress .path .marker {
+  text-align: center;
+  bottom: 0;
+}
+
+.progress .path .map-icons {
+  position: relative;
+  height: 100%;
+}
+
+.progress .path .map-icons .marker {
+  background-image: url("../img/map-tiles.png");
+  height: var(--marker-height);
+  width: var(--marker-width);
+}
+
+.map-icons .marker.amt-0 {
+  background-position: 162px -82px;
+  --marker-height: 30px;
+  --marker-width: 36px;
+}
+
+.map-icons .marker.amt-150 {
+  background-position: 32px -66px;
+  --marker-height: 14px;
+  --marker-width: 14px;
+}
+
+.map-icons .marker.amt-300 {
+  background-position: 79px -16px;
+  --marker-height: 14px;
+  --marker-width: 14px;
+}
+
+.map-icons .marker.amt-450 {
+  background-position: 208px -82px;
+  --marker-height: 30px;
+  --marker-width: 40px;
+}
+
+.map-icons .marker.amt-600 {
+  background-position: 64px -128px;
+  --marker-height: 34px;
+  --marker-width: 48px;
+}
+
+.map-icons .marker.amt-700 {
+  background-position: -128px -640px;
+  --marker-height: 32px;
+  --marker-width: 48px;
+}
+
+.map-icons .marker.amt-800 {
+  background-position: -121px -690px;
+  --marker-height: 30px;
+  --marker-width: 32px;
+}
+
+.map-icons .marker.amt-900 {
+  background-position: -284px -556px;
+  --marker-height: 52px;
+  --marker-width: 52px;
+}
+
+.map-icons .marker.amt-1000 {
+  background-position: -295px -704px;
+  --marker-height: 50px;
+  --marker-width: 72px;
+}
+
+.map-icons .marker.amt-1250 {
+  background-position: -450px -608px;
+  --marker-height: 32px;
+  --marker-width: 32px;
+}
+
+.map-icons .marker.amt-1500 {
+  background-position: -418px -544px;
+  --marker-height: 64px;
+  --marker-width: 72px;
+}
+
+.map-icons .marker.amt-1750 {
+  background-position: -377px -610px;
+  --marker-height: 54px;
+  --marker-width: 64px;
+}
+
+.map-icons .marker.amt-1999 {
+  background-position: -477px -700px;
+  --marker-height: 48px;
+  --marker-width: 64px;
+}
+
+.map-icons .marker.amt-2150 {
+  background-position: -560px -608px;
+  --marker-height: 48px;
+  --marker-width: 48px;
+}
+
+.map-icons .marker.amt-2300 {
+  background-position: -560px -696px;
+  --marker-height: 72px;
+  --marker-width: 78px;
+}
+
+.map-icons .marker.amt-2300 {
+  background-position: -560px -696px;
+  --marker-height: 72px;
+  --marker-width: 78px;
+}
+
+.progress.antiquity .map-icons .marker {
+  background-position: -288px -128px;
+  --marker-height: 108px;
+  --marker-width: 128px;
+}
+
+.progress.antiquity .path .current {
+  display: none;
+}
+
+.progress .path .marker .label {
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.panel.giveaway-alert {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  top: -105px;
+  height: 50px;
+  background: rgb(24, 32, 40);
+  background: linear-gradient(
+    180deg,
+    rgba(24, 32, 40, 1) 0%,
+    rgba(24, 32, 40, 1) 50%,
+    rgba(24, 32, 40, 0) 100%
+  );
 }

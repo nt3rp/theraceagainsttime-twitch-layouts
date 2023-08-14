@@ -34,8 +34,9 @@ export const Events: FunctionComponent<any> = (props: any) => {
 };
 
 export const CheckpointsBar: FunctionComponent<any> = () => {
-  const [checkpointsRep, _setCheckpointsRep]: [Array<any>, unknown] =
-    useReplicant("checkpoints", []);
+  // const [checkpointsRep, _setCheckpointsRep]: [Array<any>, unknown] =
+  //   useReplicant("checkpoints", []);
+  const checkpointsRep: Array<any> = [];
   const checkpoints = copy(checkpointsRep).map(
     (c: Checkpoint, index: number) => {
       return {

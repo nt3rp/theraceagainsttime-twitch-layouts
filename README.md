@@ -118,6 +118,10 @@ commands (`scripts/bundle`).
 
 Your files should now be accessible via the NodeCG dashboard.
 
+### Notes
+
+- Do NOT open the dashboard until after the extensions are set up
+
 <!-- ROADMAP -->
 
 <!--

@@ -70,12 +70,69 @@
   },
   "nodecg": {
     "compatibleRange": "^1.1.1",
-    "dashboardPanels": [],
+    "dashboardPanels": [
+      {
+        "name": "checkpoints",
+        "title": "Checkpoints",
+        "file": "checkpoints.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
+      },
+      {
+        "name": "timer",
+        "title": "Timer",
+        "file": "timer.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
+      },
+      {
+        "name": "secrets",
+        "title": "Secrets",
+        "file": "secrets.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
+      },
+      {
+        "name": "unlocks",
+        "title": "Unlocks",
+        "file": "unlocks.html",
+        "width": 3,
+        "workspace": "The Race Against Time 8"
+      }
+    ],
     "graphics": [
       {
         "file": "main.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "opening.html",
+        "width": 1070,
+        "height": 602
+      },
+      {
+        "file": "confetti.html",
+        "width": 1920,
+        "height": 1024
+      }
+    ],
+    "soundCues": [
+      {
+        "name": "donation",
+        "channels": 1
+      },
+      {
+        "name": "follow"
+      },
+      {
+        "name": "host"
+      },
+      {
+        "name": "secret"
+      },
+      {
+        "name": "generic"
       }
     ]
   }

@@ -4,19 +4,33 @@
     <meta charset="UTF-8" />
     <title>Chrono Trigger Opening</title>
     <style type="text/css">
+      :root {
+        --gap: 60px;
+        --zoom: 1; /* Developing on small monitor */
+        --panel-border-width: 16px;
+        --ct-shadow: #182028;
+        --ct-gray: #889090;
+        --ct-white: #f8f8f8;
+        --ct-yellow: #f8f800;
+      }
+
       * {
-        image-rendering: pixelated;
-        -webkit-font-smoothing: none;
         box-sizing: border-box;
       }
 
       body {
         margin: 0;
+        filter: url(#pixelate);
+      }
+
+      svg {
+        position: absolute;
       }
 
       img {
-        display: inline-block;
+        display: none;
         position: relative;
+        animation-fill-mode: forwards !important;
       }
 
       #canvas {
@@ -25,17 +39,76 @@
         height: 602px;
         overflow: hidden;
         position: relative;
+        z-index: 1;
+        zoom: 1.79;
       }
 
-      .hidden {
-        visibility: hidden;
+      #chat {
+        position: absolute;
+        width: 300px;
+        background-color: #f0f;
+        top: 0px;
+        bottom: 0px;
+        margin: 50px 100px;
+        opacity: 0;
       }
 
-      .the.appear,
-      .a.appear,
-      .c.appear,
-      .e.appear {
-        animation-delay: 1s !important;
+      #chat.active {
+        opacity: 1;
+      }
+
+      #credits {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+        margin: 150px 100px;
+        opacity: 0;
+        color: #fff;
+        font-size: 2em;
+        font-family: "MrsEavesPetiteCaps";
+        text-shadow: 0px 2px var(--ct-shadow), 2px 0px var(--ct-shadow);
+        color: var(--ct-white);
+        z-index: 100;
+      }
+
+      #credits.active {
+        opacity: 1;
+      }
+
+      #credits .title {
+        text-transform: uppercase;
+
+        letter-spacing: 10px;
+        font-size: 36px;
+      }
+
+      #credits .name {
+        letter-spacing: 6px;
+        font-size: 72px;
+        font-weight: bold;
+        margin-top: 0.1em;
+        line-height: 1em;
+      }
+
+      #credits.fade-in-and-out {
+        animation: textFade 8s forwards;
+      }
+
+      @keyframes textFade {
+        20%,
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .active,
+      .active > img {
+        display: inline-block;
       }
 
       .the {
@@ -52,13 +125,13 @@
         }
       }
 
-      .the.appear {
+      .the.active {
         left: 233px;
         top: 138px;
         animation: moveThe 1s linear;
       }
 
-      .the.hidden {
+      .the {
         left: 233px;
         top: 138px;
       }
@@ -77,12 +150,12 @@
         }
       }
 
-      .hands.appear {
+      .hands.active {
         opacity: 0;
         animation: fadeIn 1s linear;
       }
 
-      .hands.hidden {
+      .hands {
         visibility: visible;
         opacity: 0;
       }
@@ -94,25 +167,21 @@
         z-index: 10;
       }
 
+      .r.active {
+        left: 754px;
+        top: 239px;
+        transform: scale(0.7);
+        opacity: 0;
+        animation: moveR 2s ease-in;
+      }
+
       @keyframes moveR {
         to {
           left: 190px;
           top: 80px;
           transform: scale(1);
+          opacity: 1;
         }
-      }
-
-      .r.appear {
-        left: 754px;
-        top: 239px;
-        transform: scale(0.7);
-        animation: moveR 2s ease-in;
-      }
-
-      .r.hidden {
-        left: 754px;
-        top: 239px;
-        transform: scale(0.7);
       }
 
       .a {
@@ -122,22 +191,17 @@
         z-index: 9;
       }
 
-      @keyframes moveA {
-        to {
-          left: 380px;
-          top: 135px;
-        }
-      }
-
-      .a.appear {
+      .a.active {
         left: 337px;
         top: 135px;
         animation: moveA 1s linear;
       }
 
-      .a.hidden {
-        left: 337px;
-        top: 135px;
+      @keyframes moveA {
+        to {
+          left: 380px;
+          top: 135px;
+        }
       }
 
       .c {
@@ -147,22 +211,17 @@
         z-index: 8;
       }
 
-      @keyframes moveC {
-        to {
-          left: 440px;
-          top: 136px;
-        }
-      }
-
-      .c.appear {
+      .c.active {
         left: 339px;
         top: 136px;
         animation: moveC 1s linear;
       }
 
-      .c.hidden {
-        left: 339px;
-        top: 136px;
+      @keyframes moveC {
+        to {
+          left: 440px;
+          top: 136px;
+        }
       }
 
       .e {
@@ -172,22 +231,17 @@
         z-index: 7;
       }
 
-      @keyframes moveE {
-        to {
-          left: 497px;
-          top: 138px;
-        }
-      }
-
-      .e.appear {
+      .e.active {
         left: 350px;
         top: 138px;
         animation: moveE 1s linear;
       }
 
-      .e.hidden {
-        left: 350px;
-        top: 138px;
+      @keyframes moveE {
+        to {
+          left: 497px;
+          top: 138px;
+        }
       }
 
       .againsttime {
@@ -200,6 +254,12 @@
         width: 500px;
       }
 
+      .againsttime.active {
+        left: 1100px;
+        top: 174px;
+        animation: moveLeft 2.5s linear forwards;
+      }
+
       @keyframes moveLeft {
         to {
           left: 430px;
@@ -207,26 +267,21 @@
         }
       }
 
-      .againsttime.appear {
-        left: 1100px;
-        top: 174px;
-        animation: moveLeft 2s linear;
-        animation-delay: 5s !important;
-      }
-
-      .againsttime.hidden {
-        left: 1100px;
-        top: 174px;
-      }
-
       .againsttime > img {
         animation: upDown 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes upDown {
+        to {
+          transform: translatey(20px);
+        }
       }
 
       .ainst {
         top: 18px;
         animation-delay: 100ms !important;
       }
+
       .time {
         top: 20px;
         animation-delay: 200ms !important;
@@ -236,14 +291,11 @@
         transform-origin: top center;
         left: 800px;
         z-index: 0;
+        animation: stopTick 7.5s ease-in-out;
       }
 
       .pendulum.ticking {
         animation: tick 2s ease-in-out alternate infinite;
-      }
-
-      .pendulum {
-        animation: stopTick 7.5s ease-in-out;
       }
 
       @keyframes stopTick {
@@ -275,42 +327,158 @@
           transform: rotateZ(-20deg);
         }
       }
-
-      @keyframes upDown {
-        to {
-          transform: translatey(20px);
-        }
-      }
     </style>
   </head>
   <body>
+    <svg x="0px" y="0px" color-interpolation-filters="sRGB">
+      <defs>
+        <filter id="pixelate" x="0%" y="0%" width="100%" height="100%">
+          <!--Thanks to Zoltan Fegyver for figuring out pixelation and producing the awesome pixelation map. -->
+          <feGaussianBlur
+            stdDeviation="0.1"
+            in="SourceGraphic"
+            result="smoothed"
+          />
+          <feImage
+            width="3"
+            height="3"
+            xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVAgdY1ywgOEDAwKxgJhIgFQ+AP/vCNK2s+8LAAAAAElFTkSuQmCC"
+            result="displacement-map"
+          />
+          <feTile in="displacement-map" result="pixelate-map" />
+          <feDisplacementMap
+            in="smoothed"
+            in2="pixelate-map"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="5"
+            result="pre-final"
+          />
+          <feComposite operator="in" in2="SourceGraphic" />
+        </filter>
+      </defs>
+    </svg>
     <div id="canvas">
-      <img class="hands hidden" src="./img/opening-hands.png" />
-      <img class="the hidden" src="./img/opening-the.png" />
-      <img class="r hidden" src="./img/opening-r.png" />
-      <img class="a hidden" src="./img/opening-a.png" />
-      <img class="c hidden" src="./img/opening-c.png" />
-      <img class="e hidden" src="./img/opening-e.png" />
-      <span class="againsttime hidden">
+      <div id="chat"></div>
+      <div id="credits">
+        <div class="title"></div>
+        <div class="name first"></div>
+        <div class="name second"></div>
+        <div class="name third"></div>
+      </div>
+      <img class="hands" src="./img/opening-hands.png" />
+      <img class="the" src="./img/opening-the.png" />
+      <img class="r" src="./img/opening-r.png" />
+      <img class="a" src="./img/opening-a.png" />
+      <img class="c" src="./img/opening-c.png" />
+      <img class="e" src="./img/opening-e.png" />
+      <span class="againsttime">
         <img class="ag" src="./img/opening-ag.png" /><img
           class="ainst"
           src="./img/opening-ainst.png"
         /><img class="time" src="./img/opening-time.png" />
       </span>
-      <img class="pendulum ticking" src="./img/opening-pendulum.png" />
+      <img class="pendulum active ticking" src="./img/opening-pendulum.png" />
     </div>
+    <audio class="opening" preload src="./audio/opening.mp3" />
     <script type="text/javascript">
-      const start = nodecg.Replicant("start");
+      const audio = document.querySelector(".opening");
+      const chat = document.getElementById("chat");
+      const credits = document.getElementById("credits");
+      const title = document.querySelector("#credits .title");
+      const names = document.querySelectorAll("#credits .name");
       let stopTicking = false;
 
-      NodeCG.waitForReplicants(start).then(() => {
-        stopTicking = start.value;
-        start.on("change", (oldValue, newValue) => {
-          if (oldValue || newValue) {
-            stopTicking = true;
-          }
+      const credit = nodecg.Replicant("credits", {});
+
+      const chunk = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+          arr.slice(i * size, i * size + size)
+        );
+
+      const keyToTitle = {
+        chat: "For joining us",
+        "subscription.community": "For the gift subs",
+        subscription: "For subscribing to us",
+        donation: "For the generous donations",
+        host: "For sharing the stream",
+        follow: "For following us",
+      };
+
+      let lines = [];
+
+      const delayedCreditChange = () => {
+        const next = lines.shift();
+        if (!next) {
+          credits.classList.remove("active");
+        } else {
+          fadeInNextText(next);
+        }
+      };
+
+      const fadeInNextText = ([titleText, ...text]) => {
+        title.innerText = titleText;
+        names.forEach((f, i) => (f.innerText = text[i] ? text[i] : ""));
+        credits.classList.add("fade-in-and-out");
+      };
+
+      const rollCredits = () => {
+        credits.addEventListener("animationend", (event) => {
+          credits.classList.remove("fade-in-and-out");
+          setTimeout(delayedCreditChange, 200);
         });
-      });
+        // Need to group by type, the interate
+        // lazy copy
+        const dict = JSON.parse(JSON.stringify(credit.value));
+
+        const inverted = Object.entries(dict).reduce((acc, [name, attrs]) => {
+          Object.keys(attrs).forEach((attr) => {
+            if (!acc[attr]) {
+              acc[attr] = [];
+            }
+            acc[attr].push(name);
+          });
+          return acc;
+        }, {});
+
+        lines = Object.entries(inverted)
+          .map(([key, people]) => {
+            const newTitle = keyToTitle[key];
+            const chunked = chunk(people.sort(), 3);
+            const result = chunked.map((p) => [newTitle, ...p]);
+            return result;
+          })
+          .flat();
+
+        // Not showing all lines; why?
+        fadeInNextText(lines.shift());
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      switch (params.get("type")) {
+        case "credits":
+          NodeCG.waitForReplicants(credit);
+          break;
+        case "chat":
+        default:
+          chat.classList.add("active");
+          break;
+      }
+
+      const start = () => {
+        audio.play();
+        stopTicking = true;
+        chat.classList.remove("active");
+      };
+
+      (window.nodecg || { listenFor: () => {} }).listenFor("start", start);
+      window.addEventListener("test.start", start);
+
+      (window.nodecg || { listenFor: () => {} }).listenFor(
+        "credits",
+        rollCredits
+      );
+      window.addEventListener("credits", rollCredits);
 
       const pendulum = document.querySelector(".pendulum");
       const hands = document.querySelector(".hands");
@@ -321,57 +489,50 @@
       const E = document.querySelector(".e");
       const AGAINSTTIME = document.querySelector(".againsttime");
 
+      // Each TOCK is 1.25s
+      // C should be slightly transparent, curve up
+      let movedR = false;
+      let movedLetters = false;
+      let movedWavingLetters = false;
+      let showHands = false;
+      let waveEnd = false;
+      audio.addEventListener("timeupdate", () => {
+        // JUST before R moves, pendulum stops
+        // ticks one last time after
+        // pendulum zooms in
+        if (!movedR && audio.currentTime >= 10.5) {
+          R.classList.add("active");
+          movedR = true;
+        }
+        if (!movedLetters && audio.currentTime >= 13) {
+          THE.classList.add("active");
+          A.classList.add("active");
+          C.classList.add("active");
+          E.classList.add("active");
+          movedLetters = true;
+        }
+        if (!movedWavingLetters && audio.currentTime >= 15) {
+          AGAINSTTIME.classList.add("active");
+          movedWavingLetters = true;
+        }
+        if (audio.currentTime >= 17.5) {
+          // Wave ends
+        }
+        if (!showHands && audio.currentTime >= 18) {
+          hands.classList.add("active");
+          showHands = true;
+        }
+        if (audio.currentTime >= 23) {
+          // Wave stops waving
+        }
+      });
+
       let count = 0;
       pendulum.addEventListener("animationiteration", (elem) => {
         count++;
         if (count % 2 == 1 && stopTicking) {
           elem.target.classList.toggle("ticking");
         }
-      });
-
-      pendulum.addEventListener("animationend", () => {
-        R.classList.toggle("hidden");
-        R.classList.toggle("appear");
-      });
-
-      R.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-        THE.classList.toggle("hidden");
-        THE.classList.toggle("appear");
-        A.classList.toggle("hidden");
-        A.classList.toggle("appear");
-        C.classList.toggle("hidden");
-        C.classList.toggle("appear");
-        E.classList.toggle("hidden");
-        E.classList.toggle("appear");
-        AGAINSTTIME.classList.toggle("hidden");
-        AGAINSTTIME.classList.toggle("appear");
-      });
-
-      THE.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      A.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      C.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      E.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-      });
-
-      AGAINSTTIME.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
-        hands.classList.toggle("hidden");
-        hands.classList.toggle("appear");
-      });
-
-      hands.addEventListener("animationend", (elem) => {
-        elem.target.classList.toggle("appear");
       });
     </script>
   </body>

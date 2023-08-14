@@ -21,6 +21,49 @@
   background: radial-gradient(rgba(192, 192, 192, 0.5), rgba(0, 0, 0, 0.725));
 }
 
+/* TODO: Consider .<status> .icon instead. That way, can set other attributes */
+.icon.failure:after {
+  content: "✖";
+  font-size: 1.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: #f00;
+  right: 0;
+}
+
+.icon.success:after {
+  content: "✔";
+  font-size: 1.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: #0f0;
+  right: 0;
+}
+
+.icon.paused:after {
+  content: "⏸";
+  font-size: 1.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: var(--ct-yellow);
+  right: 0;
+  font-family: "Segoe UI Symbol";
+  line-height: 1.25em;
+  animation: blink-animation 3s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
 /* Achievement mappings */
 .icon.start {
   background-position: calc(0 * 72px) calc(0 * 72px);
@@ -236,4 +279,14 @@
 }
 .icon.radical-dreamers {
   background-position: calc(-5 * 72px) calc(-10 * 72px);
+}
+.icon.robo {
+  background-position: -948px -732px;
+  height: 48px;
+  width: 48px;
+  margin: 12px 26px 12px 18px !important;
+}
+
+.icon.robo:before {
+  display: none;
 }

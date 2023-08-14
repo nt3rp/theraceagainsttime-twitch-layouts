@@ -1,0 +1,29 @@
+.event {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  z-index: 1;
+  height: 100px; /* IDK, will likely need to adjust*/
+}
+
+.event .icon {
+  margin-left: 6px;
+  margin-right: 14px;
+}
+
+.event .title {
+  color: var(--ct-yellow);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.event .description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

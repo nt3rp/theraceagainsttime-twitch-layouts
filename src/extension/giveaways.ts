@@ -1,22 +1,63 @@
 import type { NodeCG, Replicant } from "nodecg-types/types/server";
 import type { TwitchClient } from "./clients/twitch-client";
 
-import * as GIVEAWAYS from "../../config/giveaways.json";
+import * as UNLOCKS from "../../config/unlocks.json";
 import { ChatMessageEvent } from "../types/events";
-import { sample } from "./utils";
+import { compare, sample, slugify } from "./utils";
+
+const GIVEAWAYS = UNLOCKS.filter(({ type }) => type === "giveaway");
 
 export interface Giveaway {
   id: string;
+  type: "giveaway";
+  title: string;
   active?: boolean;
   unlocked?: boolean;
-  prizes?: Array<string>;
+  url?: string;
   winner?: string;
   entrants?: Array<string>;
-  criteria?: {
+  subject: "donation.total";
+  criteria: {
     comparator: string;
     value: number;
   };
 }
+
+// interface Unlock {
+//   name: string;
+//   visible?: boolean;
+//   giveaway?: boolean;
+//   resolved?: boolean;
+// }
+
+// TODO: Consider making this even more generic
+// Could dig / pluck the subject from the criteria.
+// Might need to do something about filtering, if so.
+// Copied and modified from secrets.ts
+const maybeMeetCriteria = (
+  subject: Giveaway["subject"],
+  criteria: any,
+  giveaways: Replicant<Array<Giveaway>>,
+  nodecg: NodeCG
+) => {
+  const unmetCriteria = giveaways.value.filter(
+    ({ unlocked, subject: s }) => !unlocked && s === subject
+  );
+
+  unmetCriteria.forEach((g) => {
+    const { id, criteria: c } = g;
+    const { comparator, value: threshold } = c;
+    if (compare(comparator, criteria, threshold)) {
+      giveaways.value.find((giveaway) => {
+        if (id !== giveaway.id) return false;
+        giveaway.unlocked = true;
+        nodecg.log.debug(`[Giveaway] ${giveaway.title} unlocked`);
+        nodecg.sendMessage("giveaway.unlocked", giveaway);
+        return true;
+      });
+    }
+  });
+};
 
 // TODO: Generalize some of these replicant searching methods.
 // eslint-disable-next-line no-unused-vars
@@ -25,7 +66,11 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
 
   // TODO: Make an announcement when milestone surpased; might need to emit from tiltify
   const giveaways: Replicant<Array<Giveaway>> = nodecg.Replicant("giveaways", {
-    defaultValue: GIVEAWAYS,
+    defaultValue: GIVEAWAYS as Array<Giveaway>,
+  });
+
+  const unlocks: Replicant<any> = nodecg.Replicant("unlocks", {
+    defaultValue: {},
   });
 
   const currentGiveaway: Replicant<string | undefined> = nodecg.Replicant(
@@ -75,7 +120,10 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
             .filter(({ unlocked, winner }) => !!unlocked && !winner)
             .map(({ id }) => id)
             .join(", ");
-          twitch.chat.say(channel, `Unlocked giveaways: ${ids}`);
+          twitch.chat.say(
+            channel,
+            `Unlocked giveaways: ${ids || "No giveaways unlocked"}`
+          );
           break;
         }
         case "start": {
@@ -84,9 +132,19 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
             ({ id }: Giveaway) => id === arg
           );
           if (!giveaway) return;
+          if (giveaway.active) {
+            twitch.chat.say(
+              channel,
+              `Already a giveaway in progress: ${giveaway.title}`
+            );
+            return;
+          }
 
           currentGiveaway.value = arg;
-          twitch.chat.say(channel, "Starting a giveaway!");
+          twitch.chat.say(
+            channel,
+            `Starting giveaway: ${giveaway.title}! More details at ${giveaway.url}. You can enter the giveaway by typing !giveaway in the chat`
+          );
           break;
         }
         case "end": {
@@ -99,6 +157,7 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
           giveaway.winner = winner;
           giveaway.active = false;
           currentGiveaway.value = undefined;
+          nodecg.sendMessage("giveaway.completed", giveaway);
           break;
         }
         default:
@@ -115,4 +174,33 @@ export default (nodecg: NodeCG, twitch: TwitchClient) => {
       }
     }
   );
+
+  nodecg.listenFor("donation.total", (total: number) => {
+    maybeMeetCriteria("donation.total", total, giveaways, nodecg);
+  });
+
+  unlocks.on("change", (newObj) => {
+    if (!newObj) return;
+
+    Object.entries(newObj).forEach(([key, value]) => {
+      const { name, giveaway, resolved }: any = value;
+      if (!giveaway || resolved) return;
+
+      const slug = slugify(key);
+      const found = giveaways.value.find(({ id }) => id === slug);
+      if (found) return;
+
+      giveaways.value.push({
+        id: slug,
+        type: "giveaway",
+        title: name,
+        unlocked: true,
+        subject: "donation.total",
+        criteria: {
+          comparator: ">",
+          value: 0,
+        },
+      });
+    });
+  });
 };

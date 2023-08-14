@@ -71,3 +71,11 @@ export const shuffle = <T>([...arr]: Array<T>) => {
 
 export const toCsv = (...arr: Array<any>) =>
   arr.map((e) => `"${e}"`).join(",") + os.EOL;
+
+export const slugify = (str: string) =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
